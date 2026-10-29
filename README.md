@@ -267,7 +267,7 @@ El bot usa *long polling*, así que el servicio debe estar siempre encendido; no
 npm run deploy:azure
 ```
 
-`scripts/deploy-azure.sh` crea (o reutiliza) el grupo `rg-ctt-fisei-agente` en `eastus2`, un Azure Container Registry Basic, un plan Linux B1 y la Web App `ctt-fisei-asistente`. La imagen se construye con Docker local y se sube al registro (Azure for Students no permite `az acr build`), la app queda *Always On* y los secretos de `.env` pasan a la configuración de la app. Si `.env` no trae `DASHBOARD_PASSWORD`, se genera una. Volver a ejecutarlo publica la versión actual del código.
+`scripts/deploy-azure.sh` crea (o reutiliza) el grupo `rg-ctt-fisei-agente` en `eastus2`, un Azure Container Registry Basic, un plan Linux B2 (2 núcleos; con B1 la CPU llega al 99 % al vincular WhatsApp y el teléfono cancela) y la Web App `ctt-fisei-asistente`. La imagen se construye con Docker local y se sube al registro (Azure for Students no permite `az acr build`), la app queda *Always On* y los secretos de `.env` pasan a la configuración de la app. Si `.env` no trae `DASHBOARD_PASSWORD`, se genera una. Volver a ejecutarlo publica la versión actual del código.
 
 | Configuración en Azure | Por qué |
 | :--- | :--- |

@@ -55,7 +55,20 @@ export function createWhatsAppClient({ service, chromePath, dataPath, transcribe
       puppeteer: {
         headless: true,
         executablePath: chromePath,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
+        // Flags para contenedores con poca CPU/RAM (Azure App Service B1).
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+          '--no-zygote',
+          '--no-first-run',
+          '--disable-extensions',
+          '--disable-background-networking',
+          '--disable-default-apps',
+          '--disable-sync',
+          '--mute-audio',
+        ],
       },
     });
     attach(c);
@@ -78,8 +91,10 @@ export function createWhatsAppClient({ service, chromePath, dataPath, transcribe
     wa.on('disconnected', (reason) => {
       setState({ status: 'desconectado', qrDataUrl: null, number: null });
       console.warn(`[whatsapp] Desconectado: ${reason}`);
-      wa.destroy().catch(() => {});
       if (wa === client) client = null;
+      // whatsapp-web.js sigue usando la página justo después del evento: cerrar el navegador
+      // en ese instante provoca TargetCloseError, así que se espera un momento.
+      setTimeout(() => wa.destroy().catch(() => {}), 3000);
     });
 
     wa.on('message', (msg) =>

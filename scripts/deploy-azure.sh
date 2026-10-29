@@ -15,7 +15,7 @@ LOCATION="${LOCATION:-eastus2}"
 ACR="${ACR:-cttfiseiagente}"
 PLAN="${PLAN:-plan-ctt-fisei-agente}"
 APP="${APP:-ctt-fisei-asistente}"
-SKU="${SKU:-B1}"
+SKU="${SKU:-B2}"
 IMAGE="ctt-fisei-agente:$(git rev-parse --short HEAD)"
 
 # Lee una variable de .env sin ejecutar el archivo (los valores pueden tener espacios).
@@ -53,6 +53,9 @@ ACR_PASS="$(az acr credential show -n "$ACR" --query 'passwords[0].value' -o tsv
 echo "==> Plan de App Service $PLAN ($SKU, Linux)"
 if ! az appservice plan show -n "$PLAN" -g "$RG" -o none 2>/dev/null; then
   az appservice plan create -n "$PLAN" -g "$RG" -l "$LOCATION" --is-linux --sku "$SKU" -o none
+else
+  # B1 (1 núcleo) no alcanza para vincular WhatsApp Web: Chrome satura la CPU y el teléfono cancela.
+  az appservice plan update -n "$PLAN" -g "$RG" --sku "$SKU" -o none
 fi
 
 echo "==> Web App $APP"
