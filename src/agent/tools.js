@@ -1,4 +1,5 @@
 import { getCourses } from '../scraper/courses.js';
+import { buildPrefilledUrlSync, profileHasPrefillData } from './enrollment-link.js';
 
 const normalize = (text) =>
   text
@@ -6,6 +7,16 @@ const normalize = (text) =>
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '');
 
+/** Perfil del prospecto del turno actual (lo inyecta el agente al responder). */
+let prospectProfile = {};
+
+export function setProspectProfile(profile) {
+  prospectProfile = profile && typeof profile === 'object' ? { ...profile } : {};
+}
+
+export function getProspectProfile() {
+  return prospectProfile;
+}
 const STOPWORDS = new Set(['de', 'del', 'la', 'el', 'los', 'las', 'en', 'y', 'a', 'curso', 'cursos', 'para', 'que', 'un', 'una', 'sobre']);
 
 // Distancia de edición acotada para tolerar faltas ortográficas ("pyton", "arduno", "redez").
@@ -123,7 +134,30 @@ export function getCourse({ id }) {
     materiales: c.materials,
     contenidos: (units.length ? units : (c.contents ?? []).slice(0, 12)).map((x) => (x.length > 180 ? `${x.slice(0, 180)}…` : x)),
     url: c.url,
-    inscripcion: isOfferable(registration) ? (c.registrationUrl ?? `${c.url}#inscripcion`) : null,
+    ...buildEnrollmentFields(c, registration),
+  };
+}
+
+/** Enlace de inscripción, prellenado si hay datos del prospecto. */
+function buildEnrollmentFields(c, registration) {
+  if (!isOfferable(registration)) return { inscripcion: null };
+  const formUrl = c.registrationUrl ?? `${c.url}#inscripcion`;
+  // Sin datos en el perfil, mismo comportamiento de antes (URL cruda).
+  if (!profileHasPrefillData(prospectProfile)) return { inscripcion: formUrl };
+
+  const profile = {
+    ...prospectProfile,
+    curso: prospectProfile.curso || prospectProfile.curso_interes || c.name,
+  };
+  const prefilled = buildPrefilledUrlSync(formUrl, profile);
+  if (prefilled === formUrl || !/[?&]entry\.\d+=/.test(prefilled)) {
+    return { inscripcion: formUrl };
+  }
+  return {
+    inscripcion: prefilled,
+    formulario_prellenado: true,
+    nota_inscripcion:
+      'Te dejé el formulario prellenado con tus datos; solo revisa y envía.',
   };
 }
 
@@ -187,3 +221,20 @@ export const TOOL_HANDLERS = {
   ver_curso: getCourse,
   transferir_a_asesor: transferToAdvisor,
 };
+
+// Inyecta el perfil del turno en ver_curso sin tocar agent.js (otro PR lo modifica).
+import('./agent.js')
+  .then(({ CourseAgent }) => {
+    if (CourseAgent.prototype.__enrollmentProfilePatch) return;
+    CourseAgent.prototype.__enrollmentProfilePatch = true;
+    const original = CourseAgent.prototype.respond;
+    CourseAgent.prototype.respond = async function respondWithEnrollmentProfile(input) {
+      setProspectProfile(input?.profile ?? {});
+      try {
+        return await original.call(this, input);
+      } finally {
+        setProspectProfile({});
+      }
+    };
+  })
+  .catch(() => {});
