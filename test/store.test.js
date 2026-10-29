@@ -39,3 +39,22 @@ test('Store guarda historial por sesión y calcula métricas', () => {
   assert.equal(analytics.conversation(store.db, tg)[1].courses[0], 18);
   store.close();
 });
+
+test('inbox y conversation exponen estado, modo y eventos', () => {
+  const store = new Store(':memory:');
+  const id = store.upsertUser({ channel: 'telegram', externalId: 9, name: 'Leo' });
+  store.addMessage({ userId: id, channel: 'telegram', role: 'user', content: 'hola', createdAt: '2026-10-29T10:00:00.000Z' });
+  store.addEvent(id, 'handover', 'Pidió humano', '2026-10-29T10:00:01.000Z');
+  store.addMessage({ userId: id, channel: 'telegram', role: 'operator', content: 'Hola Leo', createdAt: '2026-10-29T10:00:02.000Z' });
+  store.updateConversation(id, { mode: 'human', state: 'lead_caliente', profile: { tipo: 'publico' } });
+
+  const [row] = analytics.inbox(store.db);
+  assert.equal(row.mode, 'human');
+  assert.equal(row.state, 'lead_caliente');
+  assert.equal(row.last_role, 'operator');
+  assert.equal(row.unread, 1);
+  assert.deepEqual(row.profile, { tipo: 'publico' });
+  assert.deepEqual(analytics.conversation(store.db, id).map((m) => m.role), ['user', 'system', 'operator']);
+  assert.equal(analytics.eventCounts(store.db).handover, 1);
+  assert.equal(analytics.byState(store.db)[0].state, 'lead_caliente');
+});

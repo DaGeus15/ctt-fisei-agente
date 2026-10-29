@@ -128,13 +128,84 @@ export function recentConversations(db, { since, channel, limit = 50 } = {}) {
     .all(...w.params, limit);
 }
 
+const EVENT_TEXT = {
+  handover: 'IA en pausa',
+  ia_reanudada: 'IA reanudada',
+  operador_toma: 'El operador tomó el control',
+  intento_manipulacion: 'Intento de manipulación bloqueado',
+  lead_caliente: 'Marcado como lead caliente',
+};
+
+/** Mensajes de una conversación intercalados con sus eventos (handover, reanudación, etc.). */
 export function conversation(db, userId, limit = 200) {
-  return db
+  const messages = db
     .prepare(
-      `SELECT id, role, content, topic, courses, latency_ms, error, created_at
+      `SELECT id, user_id, role, content, topic, courses, latency_ms, error, flags, created_at
        FROM messages WHERE user_id = ? ORDER BY id DESC LIMIT ?`,
     )
     .all(userId, limit)
-    .reverse()
-    .map((m) => ({ ...m, courses: JSON.parse(m.courses) }));
+    .map((m) => ({ ...m, courses: JSON.parse(m.courses), flags: JSON.parse(m.flags) }));
+  const since = messages.at(-1)?.created_at ?? '';
+  const events = db
+    .prepare("SELECT id, type, detail, created_at FROM events WHERE user_id = ? AND created_at >= ? AND type != 'operador_toma'")
+    .all(userId, since)
+    .map((e) => ({
+      id: `evt-${e.id}`,
+      user_id: userId,
+      role: 'system',
+      content: [EVENT_TEXT[e.type] ?? e.type, e.type === 'lead_caliente' ? null : e.detail].filter(Boolean).join(' · '),
+      created_at: e.created_at,
+    }));
+  const order = (x) => (typeof x.id === 'number' ? x.id : Number.MAX_SAFE_INTEGER);
+  return [...messages, ...events].sort((a, b) => a.created_at.localeCompare(b.created_at) || order(a) - order(b));
+}
+
+export function byState(db, { since, channel } = {}) {
+  const clauses = [];
+  const params = [];
+  if (since) {
+    clauses.push('last_seen >= ?');
+    params.push(since);
+  }
+  if (channel) {
+    clauses.push('channel = ?');
+    params.push(channel);
+  }
+  return db
+    .prepare(`SELECT state, COUNT(*) AS users FROM users ${clauses.length ? `WHERE ${clauses.join(' AND ')}` : ''} GROUP BY state ORDER BY users DESC`)
+    .all(...params);
+}
+
+export function eventCounts(db, { since, channel } = {}) {
+  const w = where(since, channel, 'u');
+  const sql = w.sql.replace('u.created_at', 'e.created_at');
+  const rows = db
+    .prepare(`SELECT e.type, COUNT(*) AS total FROM events e JOIN users u ON u.id = e.user_id ${sql} GROUP BY e.type`)
+    .all(...w.params);
+  return Object.fromEntries(rows.map((r) => [r.type, r.total]));
+}
+
+/** Conversaciones para la bandeja del operador, con su último mensaje. */
+export function inbox(db, { since, channel, limit = 100 } = {}) {
+  const clauses = [];
+  const params = [];
+  if (since) {
+    clauses.push('u.last_seen >= ?');
+    params.push(since);
+  }
+  if (channel) {
+    clauses.push('u.channel = ?');
+    params.push(channel);
+  }
+  return db
+    .prepare(
+      `SELECT u.id AS user_id, u.channel, u.name, u.external_id, u.mode, u.state, u.profile, u.summary,
+              u.handover_reason, u.unread, u.last_seen,
+              (SELECT content FROM messages x WHERE x.user_id = u.id ORDER BY x.id DESC LIMIT 1) AS last_message,
+              (SELECT role FROM messages x WHERE x.user_id = u.id ORDER BY x.id DESC LIMIT 1) AS last_role
+       FROM users u ${clauses.length ? `WHERE ${clauses.join(' AND ')}` : ''}
+       ORDER BY u.last_seen DESC LIMIT ?`,
+    )
+    .all(...params, limit)
+    .map((r) => ({ ...r, profile: JSON.parse(r.profile || '{}') }));
 }
