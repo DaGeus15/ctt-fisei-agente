@@ -67,6 +67,8 @@ Las capturas se generaron con `npm run seed` (datos de ejemplo, sin personas rea
 - **Termómetro en tiempo real**: cada tarjeta muestra el estado del prospecto con icono, etiqueta y color, más el modo (IA u operador) y los mensajes sin leer.
 - **Resumen automático para el operador**: el analizador resume qué busca la persona, sus objeciones y el siguiente paso.
 - **Defensa contra prompt injection**: detección por patrones antes del LLM, nota de seguridad en el turno, reglas no negociables en el prompt y validación de la salida.
+- **Inscripción real, no la etiqueta**: calcula si la inscripción sigue vigente con las fechas publicadas; no comparte enlaces de ediciones vencidas y recomienda una alternativa abierta.
+- **Respaldo entre modelos**: si un modelo llega a su límite de tokens (429) la respuesta sigue con el siguiente de la lista.
 - **Tolerancia a faltas ortográficas**: la búsqueda de cursos usa distancia de edición ("pyton", "arduno").
 - **Notas de voz**: transcripción con cualquier endpoint compatible con `/audio/transcriptions` (por ejemplo Groq Whisper).
 - **Panel en tiempo real**: Server-Sent Events, sin recargar la página; API abierta a cualquier origen (CORS).
@@ -78,7 +80,7 @@ Las capturas se generaron con `npm run seed` (datos de ejemplo, sin personas rea
 ## 🛠️ Tecnologías Utilizadas
 
 - **Frontend**: HTML, CSS y JavaScript sin framework; Chart.js 4.4.1 desde cdnjs; `EventSource` para SSE.
-- **Backend**: Node.js (ESM), Express 5, grammY, whatsapp-web.js, SDK `openai` contra un proveedor compatible (por defecto xAI Grok), cheerio y undici para el scraping.
+- **Backend**: Node.js (ESM), Express 5, grammY, whatsapp-web.js, SDK `openai` contra un proveedor compatible (por defecto Groq con `gpt-oss-120b`; también funciona con xAI), cheerio y undici para el scraping.
 - **Base de datos**: SQLite con el módulo nativo `node:sqlite` (sin dependencias nativas).
 - **Pruebas**: `node:test` y ESLint 10.
 - **Despliegue**: Docker (Node 24 + Chromium) y blueprint de Render con disco persistente; túnel de Cloudflare para demos locales.
@@ -159,7 +161,7 @@ Los conectores de mensajería solo traducen eventos del canal; toda la lógica d
 
 - Node.js 22.5 o superior (se probó con Node 26; la imagen Docker usa Node 24).
 - npm 10 o superior.
-- Una clave de un proveedor LLM compatible con la API de OpenAI (por defecto xAI).
+- Una clave de un proveedor LLM compatible con la API de OpenAI (por defecto Groq, gratis en https://console.groq.com/keys).
 - Un bot de Telegram creado con [@BotFather](https://t.me/BotFather).
 - Solo para WhatsApp: Google Chrome o Chromium instalado y un teléfono para vincular la sesión.
 - Solo en producción: un servicio siempre encendido con disco persistente (la base SQLite y la sesión de WhatsApp viven en disco).
@@ -187,9 +189,10 @@ cp .env.example .env
 | Variable | Uso |
 | :--- | :--- |
 | `LLM_API_KEY` | Clave del proveedor LLM |
-| `LLM_BASE_URL` | Endpoint compatible con OpenAI (por defecto `https://api.x.ai/v1`) |
-| `LLM_MODEL` | Modelo del agente (por defecto `grok-4-fast-non-reasoning`; verifica con `npm run models`) |
-| `LLM_ANALYZER_MODEL` | Modelo del termómetro y resúmenes (opcional) |
+| `LLM_BASE_URL` | Endpoint compatible con OpenAI (por defecto `https://api.groq.com/openai/v1`) |
+| `LLM_MODEL` | Modelos del agente separados por comas; ante un 429 se usa el siguiente (verifica con `npm run models`) |
+| `LLM_ANALYZER_MODEL` | Modelos del termómetro y resúmenes (opcional) |
+| `LLM_REASONING_EFFORT` | Esfuerzo de razonamiento para `gpt-oss` (`low` recomendado) |
 | `TELEGRAM_BOT_TOKEN` | Token de @BotFather |
 | `STT_API_KEY`, `STT_BASE_URL`, `STT_MODEL` | Transcripción de voz (opcional, por defecto Groq Whisper) |
 | `WHATSAPP_ENABLED`, `CHROME_PATH` | Activa WhatsApp y apunta al ejecutable de Chrome |
@@ -317,9 +320,9 @@ El scraper lee `course.php` y cada `cursoN.php`. Las tarjetas comentadas en el H
 
 ### Pendiente de confirmar
 
-- El nombre exacto del modelo de xAI depende de la cuenta; `npm run models` lo confirma.
+- El plan gratis de Groq limita a 8000 tokens por minuto por modelo; por eso `LLM_MODEL` encadena tres modelos. Con muchas personas a la vez conviene el plan Dev de Groq.
 - La web del CTT muestra dos direcciones distintas (Río Payamino y Río Guayllabamba); el agente solo menciona "FISEI, Campus Huachi, Av. Los Chasquis".
-- Algunos cursos figuran como "abiertos" con fechas de inscripción de 2025; el agente lo advierte al usuario.
+- Varios cursos figuran como "ABIERTO" en la web aunque su inscripción ya venció; el estado real se calcula con las fechas (`registrationStatus`) y el bot solo ofrece inscripción en los vigentes.
 
 ---
 
@@ -354,6 +357,7 @@ El scraper lee `course.php` y cada `cursoN.php`. Las tarjetas comentadas en el H
 - Oferta de cursos: https://ctt-talleresfisei.uta.edu.ec/course.php
 - grammY: https://grammy.dev/
 - whatsapp-web.js: https://wwebjs.dev/
+- API de Groq: https://console.groq.com/docs
 - API de xAI: https://docs.x.ai/
 - `node:sqlite`: https://nodejs.org/api/sqlite.html
 - Render Blueprints: https://render.com/docs/blueprint-spec
