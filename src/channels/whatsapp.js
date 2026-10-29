@@ -83,8 +83,20 @@ export function createWhatsAppClient({ service, chromePath, dataPath, transcribe
     });
 
     wa.on('message', (msg) =>
-      handleMessage(wa, msg).catch((err) => console.error(`[whatsapp] ${err.message}`)),
+      handleMessage(wa, msg).catch((err) => console.error(`[whatsapp] Error con el mensaje de ${msg.from}:`, err?.stack ?? err)),
     );
+  }
+
+  /** Envía al chat del mensaje; si sendMessage falla, responde citando el mensaje. */
+  async function sendTo(wa, msg, text) {
+    for (const part of splitMessage(text, MAX_LENGTH)) {
+      try {
+        await wa.sendMessage(msg.from, part);
+      } catch (err) {
+        console.warn(`[whatsapp] sendMessage falló (${err?.message}), usando reply`);
+        await msg.reply(part);
+      }
+    }
   }
 
   async function handleMessage(wa, msg) {
@@ -112,19 +124,20 @@ export function createWhatsAppClient({ service, chromePath, dataPath, transcribe
 
     if (RESET_WORDS.test(text)) {
       service.reset(user);
-      await wa.sendMessage(msg.from, RESET_DONE);
+      await sendTo(wa, msg, RESET_DONE);
       return;
     }
     if (MENU_WORDS.test(text)) {
-      await wa.sendMessage(msg.from, `${WELCOME}\n\n${coursesMenu()}`);
+      await sendTo(wa, msg, `${WELCOME}\n\n${coursesMenu()}`);
       return;
     }
 
-    const chat = await msg.getChat();
-    await chat.sendStateTyping().catch(() => {});
+    // El indicador "escribiendo" es opcional: si WhatsApp Web cambia su API interna no debe bloquear la respuesta.
+    const chat = await msg.getChat().catch(() => null);
+    await chat?.sendStateTyping().catch(() => {});
     const replies = await service.handleIncoming({ ...user, text });
-    await chat.clearState().catch(() => {});
-    for (const reply of replies) await sendText(msg.from, reply);
+    await chat?.clearState().catch(() => {});
+    for (const reply of replies) await sendTo(wa, msg, reply);
   }
 
   return {
