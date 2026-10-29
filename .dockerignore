@@ -1,0 +1,8 @@
+node_modules
+.env
+.git
+data/*.db*
+.wwebjs_auth
+.wwebjs_cache
+docs
+test
