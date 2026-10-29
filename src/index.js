@@ -36,17 +36,21 @@ if (config.telegram.token) {
   console.warn('[telegram] TELEGRAM_BOT_TOKEN no configurado; canal deshabilitado.');
 }
 
-let whatsapp = null;
-if (config.whatsapp.enabled) {
-  whatsapp = createWhatsAppClient({ service, transcriber, chromePath: config.whatsapp.chromePath, dataPath: config.whatsapp.dataPath });
-  whatsapp.start().catch((err) => console.error(`[whatsapp] No se pudo iniciar: ${err.message}`));
-} else {
-  console.warn('[whatsapp] WHATSAPP_ENABLED=false; canal deshabilitado.');
-}
+// El canal de WhatsApp siempre queda disponible para iniciar sesión desde el panel;
+// arranca solo si WHATSAPP_ENABLED=true o si ya hay una sesión vinculada.
+const whatsapp = createWhatsAppClient({
+  service,
+  transcriber,
+  chromePath: config.whatsapp.chromePath,
+  dataPath: config.whatsapp.dataPath,
+});
+if (config.whatsapp.enabled || whatsapp.hasSession()) whatsapp.start();
+else console.log('[whatsapp] Listo para vincular: usa "Iniciar sesión" en el panel.');
 
 const app = createDashboard({
   store,
   service,
+  whatsapp,
   auth: config.dashboard,
   telegramInfo: () => (telegramInfo ? { username: telegramInfo.username } : null),
 });
