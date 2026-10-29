@@ -27,23 +27,38 @@ const fuzzyIncludes = (words, term) =>
 
 const MONTHS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
-/** Última fecha de un texto como "Del 01 de octubre de 2026 al 15 de octubre de 2026" o "Del 19 de mayo al 04 de junio de 2025". */
-export function parseEndDate(text) {
+/**
+ * Fechas de un rango como "Del 01 de octubre de 2026 al 15 de octubre de 2026" o
+ * "Del 19 de mayo al 04 de junio de 2025" (el año de la primera fecha puede faltar).
+ */
+export function parseDateRange(text) {
   if (!text) return null;
   const t = normalize(text).replace('setiembre', 'septiembre');
-  const year = [...t.matchAll(/\b(20\d{2})\b/g)].at(-1)?.[1];
-  const day = [...t.matchAll(/(\d{1,2}) de ([a-z]+)/g)].filter((m) => MONTHS.includes(m[2])).at(-1);
-  if (!year || !day) return null;
-  return new Date(Date.UTC(Number(year), MONTHS.indexOf(day[2]), Number(day[1]), 23, 59));
+  const years = [...t.matchAll(/\b(20\d{2})\b/g)].map((m) => Number(m[1]));
+  const days = [...t.matchAll(/(\d{1,2}) de ([a-z]+)/g)].filter((m) => MONTHS.includes(m[2]));
+  if (!years.length || !days.length) return null;
+  const first = days[0];
+  const last = days.at(-1);
+  const firstYear = years.length > 1 ? years[0] : years.at(-1);
+  return {
+    start: new Date(Date.UTC(firstYear, MONTHS.indexOf(first[2]), Number(first[1]), 5, 0)),
+    end: new Date(Date.UTC(years.at(-1), MONTHS.indexOf(last[2]), Number(last[1]), 23, 59) + 5 * 3600_000),
+  };
 }
+
+export const parseEndDate = (text) => parseDateRange(text)?.end ?? null;
 
 /** El estado "abierto" de la web no siempre coincide con las fechas: se calcula con la fecha real. */
 export function registrationStatus(c, now = new Date()) {
   if (c.status !== 'abierto') return 'cerrada';
-  const end = parseEndDate(c.details?.['Fechas de inscripciones']);
-  if (!end) return 'abierta (confirmar fechas)';
-  return end >= now ? 'abierta' : 'vencida';
+  const range = parseDateRange(c.details?.['Fechas de inscripciones']);
+  if (!range) return 'abierta (confirmar fechas)';
+  if (range.end < now) return 'vencida';
+  return range.start > now ? 'próxima' : 'abierta';
 }
+
+/** Cursos que el asistente puede ofrecer: inscripción abierta o por abrir. */
+export const isOfferable = (status) => status === 'próxima' || status.startsWith('abierta');
 
 export function courseSummary(c) {
   return {
@@ -84,6 +99,7 @@ export function getCourse({ id }) {
   const c = getCourses().find((course) => course.id === Number(id));
   if (!c) return { error: `No existe un curso con id ${id}` };
   const registration = registrationStatus(c);
+  const range = parseDateRange(c.details?.['Fechas de inscripciones']);
   // Solo los títulos de unidades/módulos: el detalle anidado duplica texto y gasta tokens.
   const units = (c.contents ?? []).filter((x) => /^(unidad|m[oó]dulo)/i.test(x));
   return {
@@ -94,7 +110,9 @@ export function getCourse({ id }) {
     aviso:
       registration === 'vencida'
         ? 'La inscripción de esta edición YA CERRÓ: dilo, no compartas el enlace y recomienda el curso con inscripción abierta más afín. No transfieras a un asesor por esto.'
-        : undefined,
+        : registration === 'próxima'
+          ? `Las inscripciones abren el ${range.start.toISOString().slice(0, 10)}: dilo con esa fecha y comparte igual el enlace para que se registre desde ese día.`
+          : undefined,
     horas: c.hours,
     descripcion: c.description,
     objetivos: c.objectives,
@@ -105,7 +123,7 @@ export function getCourse({ id }) {
     materiales: c.materials,
     contenidos: (units.length ? units : (c.contents ?? []).slice(0, 12)).map((x) => (x.length > 180 ? `${x.slice(0, 180)}…` : x)),
     url: c.url,
-    inscripcion: registration === 'abierta' || registration.startsWith('abierta (') ? (c.registrationUrl ?? `${c.url}#inscripcion`) : null,
+    inscripcion: isOfferable(registration) ? (c.registrationUrl ?? `${c.url}#inscripcion`) : null,
   };
 }
 

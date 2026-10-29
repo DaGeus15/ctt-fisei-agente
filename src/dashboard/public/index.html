@@ -26,6 +26,7 @@
           <button role="tab" id="tab-inbox" aria-selected="true" aria-controls="view-inbox">
             Bandeja en vivo <span id="attention" class="count" hidden></span>
           </button>
+          <button role="tab" id="tab-courses" aria-selected="false" aria-controls="view-courses">Cursos</button>
           <button role="tab" id="tab-metrics" aria-selected="false" aria-controls="view-metrics">Métricas</button>
           <span id="live" class="live" title="Conexión en tiempo real">conectando…</span>
         </div>
@@ -68,6 +69,14 @@
             <p>Los mensajes llegan en tiempo real. Toma el control para pausar la IA y responder desde el mismo bot.</p>
           </div>
         </section>
+      </section>
+
+      <section id="view-courses" role="tabpanel" aria-labelledby="tab-courses" hidden>
+        <div class="courses-head">
+          <p id="courses-summary"></p>
+          <button type="button" class="btn-primary" id="courses-refresh">Sincronizar con la web</button>
+        </div>
+        <div class="courses" id="courses"></div>
       </section>
 
       <section id="view-metrics" role="tabpanel" aria-labelledby="tab-metrics" hidden>

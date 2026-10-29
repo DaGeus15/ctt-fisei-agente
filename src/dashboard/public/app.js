@@ -316,7 +316,7 @@
           : [el('span', { class: 'dot off' }), 'Sin configurar'],
       ),
       renderWhatsApp(wa),
-      channelItem('cursos', '#ad272e', `${st.courses.open} cursos con inscripción vigente`, [
+      channelItem('cursos', '#ad272e', `${st.courses.open} cursos para inscribirse`, [
         el('span', { class: 'dot ok' }),
         st.courses.updatedAt ? `de ${st.courses.total} publicados · sincronizado ${fmtTime(st.courses.updatedAt)}` : 'Sin datos',
       ]),
@@ -475,6 +475,75 @@
   }
   const reloadMetrics = debounce(() => activeTab === 'metrics' && loadMetrics().catch(console.error), 1500);
 
+  // ---------- Cursos ----------
+
+  const REGISTRATION = {
+    abierta: 'Inscripción abierta',
+    próxima: 'Inscripción por abrir',
+    'abierta (confirmar fechas)': 'Abierta, confirmar fechas',
+    vencida: 'Inscripción vencida',
+    cerrada: 'Cerrado',
+  };
+
+  function courseCard(c) {
+    const open = c.registration === 'próxima' || c.registration.startsWith('abierta');
+    const facts = [
+      ['Inscripciones', c.registrationDates],
+      ['Fechas', c.courseDates],
+      ['Modalidad', c.modality],
+      ['Horario', c.schedule],
+      ['Precios', c.prices],
+    ].filter(([, v]) => v);
+    return el(
+      'article',
+      { class: `course${open ? '' : ' past'}` },
+      el(
+        'header',
+        { class: `poster ${open ? 'ai' : 'human'}` },
+        el('div', { class: 'pills' }, el('span', { class: 'pill' }, REGISTRATION[c.registration] ?? c.registration), c.hours ? el('span', { class: 'pill' }, `${c.hours} horas`) : null),
+        el('h3', {}, c.name),
+      ),
+      el(
+        'div',
+        { class: 'course-body' },
+        c.description ? el('p', { class: 'course-desc' }, c.description) : null,
+        el('dl', {}, ...facts.flatMap(([k, v]) => [el('dt', {}, k), el('dd', {}, v.replaceAll('; ', '\n'))])),
+        el(
+          'div',
+          { class: 'course-actions' },
+          open && c.registrationUrl ? el('a', { class: 'btn-primary', href: c.registrationUrl, target: '_blank', rel: 'noopener' }, 'Formulario de inscripción') : null,
+          el('a', { href: c.url, target: '_blank', rel: 'noopener' }, 'Ver en la web del CTT'),
+        ),
+      ),
+    );
+  }
+
+  async function loadCourses() {
+    const courses = await api('/api/courses');
+    const now = courses.filter((c) => c.registration.startsWith('abierta')).length;
+    const soon = courses.filter((c) => c.registration === 'próxima').length;
+    $('courses-summary').textContent = `${now} con inscripción abierta y ${soon} por abrir, de ${courses.length} cursos publicados. Es la misma información que usa el asistente.`;
+    $('courses').replaceChildren(...courses.map(courseCard));
+  }
+
+  $('courses-refresh').addEventListener('click', async (e) => {
+    const button = e.currentTarget;
+    button.disabled = true;
+    button.textContent = 'Sincronizando…';
+    try {
+      await post('/api/courses/refresh');
+      await loadCourses();
+      button.textContent = 'Sincronizado';
+    } catch (err) {
+      button.textContent = `No se pudo sincronizar: ${err.message}`;
+    } finally {
+      setTimeout(() => {
+        button.disabled = false;
+        button.textContent = 'Sincronizar con la web';
+      }, 2500);
+    }
+  });
+
   // ---------- Tiempo real (SSE) ----------
 
   function connect() {
@@ -505,17 +574,19 @@
 
   // ---------- Pestañas y filtros ----------
 
+  const TABS = ['inbox', 'courses', 'metrics'];
+
   function showTab(tab) {
     activeTab = tab;
-    $('tab-inbox').setAttribute('aria-selected', String(tab === 'inbox'));
-    $('tab-metrics').setAttribute('aria-selected', String(tab === 'metrics'));
-    $('view-inbox').hidden = tab !== 'inbox';
-    $('view-metrics').hidden = tab !== 'metrics';
+    for (const t of TABS) {
+      $(`tab-${t}`).setAttribute('aria-selected', String(t === tab));
+      $(`view-${t}`).hidden = t !== tab;
+    }
     if (tab === 'metrics') loadMetrics().catch(console.error);
+    if (tab === 'courses') loadCourses().catch(console.error);
   }
 
-  $('tab-inbox').addEventListener('click', () => showTab('inbox'));
-  $('tab-metrics').addEventListener('click', () => showTab('metrics'));
+  for (const t of TABS) $(`tab-${t}`).addEventListener('click', () => showTab(t));
   $('search').addEventListener('input', () => renderInbox());
   for (const id of ['range', 'channel']) {
     $(id).addEventListener('change', () => {
@@ -529,6 +600,7 @@
   loadInbox().catch(console.error);
   connect();
   if (location.hash === '#metricas') showTab('metrics');
+  if (location.hash === '#cursos') showTab('courses');
   // Enlace directo a una conversación: #c=telegram:123
   if (location.hash.startsWith('#c=')) openConversation(decodeURIComponent(location.hash.slice(3))).catch(console.error);
 })();
