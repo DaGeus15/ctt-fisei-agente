@@ -8,7 +8,8 @@ const FALLBACK =
   'Lo siento, en este momento no puedo responder. Escríbenos a talleresfisei@uta.edu.ec o ctt.fisei@uta.edu.ec y te ayudaremos.';
 
 export function createLlmClient() {
-  return new OpenAI({ apiKey: config.llm.apiKey, baseURL: config.llm.baseURL, timeout: 60_000, maxRetries: 2 });
+  // Sin clave el cliente igual se crea: las llamadas fallan y el agente usa la respuesta de respaldo.
+  return new OpenAI({ apiKey: config.llm.apiKey || 'sin-configurar', baseURL: config.llm.baseURL, timeout: 60_000, maxRetries: 2 });
 }
 
 /**
