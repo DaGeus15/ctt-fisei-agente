@@ -2,10 +2,11 @@ import OpenAI from 'openai';
 import { config } from '../config.js';
 import { buildSystemPrompt } from './prompt.js';
 import { TOOL_DEFINITIONS, TOOL_HANDLERS } from './tools.js';
+import { checkOutput, securityNote, SAFE_REPLY } from '../core/guard.js';
 
 const MAX_STEPS = 5;
 const FALLBACK =
-  'Lo siento, en este momento no puedo responder. Escríbenos a talleresfisei@uta.edu.ec o ctt.fisei@uta.edu.ec y te ayudaremos.';
+  'Uy, se me complicó responder en este momento 🙏. Escríbenos a talleresfisei@uta.edu.ec o ctt.fisei@uta.edu.ec y te ayudamos enseguida.';
 
 export function createLlmClient() {
   // Sin clave el cliente igual se crea: las llamadas fallan y el agente usa la respuesta de respaldo.
@@ -13,69 +14,43 @@ export function createLlmClient() {
 }
 
 /**
- * Agente de atención: recibe un mensaje de un canal, consulta el historial,
- * ejecuta el ciclo de herramientas del LLM y registra todo en el store.
+ * Pipeline de inferencia: arma el contexto (prompt + resumen + historial
+ * acotado), ejecuta el ciclo de herramientas y valida la respuesta.
+ * No persiste nada: eso lo hace ConversationService.
  */
 export class CourseAgent {
-  constructor({ store, client = createLlmClient(), model = config.llm.model }) {
-    this.store = store;
+  constructor({ client = createLlmClient(), model = config.llm.model } = {}) {
     this.client = client;
     this.model = model;
+    this.fallback = FALLBACK;
   }
 
-  async reply({ channel, externalId, name, text }) {
-    const userId = this.store.upsertUser({ channel, externalId, name });
-    const history = this.store.getHistory(userId);
-    this.store.addMessage({ userId, channel, role: 'user', content: text });
-
-    const started = Date.now();
-    try {
-      const { answer, courses, usage } = await this.run(channel, history, text);
-      this.store.addMessage({
-        userId,
-        channel,
-        role: 'assistant',
-        content: answer,
-        courses,
-        latencyMs: Date.now() - started,
-        tokensIn: usage.in,
-        tokensOut: usage.out,
-      });
-      return answer;
-    } catch (err) {
-      console.error(`[agent] ${err.message}`);
-      this.store.addMessage({
-        userId,
-        channel,
-        role: 'assistant',
-        content: FALLBACK,
-        latencyMs: Date.now() - started,
-        error: err.message,
-      });
-      return FALLBACK;
-    }
-  }
-
-  resetConversation({ channel, externalId, name }) {
-    const userId = this.store.upsertUser({ channel, externalId, name });
-    this.store.resetSession(userId);
-  }
-
-  async run(channel, history, text) {
-    const messages = [
+  buildMessages({ channel, history, text, flags = [], summary, profile }) {
+    const context = [];
+    if (summary) context.push(`Resumen de lo conversado antes: ${summary}`);
+    if (profile && Object.keys(profile).length) context.push(`Perfil conocido del prospecto: ${JSON.stringify(profile)}`);
+    return [
       { role: 'system', content: buildSystemPrompt(channel) },
-      ...history.map(({ role, content }) => ({ role, content })),
-      { role: 'user', content: text },
+      ...(context.length ? [{ role: 'system', content: context.join('\n') }] : []),
+      // Los mensajes del operador salen con la identidad del bot, así que el modelo los ve como propios.
+      ...history.map(({ role, content }) => ({ role: role === 'user' ? 'user' : 'assistant', content })),
+      { role: 'user', content: text + securityNote(flags) },
     ];
+  }
+
+  async respond(input) {
+    const messages = this.buildMessages(input);
     const courses = new Set();
     const usage = { in: 0, out: 0 };
+    let handover = null;
 
     for (let step = 0; step < MAX_STEPS; step++) {
       const completion = await this.client.chat.completions.create({
         model: this.model,
         messages,
         tools: TOOL_DEFINITIONS,
-        temperature: 0.3,
+        temperature: 0.5,
+        max_tokens: 600,
       });
       usage.in += completion.usage?.prompt_tokens ?? 0;
       usage.out += completion.usage?.completion_tokens ?? 0;
@@ -85,12 +60,14 @@ export class CourseAgent {
       if (!calls.length) {
         const answer = message.content?.trim();
         if (!answer) throw new Error('Respuesta vacía del modelo');
-        return { answer, courses: [...courses], usage };
+        if (!checkOutput(answer)) return { answer: SAFE_REPLY, courses: [...courses], usage, handover, blocked: true };
+        return { answer, courses: [...courses], usage, handover };
       }
 
       messages.push({ role: 'assistant', content: message.content ?? null, tool_calls: calls });
       for (const call of calls) {
         const result = this.runTool(call, courses);
+        if (call.function.name === 'transferir_a_asesor' && result.ok) handover = result.handover;
         messages.push({ role: 'tool', tool_call_id: call.id, content: JSON.stringify(result) });
       }
     }
