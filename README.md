@@ -6,7 +6,7 @@
 [![SQLite](https://img.shields.io/badge/SQLite-node%3Asqlite-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://nodejs.org/api/sqlite.html)
 [![Telegram](https://img.shields.io/badge/Telegram-grammY-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://grammy.dev/)
 [![WhatsApp](https://img.shields.io/badge/WhatsApp-whatsapp--web.js-25D366?style=flat-square&logo=whatsapp&logoColor=white)](https://wwebjs.dev/)
-[![Docker](https://img.shields.io/badge/Docker-Render-2496ED?style=flat-square&logo=docker&logoColor=white)](https://render.com/docs/docker)
+[![Azure](https://img.shields.io/badge/Azure-App%20Service-0078D4?style=flat-square&logo=microsoftazure&logoColor=white)](https://learn.microsoft.com/azure/app-service/)
 
 **Asistente de Cursos CTT-FISEI** es un agente conversacional con IA que atiende por Telegram y WhatsApp a las personas interesadas en los cursos del Centro de Transferencia y Desarrollo de Tecnologías (CTT) de la FISEI. Informa, perfila al prospecto, responde objeciones, comparte el enlace de inscripción y, cuando hace falta, pasa la conversación a una persona. Incluye un panel de mando web en tiempo real para que el equipo del CTT supervise e intervenga.
 
@@ -70,6 +70,7 @@ Las capturas se generaron con `npm run seed` (datos de ejemplo, sin personas rea
 - **Tolerancia a faltas ortográficas**: la búsqueda de cursos usa distancia de edición ("pyton", "arduno").
 - **Notas de voz**: transcripción con cualquier endpoint compatible con `/audio/transcriptions` (por ejemplo Groq Whisper).
 - **Identidad del CTT**: el panel usa el logo, la tipografía y los colores del sitio oficial; la cabecera de cada conversación es un póster de curso, marino cuando atiende la IA y carmesí cuando atiende un operador.
+- **Pestaña Cursos**: el panel muestra el catálogo como pósters con el estado real de inscripción (abierta, por abrir, vencida o cerrada), fechas, modalidad, precios y el formulario; se puede sincronizar con la web en un clic.
 - **Panel en tiempo real**: Server-Sent Events, sin recargar la página; API abierta a cualquier origen (CORS).
 - **Métricas**: personas atendidas, leads calientes, derivaciones, manipulaciones bloqueadas, latencia, tokens por respuesta, temas, cursos y horarios.
 - **Dos canales, un pipeline**: Telegram (grammY) y WhatsApp (whatsapp-web.js) usan el mismo servicio de conversación.
@@ -84,7 +85,7 @@ Las capturas se generaron con `npm run seed` (datos de ejemplo, sin personas rea
 - **Backend**: Node.js (ESM), Express 5, grammY, whatsapp-web.js, SDK `openai` contra un proveedor compatible (por defecto Groq con `gpt-oss-120b`; también funciona con xAI), cheerio y undici para el scraping.
 - **Base de datos**: SQLite con el módulo nativo `node:sqlite` (sin dependencias nativas).
 - **Pruebas**: `node:test` y ESLint 10.
-- **Despliegue**: Docker (Node 24 + Chromium) y blueprint de Render con disco persistente; túnel de Cloudflare para demos locales.
+- **Despliegue**: Docker (Node 24 + Chromium) en Azure App Service con Azure Container Registry; también blueprint de Render y túnel de Cloudflare para demos locales.
 
 ---
 
@@ -151,6 +152,7 @@ Los conectores de mensajería solo traducen eventos del canal; toda la lógica d
 ├── data/courses.json               # Snapshot del catálogo (respaldo si la web no responde)
 ├── test/                           # Pruebas node:test y fixtures HTML
 ├── docs/capturas/                  # Capturas del panel
+├── scripts/deploy-azure.sh         # Despliegue en Azure App Service
 ├── Dockerfile                      # Imagen con Node 24 y Chromium
 ├── render.yaml                     # Blueprint de Render
 └── .env.example                    # Plantilla de variables de entorno
@@ -199,7 +201,7 @@ cp .env.example .env
 | `WHATSAPP_ENABLED`, `CHROME_PATH`, `WWEBJS_DATA_PATH` | Conectar WhatsApp al arrancar, ejecutable de Chrome y carpeta de la sesión |
 | `DASHBOARD_PORT`, `DASHBOARD_USER`, `DASHBOARD_PASSWORD` | Puerto y autenticación básica del panel (sin contraseña queda público) |
 | `HANDOVER_TIMEOUT_MIN` | Minutos sin respuesta del operador antes de que la IA retome (0 = nunca) |
-| `DB_PATH`, `COURSES_REFRESH_HOURS` | Ruta de SQLite y frecuencia de refresco del catálogo |
+| `DB_PATH`, `SQLITE_JOURNAL`, `COURSES_REFRESH_HOURS` | Ruta de SQLite, modo de diario (`WAL` por defecto, `DELETE` en discos de red) y frecuencia de refresco del catálogo |
 
 > [!WARNING]
 > Los secretos nunca se guardan en el repositorio: `.env` está en `.gitignore`. En producción se definen como variables de la plataforma.
@@ -242,6 +244,7 @@ Reinicia el proceso al guardar cambios. Para ver el panel con datos, ejecuta ant
 | `npm test` | Pruebas con `node:test` |
 | `npm run check` | Lint y pruebas |
 | `npm run tunnel` | Expone el panel local con un túnel de Cloudflare (requiere `cloudflared`) |
+| `npm run deploy:azure` | Construye la imagen en Azure y publica la Web App |
 
 ### Comandos del bot
 
@@ -256,9 +259,23 @@ Reinicia el proceso al guardar cambios. Para ver el panel con datos, ejecuta ant
 
 ## ☁️ Despliegue
 
-El bot usa *long polling*, así que el servicio debe estar siempre encendido; no sirve un entorno serverless que se duerme.
+El bot usa *long polling*, así que el servicio debe estar siempre encendido; no sirve un entorno serverless que se duerme. Solo debe correr **una** instancia a la vez: dos procesos con el mismo token de Telegram se quitan los mensajes entre sí.
 
-**Render (recomendado)**: crea un *Blueprint* apuntando a este repositorio. `render.yaml` define un servicio Docker con disco persistente en `/app/storage` (SQLite y sesión de WhatsApp) y health check en `/api/status`. Define en Render: `LLM_API_KEY`, `TELEGRAM_BOT_TOKEN`, `DASHBOARD_PASSWORD` y, si usas voz, `STT_API_KEY`. La plataforma inyecta `PORT` y la aplicación lo respeta.
+**Azure App Service (despliegue actual)**: con Azure CLI y sesión iniciada (`az login`), y un `.env` con `LLM_API_KEY` y `TELEGRAM_BOT_TOKEN`:
+
+```bash
+npm run deploy:azure
+```
+
+`scripts/deploy-azure.sh` crea (o reutiliza) el grupo `rg-ctt-fisei-agente` en `eastus2`, un Azure Container Registry Basic, un plan Linux B1 y la Web App `ctt-fisei-asistente`. La imagen se construye con Docker local y se sube al registro (Azure for Students no permite `az acr build`), la app queda *Always On* y los secretos de `.env` pasan a la configuración de la app. Si `.env` no trae `DASHBOARD_PASSWORD`, se genera una. Volver a ejecutarlo publica la versión actual del código.
+
+| Configuración en Azure | Por qué |
+| :--- | :--- |
+| `DB_PATH=/home/data/agente.db`, `SQLITE_JOURNAL=DELETE` | `/home` es persistente pero es un disco de red, donde WAL no es seguro |
+| `WWEBJS_DATA_PATH=/tmp/wwebjs` | Chrome no puede guardar su perfil en `/home`; tras cada reinicio hay que volver a escanear el QR de WhatsApp |
+| `WEBSITES_PORT=3000` | Puerto del contenedor |
+
+**Render**: crea un *Blueprint* apuntando a este repositorio. `render.yaml` define un servicio Docker con disco persistente en `/app/storage` (SQLite y sesión de WhatsApp) y health check en `/api/status`. Define en Render: `LLM_API_KEY`, `TELEGRAM_BOT_TOKEN`, `DASHBOARD_PASSWORD` y, si usas voz, `STT_API_KEY`. La plataforma inyecta `PORT` y la aplicación lo respeta.
 
 **Cualquier host con Docker**:
 
@@ -284,6 +301,7 @@ docker run -d -p 3000:3000 --env-file .env -v ctt-data:/app/storage ctt-fisei-ag
 | `POST` | `/api/conversations/:userId/mode` | `{ mode: "ai" \| "human" }`: tomar control o devolver a la IA |
 | `POST` | `/api/conversations/:userId/read` | Marca la conversación como leída |
 | `GET` | `/api/overview?range=&channel=` | Métricas agregadas |
+| `GET` | `/api/courses` | Catálogo con estado real de inscripción, ordenado por disponibilidad |
 | `GET` | `/api/status` | Estado de Telegram, WhatsApp (incluye QR) y catálogo |
 | `POST` | `/api/whatsapp/start` | Abre WhatsApp Web y publica el QR por SSE |
 | `POST` | `/api/whatsapp/logout` | Desvincula el teléfono y borra la sesión |
@@ -341,6 +359,7 @@ El scraper lee `course.php` y cada `cursoN.php`. Las tarjetas comentadas en el H
 - [x] Defensa contra prompt injection y validación de salida
 - [x] Transcripción de notas de voz
 - [x] Docker y blueprint de Render
+- [x] Despliegue en Azure App Service
 - [x] Vinculación de WhatsApp con QR desde el panel
 - [x] Protocolo de contención ante riesgo para la persona
 - [ ] Varios operadores con asignación de conversaciones
