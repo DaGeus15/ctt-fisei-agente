@@ -7,6 +7,8 @@
 # LLM_API_KEY y TELEGRAM_BOT_TOKEN. Los secretos van a la configuración de la
 # app en Azure, nunca al repositorio.
 set -euo pipefail
+# En Git Bash (Windows) evita que rutas como /home/data se conviertan en C:/Program Files/Git/...
+export MSYS_NO_PATHCONV=1
 
 RG="${RG:-rg-ctt-fisei-agente}"
 LOCATION="${LOCATION:-eastus2}"
