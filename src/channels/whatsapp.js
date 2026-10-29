@@ -24,9 +24,9 @@ function coursesMenu() {
   return `*Cursos con inscripciones abiertas:*\n${lines.join('\n')}\n\nPregúntame por cualquiera de ellos.`;
 }
 
-export function createWhatsAppClient({ service, chromePath, transcriber = null }) {
+export function createWhatsAppClient({ service, chromePath, dataPath, transcriber = null }) {
   const client = new Client({
-    authStrategy: new LocalAuth({ clientId: 'ctt-fisei' }),
+    authStrategy: new LocalAuth({ clientId: 'ctt-fisei', dataPath }),
     puppeteer: {
       headless: true,
       executablePath: chromePath,

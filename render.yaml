@@ -1,0 +1,26 @@
+# Blueprint de Render: servicio web siempre activo con disco persistente para SQLite y la sesión de WhatsApp.
+services:
+  - type: web
+    name: ctt-fisei-agente
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/status
+    disk:
+      name: data
+      mountPath: /app/storage
+      sizeGB: 1
+    envVars:
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_BASE_URL
+        value: https://api.x.ai/v1
+      - key: LLM_MODEL
+        value: grok-4-fast-non-reasoning
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: STT_API_KEY
+        sync: false
+      - key: DASHBOARD_PASSWORD
+        sync: false
+      - key: WHATSAPP_ENABLED
+        value: "false"
