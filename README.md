@@ -73,7 +73,9 @@ Las capturas se generaron con `npm run seed` (datos de ejemplo, sin personas rea
 - **Notas de voz**: transcripción con cualquier endpoint compatible con `/audio/transcriptions` (por ejemplo Groq Whisper).
 - **Panel en tiempo real**: Server-Sent Events, sin recargar la página; API abierta a cualquier origen (CORS).
 - **Métricas**: personas atendidas, leads calientes, derivaciones, manipulaciones bloqueadas, latencia, tokens por respuesta, temas, cursos y horarios.
-- **Dos canales, un pipeline**: Telegram (grammY) y WhatsApp (whatsapp-web.js, con QR visible en el panel) usan el mismo servicio de conversación.
+- **Dos canales, un pipeline**: Telegram (grammY) y WhatsApp (whatsapp-web.js) usan el mismo servicio de conversación.
+- **WhatsApp desde el panel**: el botón "Iniciar sesión" abre WhatsApp Web y muestra el QR en la tarjeta del canal; "Cerrar sesión" desvincula el teléfono. La sesión queda guardada y se reconecta sola al reiniciar.
+- **Protocolo de riesgo**: si alguien menciona hacerse daño, el bot responde con contención y las líneas de ayuda de Ecuador (ECU 911, 171 opción 6), pausa la IA y marca la conversación como urgente para el operador.
 
 ---
 
@@ -195,7 +197,7 @@ cp .env.example .env
 | `LLM_REASONING_EFFORT` | Esfuerzo de razonamiento para `gpt-oss` (`low` recomendado) |
 | `TELEGRAM_BOT_TOKEN` | Token de @BotFather |
 | `STT_API_KEY`, `STT_BASE_URL`, `STT_MODEL` | Transcripción de voz (opcional, por defecto Groq Whisper) |
-| `WHATSAPP_ENABLED`, `CHROME_PATH` | Activa WhatsApp y apunta al ejecutable de Chrome |
+| `WHATSAPP_ENABLED`, `CHROME_PATH`, `WWEBJS_DATA_PATH` | Conectar WhatsApp al arrancar, ejecutable de Chrome y carpeta de la sesión |
 | `DASHBOARD_PORT`, `DASHBOARD_USER`, `DASHBOARD_PASSWORD` | Puerto y autenticación básica del panel (sin contraseña queda público) |
 | `HANDOVER_TIMEOUT_MIN` | Minutos sin respuesta del operador antes de que la IA retome (0 = nunca) |
 | `DB_PATH`, `COURSES_REFRESH_HOURS` | Ruta de SQLite y frecuencia de refresco del catálogo |
@@ -220,7 +222,7 @@ npm run scrape
 npm start
 ```
 
-El panel queda en `http://localhost:3000` y el bot de Telegram empieza a responder. Con `WHATSAPP_ENABLED=true` aparece un QR en la terminal y en el panel; escanéalo desde WhatsApp > Dispositivos vinculados.
+El panel queda en `http://localhost:3000` y el bot de Telegram empieza a responder. Para WhatsApp pulsa **Iniciar sesión** en la tarjeta de WhatsApp del panel y escanea el QR desde WhatsApp > Dispositivos vinculados > Vincular un dispositivo. Con `WHATSAPP_ENABLED=true` (o con una sesión ya guardada) se conecta al arrancar.
 
 ### Desarrollo
 
@@ -284,6 +286,8 @@ docker run -d -p 3000:3000 --env-file .env -v ctt-data:/app/storage ctt-fisei-ag
 | `POST` | `/api/conversations/:userId/read` | Marca la conversación como leída |
 | `GET` | `/api/overview?range=&channel=` | Métricas agregadas |
 | `GET` | `/api/status` | Estado de Telegram, WhatsApp (incluye QR) y catálogo |
+| `POST` | `/api/whatsapp/start` | Abre WhatsApp Web y publica el QR por SSE |
+| `POST` | `/api/whatsapp/logout` | Desvincula el teléfono y borra la sesión |
 | `POST` | `/api/courses/refresh` | Fuerza el refresco del catálogo |
 
 Todas las rutas responden con CORS abierto. Si hay `DASHBOARD_PASSWORD`, piden autenticación básica.
@@ -292,6 +296,7 @@ Todas las rutas responden con CORS abierto. Si hay `DASHBOARD_PASSWORD`, piden a
 
 | Disparador | Qué pasa |
 | :--- | :--- |
+| Mensaje con posible riesgo para la persona (autolesión) | Respuesta de contención con líneas de ayuda, IA en pausa, aviso URGENTE |
 | El usuario pide una persona (`/asesor`, "quiero hablar con un humano") | Respuesta de traspaso, IA en pausa |
 | Frustración detectada por patrones | Respuesta de traspaso, estado `frustrado`, IA en pausa |
 | El analizador clasifica `frustrado` | IA en pausa para el siguiente mensaje |
@@ -301,7 +306,7 @@ Todas las rutas responden con CORS abierto. Si hay `DASHBOARD_PASSWORD`, piden a
 
 ### Seguridad frente a prompt injection
 
-- `guard.inspectInput` marca `inyeccion`, `descuento_indebido`, `pide_humano` y `frustracion` antes de llamar al LLM; los intentos quedan registrados como eventos y se ven en el panel.
+- `guard.inspectInput` marca `inyeccion`, `descuento_indebido`, `pide_humano`, `frustracion` (incluye insultos) y `riesgo` antes de llamar al LLM; los intentos quedan registrados como eventos y se ven en el panel.
 - Cuando hay bandera, el turno del usuario lleva una nota del sistema que el modelo debe respetar.
 - El prompt fija las reglas de seguridad como prioridad máxima: no hay cursos gratis, cupones ni descuentos fuera de las tarifas publicadas.
 - `guard.checkOutput` bloquea respuestas que prometan descuentos, cupones o revelen instrucciones, y las reemplaza por una respuesta segura.
@@ -337,6 +342,8 @@ El scraper lee `course.php` y cada `cursoN.php`. Las tarjetas comentadas en el H
 - [x] Defensa contra prompt injection y validación de salida
 - [x] Transcripción de notas de voz
 - [x] Docker y blueprint de Render
+- [x] Vinculación de WhatsApp con QR desde el panel
+- [x] Protocolo de contención ante riesgo para la persona
 - [ ] Varios operadores con asignación de conversaciones
 - [ ] Notificaciones push al operador cuando la IA se pausa
 - [ ] Evaluaciones automáticas de calidad de respuestas
