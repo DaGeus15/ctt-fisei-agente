@@ -21,7 +21,7 @@ export const config = {
     baseURL: env.STT_BASE_URL || 'https://api.groq.com/openai/v1',
     model: env.STT_MODEL || 'whisper-large-v3-turbo',
   },
-  handoverTimeoutMin: Number(env.HANDOVER_TIMEOUT_MIN ?? 15),
+  handoverTimeoutMin: env.HANDOVER_TIMEOUT_MIN ? Number(env.HANDOVER_TIMEOUT_MIN) : 15,
   telegram: {
     token: env.TELEGRAM_BOT_TOKEN ?? '',
   },

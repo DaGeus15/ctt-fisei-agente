@@ -55,7 +55,7 @@ export function createWhatsAppClient({ service, chromePath, dataPath, transcribe
       puppeteer: {
         headless: true,
         executablePath: chromePath,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
       },
     });
     attach(c);
