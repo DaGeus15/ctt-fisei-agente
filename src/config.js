@@ -12,7 +12,14 @@ export const config = {
     apiKey: env.LLM_API_KEY ?? '',
     baseURL: env.LLM_BASE_URL || 'https://api.x.ai/v1',
     model: env.LLM_MODEL || 'grok-4-fast-non-reasoning',
+    analyzerModel: env.LLM_ANALYZER_MODEL || env.LLM_MODEL || 'grok-4-fast-non-reasoning',
   },
+  stt: {
+    apiKey: env.STT_API_KEY ?? '',
+    baseURL: env.STT_BASE_URL || 'https://api.groq.com/openai/v1',
+    model: env.STT_MODEL || 'whisper-large-v3-turbo',
+  },
+  handoverTimeoutMin: Number(env.HANDOVER_TIMEOUT_MIN ?? 15),
   telegram: {
     token: env.TELEGRAM_BOT_TOKEN ?? '',
   },
