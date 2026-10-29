@@ -62,7 +62,9 @@ export class Store {
   constructor(path) {
     if (path !== ':memory:') mkdirSync(dirname(path), { recursive: true });
     this.db = new DatabaseSync(path);
-    this.db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;');
+    // WAL no funciona sobre discos de red (Azure Files /home): ahí se usa SQLITE_JOURNAL=DELETE.
+    const journal = ['WAL', 'DELETE', 'TRUNCATE'].includes(process.env.SQLITE_JOURNAL) ? process.env.SQLITE_JOURNAL : 'WAL';
+    this.db.exec(`PRAGMA journal_mode = ${journal}; PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;`);
     this.db.exec(SCHEMA);
     this.migrate();
   }

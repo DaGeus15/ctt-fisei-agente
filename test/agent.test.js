@@ -129,3 +129,42 @@ test('complete pasa al siguiente modelo cuando uno no tiene cupo', async () => {
   assert.deepEqual(await complete(client, ['a', 'openai/gpt-oss-20b'], {}, 'low'), { ok: 'openai/gpt-oss-20b', reasoning: 'low' });
   assert.deepEqual(used, ['a', 'openai/gpt-oss-20b']);
 });
+
+test('removeFiller quita el relleno de una respuesta degenerada y conserva el texto útil', async () => {
+  const { removeFiller } = await import('../src/agent/agent.js');
+  const raw = [
+    'Te dejo           …  … ……… …  … ……  … …',
+    '¡   … ……  …',
+    '... … …… … …… … …',
+    'The answer……… …',
+    'Oops… …',
+    '---',
+    '¡Claro! Actualmente tenemos varios cursos con inscripción abierta o próxima.',
+    '• Fundamentos de Python 2 – 40 h, virtual autodidacta (16 nov – 16 dic).',
+    '¿Qué te llama más la atención?',
+  ].join('\n');
+  const { text, removed } = removeFiller(raw);
+  assert.ok(removed >= 5);
+  assert.equal(text.split('\n')[0], '¡Claro! Actualmente tenemos varios cursos con inscripción abierta o próxima.');
+  assert.match(text, /Python 2 – 40 h/);
+  assert.deepEqual(removeFiller('Hola... ¿en qué te ayudo?'), { text: 'Hola... ¿en qué te ayudo?', removed: 0 });
+});
+
+test('CourseAgent regenera con otro modelo cuando la respuesta es relleno', async () => {
+  const used = [];
+  const garbage = ['…', '¡… ……', '... … …', 'Oops… …'].join('\n');
+  const client = {
+    chat: {
+      completions: {
+        create: async (body) => {
+          used.push(body.model);
+          const content = used.length === 1 ? garbage : 'Respuesta limpia';
+          return { model: body.model, usage: {}, choices: [{ message: { content } }] };
+        },
+      },
+    },
+  };
+  const result = await new CourseAgent({ client, models: ['a', 'b'] }).respond({ channel: 'telegram', history: [], text: 'hola' });
+  assert.equal(result.answer, 'Respuesta limpia');
+  assert.deepEqual(used, ['a', 'b']);
+});

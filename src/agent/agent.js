@@ -11,6 +11,26 @@ const FALLBACK =
 /** Quita el razonamiento que algunos modelos devuelven dentro del contenido. */
 export const stripThinking = (text) => String(text).replace(/<think>[\s\S]*?(<\/think>|$)/g, '').trim();
 
+/**
+ * Quita líneas de relleno que algunos modelos generan al degenerar ("…", "¡…", "Oops… …").
+ * Una línea es relleno si casi no tiene letras o si mezcla puntos suspensivos con muy poco texto.
+ */
+export function removeFiller(text) {
+  let removed = 0;
+  const lines = String(text)
+    .split('\n')
+    .filter((line) => {
+      const visible = line.replace(/\s/g, '');
+      if (!visible) return true;
+      const letters = (line.match(/\p{L}/gu) ?? []).length;
+      const ellipses = (line.match(/…|\.\.\./g) ?? []).length;
+      const filler = letters / visible.length < 0.4 || (ellipses >= 2 && letters < 25) || (ellipses >= 1 && letters < 8);
+      if (filler) removed++;
+      return !filler;
+    });
+  return { text: lines.join('\n').replace(/\n{3,}/g, '\n\n').trim(), removed };
+}
+
 /** Ajusta el Markdown que algunos modelos generan igual al formato de cada canal. */
 export function formatForChannel(text, channel) {
   let out = stripThinking(text).replace(/^#{1,6}\s+/gm, '').replace(/^\s*[-*]\s+/gm, '• ');
@@ -77,9 +97,11 @@ export class CourseAgent {
     const courses = new Set();
     const usage = { in: 0, out: 0 };
     let handover = null;
+    let models = this.models;
+    let regenerated = false;
 
     for (let step = 0; step < MAX_STEPS; step++) {
-      const completion = await complete(this.client, this.models, {
+      const completion = await complete(this.client, models, {
         messages,
         tools: TOOL_DEFINITIONS,
         temperature: 0.5,
@@ -91,7 +113,16 @@ export class CourseAgent {
       const message = completion.choices[0].message;
       const calls = message.tool_calls ?? [];
       if (!calls.length) {
-        const answer = message.content && formatForChannel(message.content, input.channel);
+        const cleaned = removeFiller(formatForChannel(message.content ?? '', input.channel));
+        // Respuesta degenerada: se vuelve a pedir una vez, empezando por otro modelo de la lista.
+        if (cleaned.removed >= 3 && !regenerated && this.models.length > 1) {
+          console.warn(`[agent] ${completion.model} generó ${cleaned.removed} líneas de relleno; se regenera con otro modelo`);
+          regenerated = true;
+          models = [...this.models.slice(1), this.models[0]];
+          step--;
+          continue;
+        }
+        const answer = cleaned.text;
         if (!answer) throw new Error('Respuesta vacía del modelo');
         if (!checkOutput(answer)) return { answer: SAFE_REPLY, courses: [...courses], usage, handover, blocked: true };
         return { answer, courses: [...courses], usage, handover };
