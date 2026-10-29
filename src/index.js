@@ -38,7 +38,7 @@ if (config.telegram.token) {
 
 let whatsapp = null;
 if (config.whatsapp.enabled) {
-  whatsapp = createWhatsAppClient({ service, transcriber, chromePath: config.whatsapp.chromePath });
+  whatsapp = createWhatsAppClient({ service, transcriber, chromePath: config.whatsapp.chromePath, dataPath: config.whatsapp.dataPath });
   whatsapp.start().catch((err) => console.error(`[whatsapp] No se pudo iniciar: ${err.message}`));
 } else {
   console.warn('[whatsapp] WHATSAPP_ENABLED=false; canal deshabilitado.');

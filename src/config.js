@@ -26,9 +26,10 @@ export const config = {
   whatsapp: {
     enabled: env.WHATSAPP_ENABLED === 'true',
     chromePath: env.CHROME_PATH || undefined,
+    dataPath: env.WWEBJS_DATA_PATH || '.wwebjs_auth',
   },
   dashboard: {
-    port: Number(env.DASHBOARD_PORT || 3000),
+    port: Number(env.PORT || env.DASHBOARD_PORT || 3000),
     user: env.DASHBOARD_USER || 'admin',
     password: env.DASHBOARD_PASSWORD ?? '',
   },

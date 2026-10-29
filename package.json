@@ -14,7 +14,9 @@
     "models": "node src/agent/list-models.js",
     "seed": "node src/db/seed.js",
     "lint": "eslint .",
-    "test": "node --test"
+    "test": "node --test",
+    "tunnel": "cloudflared tunnel --url http://localhost:3000",
+    "check": "npm run lint && npm test"
   },
   "license": "MIT",
   "devDependencies": {
