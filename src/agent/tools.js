@@ -25,11 +25,32 @@ function editDistance(a, b) {
 const fuzzyIncludes = (words, term) =>
   words.some((w) => w.includes(term) || (term.length >= 4 && editDistance(w, term) <= (term.length >= 7 ? 2 : 1)));
 
+const MONTHS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+/** Última fecha de un texto como "Del 01 de octubre de 2026 al 15 de octubre de 2026" o "Del 19 de mayo al 04 de junio de 2025". */
+export function parseEndDate(text) {
+  if (!text) return null;
+  const t = normalize(text).replace('setiembre', 'septiembre');
+  const year = [...t.matchAll(/\b(20\d{2})\b/g)].at(-1)?.[1];
+  const day = [...t.matchAll(/(\d{1,2}) de ([a-z]+)/g)].filter((m) => MONTHS.includes(m[2])).at(-1);
+  if (!year || !day) return null;
+  return new Date(Date.UTC(Number(year), MONTHS.indexOf(day[2]), Number(day[1]), 23, 59));
+}
+
+/** El estado "abierto" de la web no siempre coincide con las fechas: se calcula con la fecha real. */
+export function registrationStatus(c, now = new Date()) {
+  if (c.status !== 'abierto') return 'cerrada';
+  const end = parseEndDate(c.details?.['Fechas de inscripciones']);
+  if (!end) return 'abierta (confirmar fechas)';
+  return end >= now ? 'abierta' : 'vencida';
+}
+
 export function courseSummary(c) {
   return {
     id: c.id,
     nombre: c.name,
     estado: c.status,
+    inscripcion: registrationStatus(c),
     horas: c.hours,
     modalidad: c.details?.['Modalidad'] ?? null,
     inscripciones: c.details?.['Fechas de inscripciones'] ?? null,
@@ -62,10 +83,18 @@ export function searchCourses({ consulta = '', estado = 'todos' } = {}) {
 export function getCourse({ id }) {
   const c = getCourses().find((course) => course.id === Number(id));
   if (!c) return { error: `No existe un curso con id ${id}` };
+  const registration = registrationStatus(c);
+  // Solo los títulos de unidades/módulos: el detalle anidado duplica texto y gasta tokens.
+  const units = (c.contents ?? []).filter((x) => /^(unidad|m[oó]dulo)/i.test(x));
   return {
     id: c.id,
     nombre: c.name,
     estado: c.status,
+    estado_inscripcion: registration,
+    aviso:
+      registration === 'vencida'
+        ? 'La inscripción de esta edición YA CERRÓ: dilo, no compartas el enlace y recomienda el curso con inscripción abierta más afín. No transfieras a un asesor por esto.'
+        : undefined,
     horas: c.hours,
     descripcion: c.description,
     objetivos: c.objectives,
@@ -74,9 +103,9 @@ export function getCourse({ id }) {
     detalles: c.details,
     notas: c.notes,
     materiales: c.materials,
-    contenidos: c.contents,
+    contenidos: (units.length ? units : (c.contents ?? []).slice(0, 12)).map((x) => (x.length > 180 ? `${x.slice(0, 180)}…` : x)),
     url: c.url,
-    inscripcion: c.registrationUrl ?? (c.status === 'abierto' ? `${c.url}#inscripcion` : null),
+    inscripcion: registration === 'abierta' || registration.startsWith('abierta (') ? (c.registrationUrl ?? `${c.url}#inscripcion`) : null,
   };
 }
 
@@ -116,7 +145,7 @@ export const TOOL_DEFINITIONS = [
     function: {
       name: 'transferir_a_asesor',
       description:
-        'Pausa la IA y deriva la conversación a una persona del CTT. Úsala cuando el usuario pida hablar con alguien, pida descuentos, becas, convenios o formas de pago especiales, tenga un reclamo, una duda académica que no está en los datos (tipo "docente"), o esté listo para inscribirse y necesite ayuda con el pago.',
+        'Pausa la IA y deriva la conversación a una persona del CTT. No la uses solo porque un curso esté cerrado o vencido. Úsala únicamente cuando el usuario pida hablar con alguien, pida descuentos, becas, convenios o formas de pago especiales, tenga un reclamo, una duda académica que no está en los datos (tipo "docente"), o esté listo para inscribirse y necesite ayuda con el pago.',
       parameters: {
         type: 'object',
         properties: {
