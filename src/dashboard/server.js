@@ -6,6 +6,7 @@ import { TOPIC_LABELS } from '../db/topics.js';
 import { getCourses, getCoursesUpdatedAt, refreshCourses } from '../scraper/courses.js';
 import { whatsappState } from '../channels/whatsapp.js';
 import { openCourses } from '../channels/common.js';
+import { registrationStatus } from '../agent/tools.js';
 import { bus } from '../core/events.js';
 
 const safeEqual = (a, b) => {
@@ -101,6 +102,27 @@ export function createDashboard({ store, service, auth, telegramInfo, whatsapp =
       byTopic: analytics.byTopic(db, f).map((t) => ({ ...t, label: TOPIC_LABELS[t.topic] ?? t.topic })),
       topCourses: analytics.topCourses(db, f).map((c) => ({ ...c, name: names.get(c.course_id) ?? `Curso ${c.course_id}` })),
     });
+  });
+
+  app.get('/api/courses', (_req, res) => {
+    const order = { abierta: 0, próxima: 1, 'abierta (confirmar fechas)': 2, vencida: 3, cerrada: 4 };
+    const courses = getCourses()
+      .map((c) => ({
+        id: c.id,
+        name: c.name,
+        hours: c.hours,
+        registration: registrationStatus(c),
+        modality: c.details?.['Modalidad'] ?? null,
+        registrationDates: c.details?.['Fechas de inscripciones'] ?? null,
+        courseDates: c.details?.['Fecha del curso'] ?? null,
+        schedule: c.details?.['Horario'] ?? null,
+        prices: c.details?.['Precio para los asistentes'] ?? null,
+        description: c.description ?? null,
+        url: c.url,
+        registrationUrl: c.registrationUrl ?? null,
+      }))
+      .sort((a, b) => order[a.registration] - order[b.registration] || b.id - a.id);
+    res.json(courses);
   });
 
   app.get('/api/inbox', (req, res) => res.json(analytics.inbox(db, filters(req))));
