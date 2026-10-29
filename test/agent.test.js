@@ -103,9 +103,11 @@ test('registrationStatus usa las fechas reales y no solo la etiqueta de la web',
   const { registrationStatus, parseEndDate } = await import('../src/agent/tools.js');
   const course = (insc) => ({ status: 'abierto', details: { 'Fechas de inscripciones': insc } });
   const now = new Date('2026-10-29T12:00:00Z');
-  assert.equal(parseEndDate('Del 19 de mayo al 04 de junio de 2025').toISOString().slice(0, 10), '2025-06-04');
+  // Fin del 04/06/2025 a las 23:59 en Ecuador (UTC-5).
+  assert.equal(parseEndDate('Del 19 de mayo al 04 de junio de 2025').toISOString(), '2025-06-05T04:59:00.000Z');
   assert.equal(registrationStatus(course('Del 01 de octubre de 2026 al 15 de octubre de 2026'), now), 'vencida');
-  assert.equal(registrationStatus(course('Del 30 de octubre de 2026 al 13 de noviembre de 2026'), now), 'abierta');
+  assert.equal(registrationStatus(course('Del 30 de octubre de 2026 al 13 de noviembre de 2026'), now), 'próxima');
+  assert.equal(registrationStatus(course('Del 20 de octubre de 2026 al 13 de noviembre de 2026'), now), 'abierta');
   assert.equal(registrationStatus({ status: 'cerrado' }, now), 'cerrada');
   assert.equal(getCourse({ id: 1 }).inscripcion, null);
 });
