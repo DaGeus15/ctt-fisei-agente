@@ -23,13 +23,18 @@ async function fetchHtml(url) {
 export async function scrapeCourses(baseUrl = config.coursesUrl) {
   const catalog = parseCatalog(await fetchHtml(new URL('course.php', baseUrl).href), baseUrl);
   const courses = [];
+  const previous = new Map((state?.courses ?? []).map((c) => [c.id, c]));
   for (const item of catalog) {
     try {
-      const detail = parseCourse(await fetchHtml(item.url), baseUrl);
+      // El servidor de la UTA a veces corta conexiones: un reintento antes de rendirse.
+      const html = await fetchHtml(item.url).catch(() => fetchHtml(item.url));
+      const detail = parseCourse(html, baseUrl);
       courses.push({ ...item, ...detail, name: item.name || detail.name, title: detail.name });
     } catch (err) {
-      console.warn(`[scraper] No se pudo leer ${item.url}: ${err.message}`);
-      courses.push(item);
+      // Sin detalle nuevo se conserva el anterior para no perder precios ni fechas.
+      const cached = previous.get(item.id);
+      console.warn(`[scraper] No se pudo leer ${item.url}: ${err.message}${cached ? ' (se usa la versión guardada)' : ''}`);
+      courses.push(cached ? { ...cached, ...item } : item);
     }
   }
   return { updatedAt: new Date().toISOString(), source: baseUrl, courses };
@@ -57,11 +62,12 @@ export async function refreshCourses() {
 
 /** Devuelve los cursos en memoria; usa la caché en disco si la web no responde. */
 export async function initCourses() {
+  // Primero la caché: sirve de respaldo para los cursos cuyo detalle no se pueda descargar.
+  await loadCachedCourses();
   try {
     await refreshCourses();
   } catch (err) {
     console.warn(`[scraper] Usando caché local: ${err.message}`);
-    await loadCachedCourses();
   }
   if (!state) throw new Error('No hay datos de cursos disponibles');
   const hours = config.coursesRefreshHours;
