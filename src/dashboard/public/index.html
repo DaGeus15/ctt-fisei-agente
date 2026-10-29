@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard CTT-FISEI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">CTT-FISEI · Universidad Técnica de Ambato</p>
+        <h1>Interacciones del asistente de cursos</h1>
+      </div>
+      <div class="filters" role="group" aria-label="Filtros">
+        <label>
+          Periodo
+          <select id="range">
+            <option value="24h">Últimas 24 h</option>
+            <option value="7d">Últimos 7 días</option>
+            <option value="30d" selected>Últimos 30 días</option>
+            <option value="90d">Últimos 90 días</option>
+            <option value="all">Todo</option>
+          </select>
+        </label>
+        <label>
+          Canal
+          <select id="channel">
+            <option value="">Todos</option>
+            <option value="telegram">Telegram</option>
+            <option value="whatsapp">WhatsApp</option>
+          </select>
+        </label>
+        <button id="refresh" type="button">Actualizar</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="status" id="status" aria-label="Estado de los canales"></section>
+
+      <section class="kpis" id="kpis" aria-label="Indicadores"></section>
+
+      <section class="grid">
+        <article class="card wide">
+          <header><h2>Preguntas por día</h2><div class="legend" id="legend-day"></div></header>
+          <div class="chart"><canvas id="chart-day" aria-label="Preguntas por día y canal"></canvas></div>
+        </article>
+        <article class="card">
+          <header><h2>Temas consultados</h2></header>
+          <div class="chart tall"><canvas id="chart-topic" aria-label="Preguntas por tema"></canvas></div>
+        </article>
+        <article class="card">
+          <header><h2>Cursos más consultados</h2></header>
+          <div class="chart tall"><canvas id="chart-course" aria-label="Cursos más consultados"></canvas></div>
+        </article>
+        <article class="card wide">
+          <header><h2>Preguntas por hora del día</h2></header>
+          <div class="chart short"><canvas id="chart-hour" aria-label="Preguntas por hora"></canvas></div>
+        </article>
+      </section>
+
+      <section class="card conversations">
+        <header><h2>Conversaciones recientes</h2></header>
+        <div class="split">
+          <ul id="conversation-list" class="conv-list"></ul>
+          <div id="transcript" class="transcript">
+            <p class="muted">Selecciona una conversación para ver los mensajes.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
