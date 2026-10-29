@@ -1,0 +1,1358 @@
+{
+  "updatedAt": "2026-10-29T16:25:47.396Z",
+  "source": "https://ctt-talleresfisei.uta.edu.ec/",
+  "courses": [
+    {
+      "id": 16,
+      "name": "INTRODUCCIÓN A LAS REDES – PREPARACIÓN CCNA",
+      "status": "abierto",
+      "hours": 70,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso16.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso16.jpg",
+      "description": "El curso CCNA: Introducción a las redes proporciona los fundamentos teóricos y prácticos para comprender cómo funcionan las redes de datos. Aborda los modelos OSI y TCP/IP, Ethernet, configuración básica de switches y routers, direccionamiento IPv4 e IPv6, protocolos de comunicación, seguridad y la construcción de una red pequeña.",
+      "objectives": [
+        "Comprender los modelos y protocolos de comunicación de redes.",
+        "Configurar y verificar dispositivos de red como switches y routers.",
+        "Aplicar direccionamiento IPv4 e IPv6 y conceptos de seguridad en una red pequeña."
+      ],
+      "location": [
+        "Talleres Tecnológicos FISEI, Campus Huachi, Ambato; sesiones virtuales según cronograma.",
+        "Centro de Transferencia y Desarrollo de Tecnologías CTT-FISEI."
+      ],
+      "organizers": [
+        "Ing. Carlos Vargas, Mg."
+      ],
+      "instructors": [
+        "Ing. Livio Danilo Miniguano, Mg.",
+        "Ing. Daniel Maldonado Ruiz, Ph.D."
+      ],
+      "details": {
+        "Fechas de inscripciones": "Del 01 de octubre de 2026 al 15 de octubre de 2026",
+        "Cupo de inscripciones": "Mínimo 5, máximo 20",
+        "Lugar del evento": "Talleres Tecnológicos FISEI, Campus Huachi, Ambato; sesiones virtuales según cronograma.",
+        "Fecha del curso": "Del 16 de octubre de 2026 al 05 de diciembre de 2026",
+        "Horario": "Sesiones virtuales los viernes de 19:00 a 21:00 y sesiones presenciales los sábados de 08:00 a 13:00, más trabajo autónomo, según la planificación.",
+        "Precio para los asistentes": "Estudiantes UTA (hasta último período): $120,00; Graduados, docentes y personal administrativo UTA: $150,00; Público en general: $180,00",
+        "Tipo de capacitación": "Certificado digital de aprobación con validación QR.",
+        "Horas de capacitación": "70 horas",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Híbrida",
+        "Conocimientos previos": "Ninguno."
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 01 de octubre de 2026 al 15 de octubre de 2026",
+        "Cupo de inscripciones: Mínimo 5, máximo 20",
+        "Lugar del evento: Talleres Tecnológicos FISEI, Campus Huachi, Ambato; sesiones virtuales según cronograma.",
+        "Fecha del curso: Del 16 de octubre de 2026 al 05 de diciembre de 2026",
+        "Horario: Sesiones virtuales los viernes de 19:00 a 21:00 y sesiones presenciales los sábados de 08:00 a 13:00, más trabajo autónomo, según la planificación.",
+        "Precio para los asistentes:",
+        "Estudiantes UTA (hasta último período): $120,00",
+        "Graduados, docentes y personal administrativo UTA: $150,00",
+        "Público en general: $180,00",
+        "Tipo de capacitación: Certificado digital de aprobación con validación QR.",
+        "Horas de capacitación: 70 horas",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Híbrida",
+        "Conocimientos previos: Ninguno."
+      ],
+      "notes": [
+        "El certificado de este curso de preparación no significa obtener automáticamente la certificación internacional externa."
+      ],
+      "materials": [
+        "Computador personal",
+        "Laboratorio de redes",
+        "Plataforma Cisco NetAcad"
+      ],
+      "contents": [
+        "Módulo 1: Networking Today",
+        "Módulo 2: Basic Switch and End Device Configuration",
+        "Módulo 3: Protocols and Models",
+        "Módulo 4: Physical Layer",
+        "Módulo 5: Number Systems",
+        "Módulo 6: Data Link Layer",
+        "Módulo 7: Ethernet Switching",
+        "Módulo 8: Network Layer",
+        "Módulo 9: Address Resolution",
+        "Módulo 10: Basic Router Configuration",
+        "Módulo 11: IPv4 Addressing",
+        "Módulo 12: IPv6 Addressing",
+        "Módulo 13: ICMP",
+        "Módulo 14: Transport Layer",
+        "Módulo 15: Application Layer",
+        "Módulo 16: Network Security Fundamentals",
+        "Módulo 17: Build a Small Network"
+      ],
+      "registrationUrl": "https://docs.google.com/forms/d/e/1FAIpQLSeWhh69h-nGZYQvWkFIyR1riMYBOc61CC7YmWL49XBo64I3zA/viewform",
+      "title": "CCNA: Introducción a las redes – Preparación Cisco Certified Network Associate"
+    },
+    {
+      "id": 17,
+      "name": "PREPARACIÓN LINUX ESSENTIALS CERTIFICATE",
+      "status": "abierto",
+      "hours": 70,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso17.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso17.jpg",
+      "description": "El curso Linux Essentials introduce el sistema operativo Linux y los fundamentos del software libre y de código abierto. Permite adquirir competencias iniciales para trabajar con distribuciones Linux, navegar por el sistema de archivos, administrar usuarios y permisos, ejecutar comandos y aplicar nociones de administración y seguridad.",
+      "objectives": [
+        "Instalar y configurar un sistema operativo Linux con procedimientos básicos.",
+        "Administrar archivos, directorios, usuarios, grupos y permisos desde la línea de comandos.",
+        "Gestionar procesos, servicios y tareas de Linux.",
+        "Aplicar buenas prácticas iniciales de administración y seguridad."
+      ],
+      "location": [
+        "Virtual, plataforma Cisco NetAcad.",
+        "Centro de Transferencia y Desarrollo de Tecnologías CTT-FISEI."
+      ],
+      "organizers": [
+        "Ing. Carlos Vargas, Mg."
+      ],
+      "instructors": [
+        "Ing. Carlos Vargas, Mg."
+      ],
+      "details": {
+        "Fechas de inscripciones": "Del 01 de octubre de 2026 al 15 de octubre de 2026",
+        "Cupo de inscripciones": "Mínimo 5, sin cupo máximo especificado",
+        "Lugar del evento": "Virtual, plataforma Cisco NetAcad.",
+        "Fecha del curso": "Del 16 de octubre de 2026 al 05 de diciembre de 2026",
+        "Horario": "Modalidad autodidacta; el participante avanza en la plataforma dentro del período de ejecución.",
+        "Precio para los asistentes": "Estudiantes UTA (hasta último período): $40,00; Graduados, docentes y personal administrativo UTA: $50,00; Público en general: $60,00",
+        "Tipo de capacitación": "Certificado digital de aprobación con validación QR.",
+        "Horas de capacitación": "70 horas",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Virtual autodidacta (Self-paced)",
+        "Conocimientos previos": "Ninguno."
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 01 de octubre de 2026 al 15 de octubre de 2026",
+        "Cupo de inscripciones: Mínimo 5, sin cupo máximo especificado",
+        "Lugar del evento: Virtual, plataforma Cisco NetAcad.",
+        "Fecha del curso: Del 16 de octubre de 2026 al 05 de diciembre de 2026",
+        "Horario: Modalidad autodidacta; el participante avanza en la plataforma dentro del período de ejecución.",
+        "Precio para los asistentes:",
+        "Estudiantes UTA (hasta último período): $40,00",
+        "Graduados, docentes y personal administrativo UTA: $50,00",
+        "Público en general: $60,00",
+        "Tipo de capacitación: Certificado digital de aprobación con validación QR.",
+        "Horas de capacitación: 70 horas",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Virtual autodidacta (Self-paced)",
+        "Conocimientos previos: Ninguno."
+      ],
+      "notes": [
+        "El certificado de este curso de preparación no significa obtener automáticamente la certificación internacional externa."
+      ],
+      "materials": [
+        "Computadora personal",
+        "Conexión a Internet",
+        "Plataforma Cisco NetAcad"
+      ],
+      "contents": [
+        "Capítulo 1: Introduction to Linux",
+        "Capítulo 2: Operating Systems",
+        "Capítulo 3: Working in Linux",
+        "Capítulo 4: Open Source Software and Licensing",
+        "Capítulo 5: Command Line Skills",
+        "Capítulo 6: Getting Help",
+        "Capítulo 7: Navigating the Filesystem",
+        "Capítulo 8: Managing Files and Directories",
+        "Capítulo 9: Archiving and Compression",
+        "Capítulo 10: Working With Text",
+        "Capítulo 11: Basic Scripting",
+        "Capítulo 12: Understanding Computer Hardware",
+        "Capítulo 13: Where Data is Stored",
+        "Capítulo 14: Network Configuration",
+        "Capítulo 15: System and User Security",
+        "Capítulo 16: Creating Users and Groups",
+        "Capítulo 17: Ownership and Permissions",
+        "Capítulo 18: Special Directories and Files"
+      ],
+      "registrationUrl": "https://docs.google.com/forms/d/e/1FAIpQLSeWhh69h-nGZYQvWkFIyR1riMYBOc61CC7YmWL49XBo64I3zA/viewform",
+      "title": "Linux Essentials – Preparación Linux Essentials Certificate"
+    },
+    {
+      "id": 18,
+      "name": "FUNDAMENTOS DE PYTHON 1",
+      "status": "abierto",
+      "hours": 32,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso18.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso18.jpg",
+      "description": "Fundamentos de Python 1 de Cisco NetAcad introduce la programación con Python mediante ejercicios y actividades. Los participantes estudian lógica, variables, operadores, entrada y salida de datos, condiciones, bucles, listas, funciones y procesamiento básico de información.",
+      "objectives": [
+        "Comprender los conceptos fundamentales de la programación y la lógica algorítmica.",
+        "Desarrollar programas sencillos con variables, operadores y condicionales.",
+        "Utilizar listas, bucles, funciones y diccionarios para resolver problemas.",
+        "Organizar soluciones en módulos y preparar aplicaciones prácticas."
+      ],
+      "location": [
+        "Virtual, plataforma Cisco NetAcad.",
+        "Centro de Transferencia y Desarrollo de Tecnologías CTT-FISEI."
+      ],
+      "organizers": [
+        "Ing. Carlos Vargas, Mg."
+      ],
+      "instructors": [
+        "Ing. Carlos Vargas, Mg."
+      ],
+      "details": {
+        "Fechas de inscripciones": "Del 01 de octubre de 2026 al 15 de octubre de 2026",
+        "Cupo de inscripciones": "Mínimo 5, sin cupo máximo especificado",
+        "Lugar del evento": "Virtual, plataforma Cisco NetAcad.",
+        "Fecha del curso": "Del 16 de octubre de 2026 al 16 de noviembre de 2026",
+        "Horario": "Modalidad autodidacta; actividades y evaluaciones en línea.",
+        "Precio para los asistentes": "Estudiantes UTA (hasta último período): $40,00; Graduados, docentes y personal administrativo UTA: $50,00; Público en general: $60,00",
+        "Tipo de capacitación": "Certificado digital de asistencia y aprobación con validación QR.",
+        "Horas de capacitación": "32 horas",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Virtual autodidacta (Self-paced)",
+        "Conocimientos previos": "Ninguno."
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 01 de octubre de 2026 al 15 de octubre de 2026",
+        "Cupo de inscripciones: Mínimo 5, sin cupo máximo especificado",
+        "Lugar del evento: Virtual, plataforma Cisco NetAcad.",
+        "Fecha del curso: Del 16 de octubre de 2026 al 16 de noviembre de 2026",
+        "Horario: Modalidad autodidacta; actividades y evaluaciones en línea.",
+        "Precio para los asistentes:",
+        "Estudiantes UTA (hasta último período): $40,00",
+        "Graduados, docentes y personal administrativo UTA: $50,00",
+        "Público en general: $60,00",
+        "Tipo de capacitación: Certificado digital de asistencia y aprobación con validación QR.",
+        "Horas de capacitación: 32 horas",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Virtual autodidacta (Self-paced)",
+        "Conocimientos previos: Ninguno."
+      ],
+      "notes": [
+        "El certificado de este curso de preparación no significa obtener automáticamente la certificación internacional externa."
+      ],
+      "materials": [
+        "Computador personal",
+        "Conexión a Internet",
+        "Plataforma Cisco NetAcad"
+      ],
+      "contents": [
+        "Módulo 1: Introducción a Python y programación informática Introducción a la programación Introducción a Python Descarga e instalación de Python Evaluación",
+        "Introducción a la programación",
+        "Introducción a Python",
+        "Descarga e instalación de Python",
+        "Evaluación",
+        "Módulo 2: Tipos de datos, variables, operaciones básicas de entrada-salida y operadores básicos El programa “Hola, Mundo” Literales de Python Operadores: herramientas de manipulación de datos Variables Comentarios Interacción con el usuario Evaluación",
+        "El programa “Hola, Mundo”",
+        "Literales de Python",
+        "Operadores: herramientas de manipulación de datos",
+        "Variables",
+        "Comentarios",
+        "Interacción con el usuario",
+        "Evaluación",
+        "Módulo 3: Valores booleanos, ejecución condicional, bucles, listas y procesamiento de listas, operaciones lógicas y bit a bit Toma de decisiones en Python Bucles en Python Operadores lógicos y operaciones bit a bit en Python Listas Ordenamiento de listas: algoritmo burbuja Operaciones con listas Aplicaciones avanzadas de listas Evaluación",
+        "Toma de decisiones en Python",
+        "Bucles en Python",
+        "Operadores lógicos y operaciones bit a bit en Python",
+        "Listas",
+        "Ordenamiento de listas: algoritmo burbuja",
+        "Operaciones con listas",
+        "Aplicaciones avanzadas de listas",
+        "Evaluación",
+        "Módulo 4: Funciones, tuplas, diccionarios, excepciones y procesamiento de datos Funciones Comunicación de las funciones con su entorno Resultados de funciones Alcances en Python Creación de funciones con múltiples parámetros Tuplas y diccionarios Excepcione Evaluación",
+        "Funciones",
+        "Comunicación de las funciones con su entorno",
+        "Resultados de funciones",
+        "Alcances en Python",
+        "Creación de funciones con múltiples parámetros",
+        "Tuplas y diccionarios",
+        "Excepcione",
+        "Evaluación"
+      ],
+      "registrationUrl": "https://docs.google.com/forms/d/e/1FAIpQLSeWhh69h-nGZYQvWkFIyR1riMYBOc61CC7YmWL49XBo64I3zA/viewform",
+      "title": "Fundamentos de Python 1 – Certified Entry-Level Python"
+    },
+    {
+      "id": 19,
+      "name": "GITHUB CERTIFIED: AGENTIC AI DEVELOPER (GH-600)",
+      "status": "abierto",
+      "hours": 32,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso19.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso19.jpg",
+      "description": "Capacitación inicial de agentes de inteligencia artificial aplicados al ciclo de vida del desarrollo de software. Abarca Git y GitHub, colaboración, GitHub Actions, GitHub Copilot, instrucciones para agentes, uso de herramientas y fundamentos de Model Context Protocol (MCP), evaluación, controles de seguridad y un proyecto integrador.",
+      "objectives": [
+        "Aplicar Git, GitHub, SDLC y automatización básica con GitHub Actions en trabajo colaborativo.",
+        "Configurar agentes de codificación con GitHub Copilot, instrucciones personalizadas y fundamentos de MCP.",
+        "Evaluar y supervisar agentes mediante criterios de éxito, guardrails y revisión humana; desarrollar un proyecto integrador."
+      ],
+      "location": [
+        "Virtual por Zoom.",
+        "Centro de Transferencia y Desarrollo de Tecnologías CTT-FISEI."
+      ],
+      "organizers": [
+        "Ing. Javier Santiago Vargas Paredes, Mg."
+      ],
+      "instructors": [
+        "Ing. Javier Santiago Vargas Paredes, Mg."
+      ],
+      "details": {
+        "Fechas de inscripciones": "Del 30 de octubre de 2026 al 13 de noviembre de 2026",
+        "Cupo de inscripciones": "Mínimo 5, máximo 25",
+        "Lugar del evento": "Virtual por Zoom.",
+        "Fecha del curso": "Del 14 de noviembre de 2026 al 05 de diciembre de 2026",
+        "Horario": "Sesiones virtuales el 14, 21 y 28 de noviembre y el 5 de diciembre de 2026, de 08:00 a 14:00; 24 horas de clase y 8 de trabajo autónomo.",
+        "Precio para los asistentes": "Estudiantes UTA (hasta último período): $40,00; Graduados, docentes y personal administrativo UTA: $50,00; Público en general: $60,00",
+        "Tipo de capacitación": "Certificado digital de asistencia y aprobación con validación QR.",
+        "Horas de capacitación": "32 horas",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Virtual",
+        "Conocimientos previos": "Conocimientos básicos de programación y manejo de computador. No se requiere experiencia previa con IA agéntica, MCP ni GitHub Copilot."
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 30 de octubre de 2026 al 13 de noviembre de 2026",
+        "Cupo de inscripciones: Mínimo 5, máximo 25",
+        "Lugar del evento: Virtual por Zoom.",
+        "Fecha del curso: Del 14 de noviembre de 2026 al 05 de diciembre de 2026",
+        "Horario: Sesiones virtuales el 14, 21 y 28 de noviembre y el 5 de diciembre de 2026, de 08:00 a 14:00; 24 horas de clase y 8 de trabajo autónomo.",
+        "Precio para los asistentes:",
+        "Estudiantes UTA (hasta último período): $40,00",
+        "Graduados, docentes y personal administrativo UTA: $50,00",
+        "Público en general: $60,00",
+        "Tipo de capacitación: Certificado digital de asistencia y aprobación con validación QR.",
+        "Horas de capacitación: 32 horas",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Virtual",
+        "Conocimientos previos: Conocimientos básicos de programación y manejo de computador. No se requiere experiencia previa con IA agéntica, MCP ni GitHub Copilot."
+      ],
+      "notes": [
+        "El certificado de este curso de preparación no significa obtener automáticamente la certificación internacional externa."
+      ],
+      "materials": [
+        "Computador personal con navegador actualizado",
+        "Conexión a Internet"
+      ],
+      "contents": [
+        "Clase 1: Fundamentos de GitHub, SDLC e IA Agéntica Git y GitHub: repositorios, commits, ramas, pull requests y revisión de código. Introducción al SDLC, CI/CD y GitHub Actions. Fundamentos de IA generativa y agentes de codificación. Introducción a GitHub Copilot y prompting para desarrollo. Ciclo del agente: planificar, actuar y evaluar. GitHub como sistema de registro y plano de control. Trabajo autónomo: práctica de repositorio, ramas y pull request.",
+        "Git y GitHub: repositorios, commits, ramas, pull requests y revisión de código.",
+        "Introducción al SDLC, CI/CD y GitHub Actions.",
+        "Fundamentos de IA generativa y agentes de codificación.",
+        "Introducción a GitHub Copilot y prompting para desarrollo.",
+        "Ciclo del agente: planificar, actuar y evaluar.",
+        "GitHub como sistema de registro y plano de control.",
+        "Clase 2: Arquitectura del Agente e Integración con el SDLC Definición de tareas, entradas, salidas y criterios de éxito. Separación entre planificación, razonamiento y ejecución. Instrucciones personalizadas y agentes personalizados. Alcance por repositorio, rama y flujo de trabajo. Revisión, CODEOWNERS, reglas, protección de ramas y observabilidad. Trabajo autónomo: diseño de un flujo agéntico controlado.",
+        "Definición de tareas, entradas, salidas y criterios de éxito.",
+        "Separación entre planificación, razonamiento y ejecución.",
+        "Instrucciones personalizadas y agentes personalizados.",
+        "Alcance por repositorio, rama y flujo de trabajo.",
+        "Revisión, CODEOWNERS, reglas, protección de ramas y observabilidad.",
+        "Clase 3: Herramientas, MCP, Memoria, Estado y Ejecución Uso de herramientas, APIs y permisos del agente. Fundamentos de Model Context Protocol (MCP), servidores, registros y listas permitidas. Contexto y límites de ejecución en GitHub. Estrategias básicas de memoria, estado y prevención de deriva de contexto. Manejo de errores, reintentos, reversión, escalamiento y trazabilidad. Trabajo autónomo: laboratorio guiado de herramientas y MCP.",
+        "Uso de herramientas, APIs y permisos del agente.",
+        "Fundamentos de Model Context Protocol (MCP), servidores, registros y listas permitidas.",
+        "Contexto y límites de ejecución en GitHub.",
+        "Estrategias básicas de memoria, estado y prevención de deriva de contexto.",
+        "Manejo de errores, reintentos, reversión, escalamiento y trazabilidad.",
+        "Clase 4: Evaluación, Multiagente, Guardrails y Proyecto Integrador Criterios de éxito, señales de evaluación y análisis de errores. Ajuste de instrucciones, herramientas, contexto y permisos. Coordinación multiagente, aislamiento, conflictos y recuperación. Guardrails, mínimo privilegio, aprobación humana y auditoría. Proyecto: agente que propone cambios mediante rama y pull request controlado. Mapeo introductorio a los seis dominios del examen GH-600.",
+        "Criterios de éxito, señales de evaluación y análisis de errores.",
+        "Ajuste de instrucciones, herramientas, contexto y permisos.",
+        "Coordinación multiagente, aislamiento, conflictos y recuperación.",
+        "Guardrails, mínimo privilegio, aprobación humana y auditoría.",
+        "Proyecto: agente que propone cambios mediante rama y pull request controlado."
+      ],
+      "registrationUrl": "https://docs.google.com/forms/d/e/1FAIpQLSeWhh69h-nGZYQvWkFIyR1riMYBOc61CC7YmWL49XBo64I3zA/viewform",
+      "title": "Preparación GitHub Certified: Agentic AI Developer (GH-600)"
+    },
+    {
+      "id": 20,
+      "name": "PREPARACIÓN ARDUINO CERTIFICATION PROGRAM",
+      "status": "abierto",
+      "hours": 32,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso20.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso20.jpg",
+      "description": "Formación teórico-práctica en electricidad, circuitos de corriente continua, lectura de esquemas, instrumentación y programación de microcontroladores Arduino Uno. Se estudian leyes eléctricas, uso del multímetro, Arduino IDE, pines digitales y analógicos, PWM, comunicación serial y prácticas sobre protoboard.",
+      "objectives": [
+        "Aplicar las leyes fundamentales de circuitos eléctricos en montaje y medición en protoboard.",
+        "Desarrollar programas estructurados en C/C++ utilizando Arduino IDE.",
+        "Integrar sensores y entradas analógicas para adquisición de datos y control básico."
+      ],
+      "location": [
+        "Talleres de Innovación y Desarrollo Tecnológico FISEI, Campus Huachi, Ambato.",
+        "Centro de Transferencia y Desarrollo de Tecnologías CTT-FISEI."
+      ],
+      "organizers": [
+        "Ing. Carlos Luis Vargas Guevara, Mg.",
+        "Ing. Jesús Israel Guamán Molina, Mg."
+      ],
+      "instructors": [
+        "Ing. Carlos Luis Vargas Guevara, Mg.",
+        "Ing. Jesús Israel Guamán Molina, Mg."
+      ],
+      "details": {
+        "Fechas de inscripciones": "Del 30 de octubre de 2026 al 13 de noviembre de 2026",
+        "Cupo de inscripciones": "Mínimo 5, máximo 30",
+        "Lugar del evento": "Talleres de Innovación y Desarrollo Tecnológico FISEI, Campus Huachi, Ambato.",
+        "Fecha del curso": "Del 14 de noviembre de 2026 al 05 de diciembre de 2026",
+        "Horario": "Clases presenciales los días 14, 21 y 28 de noviembre y 5 de diciembre de 2026. Confirmar el horario exacto con la coordinación.",
+        "Precio para los asistentes": "Estudiantes UTA (hasta último período): $40,00; Graduados, docentes y personal administrativo UTA: $50,00; Público en general: $60,00",
+        "Tipo de capacitación": "Certificado digital de asistencia y aprobación emitido por FISEI-UTA, con validación QR.",
+        "Horas de capacitación": "32 horas",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Presencial",
+        "Conocimientos previos": "Conocimientos básicos de matemáticas y manejo general de herramientas informáticas."
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 30 de octubre de 2026 al 13 de noviembre de 2026",
+        "Cupo de inscripciones: Mínimo 5, máximo 30",
+        "Lugar del evento: Talleres de Innovación y Desarrollo Tecnológico FISEI, Campus Huachi, Ambato.",
+        "Fecha del curso: Del 14 de noviembre de 2026 al 05 de diciembre de 2026",
+        "Horario: Clases presenciales los días 14, 21 y 28 de noviembre y 5 de diciembre de 2026. Confirmar el horario exacto con la coordinación.",
+        "Precio para los asistentes:",
+        "Estudiantes UTA (hasta último período): $40,00",
+        "Graduados, docentes y personal administrativo UTA: $50,00",
+        "Público en general: $60,00",
+        "Tipo de capacitación: Certificado digital de asistencia y aprobación emitido por FISEI-UTA, con validación QR.",
+        "Horas de capacitación: 32 horas",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Presencial",
+        "Conocimientos previos: Conocimientos básicos de matemáticas y manejo general de herramientas informáticas."
+      ],
+      "notes": [
+        "El certificado de este curso de preparación no significa obtener automáticamente la certificación internacional externa."
+      ],
+      "materials": [
+        "Computador personal",
+        "Conexión a Internet",
+        "Laboratorio de redes / electrónica según disponibilidad del CTT-FISEI"
+      ],
+      "contents": [
+        "Unidad 1: FUNDAMENTOS DE ELECTRICIDAD Y LEYES DE CIRCUITOS. Clase 1 Carga eléctrica, tensión (voltaje), corriente y potencia eléctrica. Ley de Ohm y Leyes de Kirchhoff. Componentes pasivos: Resistencias en serie, paralelo y combinaciones mixtas. Ejercicios prácticos de cálculo de corriente y caída de tensión. Clase 2 Simbología electrónica estandarizada (IEEE/IEC). Interpretación y dibujo de diagramas esquemáticos eléctricos. Uso correcto del multímetro digital para medición de resistencia, voltaje continuo y corriente. Montaje correcto de circuitos en protoboard sin energía y verificación de continuidad.",
+        "Clase 1 Carga eléctrica, tensión (voltaje), corriente y potencia eléctrica. Ley de Ohm y Leyes de Kirchhoff. Componentes pasivos: Resistencias en serie, paralelo y combinaciones mixtas. Ejercicios prácticos de cálculo de corriente y caída de tensión.",
+        "Carga eléctrica, tensión (voltaje), corriente y potencia eléctrica.",
+        "Ley de Ohm y Leyes de Kirchhoff.",
+        "Componentes pasivos: Resistencias en serie, paralelo y combinaciones mixtas.",
+        "Ejercicios prácticos de cálculo de corriente y caída de tensión.",
+        "Clase 2 Simbología electrónica estandarizada (IEEE/IEC). Interpretación y dibujo de diagramas esquemáticos eléctricos. Uso correcto del multímetro digital para medición de resistencia, voltaje continuo y corriente. Montaje correcto de circuitos en protoboard sin energía y verificación de continuidad.",
+        "Simbología electrónica estandarizada (IEEE/IEC).",
+        "Interpretación y dibujo de diagramas esquemáticos eléctricos.",
+        "Uso correcto del multímetro digital para medición de resistencia, voltaje continuo y corriente.",
+        "Montaje correcto de circuitos en protoboard sin energía y verificación de continuidad.",
+        "Unidad 2: ARQUITECTURA ARDUINO Y ENTORNO IDE. Clase 3 Arquitectura básica de microcontroladores (ATmega328P) vs. sistemas en chip. Descripción del hardware Arduino Uno: Alimentación (VIN, 5V, 3.3V, GND), pines digitales, analógicos y reset. Instalación del Arduino IDE 2.x, configuración de puertos serie (COM) y selección de placa. Estructura fundamental de un programa: setup() y loop(). Clase 4 Tipos de datos en C++: int, float, char, boolean, byte, long, unsigned. Variables y constantes: Declaración, asignación, ámbito (variables globales vs. locales) y const. Operadores aritméticos, relacionales y lógicos. Ejercicios de depuración y buenas prácticas de sintaxis (punto y coma, llaves, comentarios).",
+        "Clase 3 Arquitectura básica de microcontroladores (ATmega328P) vs. sistemas en chip. Descripción del hardware Arduino Uno: Alimentación (VIN, 5V, 3.3V, GND), pines digitales, analógicos y reset. Instalación del Arduino IDE 2.x, configuración de puertos serie (COM) y selección de placa. Estructura fundamental de un programa: setup() y loop().",
+        "Arquitectura básica de microcontroladores (ATmega328P) vs. sistemas en chip.",
+        "Descripción del hardware Arduino Uno: Alimentación (VIN, 5V, 3.3V, GND), pines digitales, analógicos y reset.",
+        "Instalación del Arduino IDE 2.x, configuración de puertos serie (COM) y selección de placa.",
+        "Estructura fundamental de un programa: setup() y loop().",
+        "Clase 4 Tipos de datos en C++: int, float, char, boolean, byte, long, unsigned. Variables y constantes: Declaración, asignación, ámbito (variables globales vs. locales) y const. Operadores aritméticos, relacionales y lógicos. Ejercicios de depuración y buenas prácticas de sintaxis (punto y coma, llaves, comentarios).",
+        "Tipos de datos en C++: int, float, char, boolean, byte, long, unsigned.",
+        "Variables y constantes: Declaración, asignación, ámbito (variables globales vs. locales) y const.",
+        "Operadores aritméticos, relacionales y lógicos.",
+        "Ejercicios de depuración y buenas prácticas de sintaxis (punto y coma, llaves, comentarios).",
+        "Unidad 3: ENTRADAS Y SALIDAS DIGITALES (GPIO) Clase 5 Configuración de pines digitales con pinMode(). Salida digital con digitalWrite(): Control de estados HIGH (5V) y LOW (0V). Entradas digitales con digitalRead(): Configuración con resistencias Pull-Up y Pull-Down externas. Configuración de Pull-Up interno (INPUT_PULLUP). Clase 6 Ensamblaje físico de matriz de LEDs e indicadores luminosos. Detección y solución del rebote mecánico en pulsadores. Creación de secuencias lógicas de conmutación mediante máquinas de estado simples.",
+        "Clase 5 Configuración de pines digitales con pinMode(). Salida digital con digitalWrite(): Control de estados HIGH (5V) y LOW (0V). Entradas digitales con digitalRead(): Configuración con resistencias Pull-Up y Pull-Down externas. Configuración de Pull-Up interno (INPUT_PULLUP).",
+        "Configuración de pines digitales con pinMode().",
+        "Salida digital con digitalWrite(): Control de estados HIGH (5V) y LOW (0V).",
+        "Entradas digitales con digitalRead(): Configuración con resistencias Pull-Up y Pull-Down externas.",
+        "Configuración de Pull-Up interno (INPUT_PULLUP).",
+        "Clase 6 Ensamblaje físico de matriz de LEDs e indicadores luminosos. Detección y solución del rebote mecánico en pulsadores. Creación de secuencias lógicas de conmutación mediante máquinas de estado simples.",
+        "Ensamblaje físico de matriz de LEDs e indicadores luminosos.",
+        "Detección y solución del rebote mecánico en pulsadores.",
+        "Creación de secuencias lógicas de conmutación mediante máquinas de estado simples.",
+        "Unidad 4: SEÑALES ANALÓGICAS Y CONVERSIÓN ADC Clase 7 Concepto de señal analógica vs. señal digital. El Conversor Analógico-Digital (ADC) de 10 bits en Arduino (valores de 0 a 1023). Lectura de voltajes con analogRead() y referencia interna de tensión. Acondicionamiento de entrada con potenciómetros y divisor de tensión con fotoresistor LDR. Clase 8 Concepto de Modulación por Ancho de Pulso (PWM), Frecuencia y Ciclo de Trabajo (Duty Cycle). Uso de los pines PWM (~) y salida con analogWrite() (resolución de 8 bits: 0 a 255). Funciones matemáticas de escalado: map() y constrain(). Aplicación: Variación de intensidad de luz (Dimmer) y control de zumbadores piezoeléctricos.",
+        "Clase 7 Concepto de señal analógica vs. señal digital. El Conversor Analógico-Digital (ADC) de 10 bits en Arduino (valores de 0 a 1023). Lectura de voltajes con analogRead() y referencia interna de tensión. Acondicionamiento de entrada con potenciómetros y divisor de tensión con fotoresistor LDR.",
+        "Concepto de señal analógica vs. señal digital.",
+        "El Conversor Analógico-Digital (ADC) de 10 bits en Arduino (valores de 0 a 1023).",
+        "Lectura de voltajes con analogRead() y referencia interna de tensión.",
+        "Acondicionamiento de entrada con potenciómetros y divisor de tensión con fotoresistor LDR.",
+        "Clase 8 Concepto de Modulación por Ancho de Pulso (PWM), Frecuencia y Ciclo de Trabajo (Duty Cycle). Uso de los pines PWM (~) y salida con analogWrite() (resolución de 8 bits: 0 a 255). Funciones matemáticas de escalado: map() y constrain(). Aplicación: Variación de intensidad de luz (Dimmer) y control de zumbadores piezoeléctricos.",
+        "Concepto de Modulación por Ancho de Pulso (PWM), Frecuencia y Ciclo de Trabajo (Duty Cycle).",
+        "Uso de los pines PWM (~) y salida con analogWrite() (resolución de 8 bits: 0 a 255).",
+        "Funciones matemáticas de escalado: map() y constrain().",
+        "Aplicación: Variación de intensidad de luz (Dimmer) y control de zumbadores piezoeléctricos.",
+        "Unidad 5: ESTRUCTURAS DE CONTROL Y COMUNICACIÓN SERIAL Clase 9 Toma de decisiones: if, else if, else, y switch-case. Bucle iterativo: for, while, y do-while. Comunicación asíncrona UART: Configuración de la velocidad de baudios (Serial.begin). Envío y recepción de datos con la clase Serial (Serial.print, Serial.println, Serial.read). Clase 10 Uso avanzado del Monitor Serial y Plotter Serial del Arduino IDE para graficar sensores en tiempo real. Creación y llamada a funciones personalizadas (modularización del programa). Taller práctico de resolución de errores comunes de compilación y lógica.",
+        "Clase 9 Toma de decisiones: if, else if, else, y switch-case. Bucle iterativo: for, while, y do-while. Comunicación asíncrona UART: Configuración de la velocidad de baudios (Serial.begin). Envío y recepción de datos con la clase Serial (Serial.print, Serial.println, Serial.read).",
+        "Toma de decisiones: if, else if, else, y switch-case.",
+        "Bucle iterativo: for, while, y do-while.",
+        "Comunicación asíncrona UART: Configuración de la velocidad de baudios (Serial.begin).",
+        "Envío y recepción de datos con la clase Serial (Serial.print, Serial.println, Serial.read).",
+        "Clase 10 Uso avanzado del Monitor Serial y Plotter Serial del Arduino IDE para graficar sensores en tiempo real. Creación y llamada a funciones personalizadas (modularización del programa). Taller práctico de resolución de errores comunes de compilación y lógica.",
+        "Uso avanzado del Monitor Serial y Plotter Serial del Arduino IDE para graficar sensores en tiempo real.",
+        "Creación y llamada a funciones personalizadas (modularización del programa).",
+        "Taller práctico de resolución de errores comunes de compilación y lógica."
+      ],
+      "registrationUrl": "https://docs.google.com/forms/d/e/1FAIpQLSeWhh69h-nGZYQvWkFIyR1riMYBOc61CC7YmWL49XBo64I3zA/viewform",
+      "title": "Preparación Arduino Certification Program"
+    },
+    {
+      "id": 21,
+      "name": "FUNDAMENTOS DE PYTHON 2",
+      "status": "abierto",
+      "hours": 40,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso21.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso21.jpg",
+      "description": "Fundamentos de Python 2 de Cisco NetAcad amplía los conocimientos del primer nivel. Profundiza en módulos, paquetes, PIP, cadenas y excepciones, programación orientada a objetos, herencia, polimorfismo y trabajo con archivos, para desarrollar programas más sólidos y modulares.",
+      "objectives": [
+        "Aplicar manejo de excepciones para mejorar la robustez de los programas.",
+        "Utilizar estructuras de datos más avanzadas para resolver problemas.",
+        "Diseñar soluciones de programación orientada a objetos con clases, herencia y encapsulación.",
+        "Trabajar con archivos y bibliotecas de Python."
+      ],
+      "location": [
+        "Virtual, plataforma Cisco NetAcad.",
+        "Centro de Transferencia y Desarrollo de Tecnologías CTT-FISEI."
+      ],
+      "organizers": [
+        "Ing. Carlos Vargas, Mg."
+      ],
+      "instructors": [
+        "Ing. Carlos Vargas, Mg."
+      ],
+      "details": {
+        "Fechas de inscripciones": "Del 30 de octubre de 2026 al 15 de noviembre de 2026",
+        "Cupo de inscripciones": "Mínimo 5, sin cupo máximo especificado",
+        "Lugar del evento": "Virtual, plataforma Cisco NetAcad.",
+        "Fecha del curso": "Del 16 de noviembre de 2026 al 16 de diciembre de 2026",
+        "Horario": "Modalidad autodidacta; el participante completa los módulos en línea dentro de las fechas establecidas.",
+        "Precio para los asistentes": "Estudiantes UTA (hasta último período): $40,00; Graduados, docentes y personal administrativo UTA: $50,00; Público en general: $60,00",
+        "Tipo de capacitación": "Certificado digital de asistencia y aprobación con validación QR.",
+        "Horas de capacitación": "40 horas",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Virtual autodidacta (Self-paced)",
+        "Conocimientos previos": "Ninguno indicado en la planificación. Se recomienda haber cursado Fundamentos de Python 1 por la progresión de contenidos."
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 30 de octubre de 2026 al 15 de noviembre de 2026",
+        "Cupo de inscripciones: Mínimo 5, sin cupo máximo especificado",
+        "Lugar del evento: Virtual, plataforma Cisco NetAcad.",
+        "Fecha del curso: Del 16 de noviembre de 2026 al 16 de diciembre de 2026",
+        "Horario: Modalidad autodidacta; el participante completa los módulos en línea dentro de las fechas establecidas.",
+        "Precio para los asistentes:",
+        "Estudiantes UTA (hasta último período): $40,00",
+        "Graduados, docentes y personal administrativo UTA: $50,00",
+        "Público en general: $60,00",
+        "Tipo de capacitación: Certificado digital de asistencia y aprobación con validación QR.",
+        "Horas de capacitación: 40 horas",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Virtual autodidacta (Self-paced)",
+        "Conocimientos previos: Ninguno indicado en la planificación. Se recomienda haber cursado Fundamentos de Python 1 por la progresión de contenidos."
+      ],
+      "notes": [
+        "El certificado de este curso de preparación no significa obtener automáticamente la certificación internacional externa."
+      ],
+      "materials": [
+        "Computador personal",
+        "Conexión a Internet",
+        "Plataforma Cisco NetAcad"
+      ],
+      "contents": [
+        "Módulo 1: Módulos, paquetes y PIP ¿Qué es un módulo y para qué lo necesitamos? Importación y uso de módulos. Revisión de algunos módulos útiles de Python. ¿Qué es un paquete y en qué se diferencia de un módulo? Construcción y uso de paquetes. PIP: La navaja suiza y el mantenimiento de paquetes.",
+        "¿Qué es un módulo y para qué lo necesitamos?",
+        "Importación y uso de módulos.",
+        "Revisión de algunos módulos útiles de Python.",
+        "¿Qué es un paquete y en qué se diferencia de un módulo?",
+        "Construcción y uso de paquetes.",
+        "PIP: La navaja suiza y el mantenimiento de paquetes.",
+        "Módulo 2: Caracteres, cadenas y excepciones avanzadas Caracteres, cadenas y estándares de codificación. Cadenas y listas: similitudes y diferencias. Métodos de listas. Métodos de cadenas. La forma en que Python maneja los errores en tiempo de ejecución. Controlar el flujo de errores usando try y except. La jerarquía de excepciones. Evaluación.",
+        "Caracteres, cadenas y estándares de codificación.",
+        "Cadenas y listas: similitudes y diferencias.",
+        "Métodos de listas.",
+        "Métodos de cadenas.",
+        "La forma en que Python maneja los errores en tiempo de ejecución.",
+        "Controlar el flujo de errores usando try y except.",
+        "La jerarquía de excepciones.",
+        "Evaluación.",
+        "Módulo 3: Programación orientada a objetos en Python Conceptos básicos de programación orientada a objetos. Del enfoque procedimental al de objetos: motivaciones y beneficios. Clases, objetos, propiedades y métodos. Herencia y polimorfismo. Excepción como objeto.",
+        "Conceptos básicos de programación orientada a objetos.",
+        "Del enfoque procedimental al de objetos: motivaciones y beneficios.",
+        "Clases, objetos, propiedades y métodos.",
+        "Herencia y polimorfismo.",
+        "Excepción como objeto.",
+        "Módulo 4: Trabajar con archivos y utilidades Generadores, iteradores y cierres. Trabajar con sistemas de archivos, árboles de directorios y archivos. Módulos seleccionados de la biblioteca estándar de Python (os, date, datetime, calendar).",
+        "Generadores, iteradores y cierres.",
+        "Trabajar con sistemas de archivos, árboles de directorios y archivos.",
+        "Módulos seleccionados de la biblioteca estándar de Python (os, date, datetime, calendar)."
+      ],
+      "registrationUrl": "https://docs.google.com/forms/d/e/1FAIpQLSeWhh69h-nGZYQvWkFIyR1riMYBOc61CC7YmWL49XBo64I3zA/viewform",
+      "title": "Fundamentos de Python 2 – Certified Associate Python Programmer"
+    },
+    {
+      "id": 13,
+      "name": "ARDUINO DESDE CERO: ELECTRÓNICA, PROGRAMACIÓN Y AUTOMATIZACIÓN",
+      "status": "abierto",
+      "hours": 40,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso13.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso13.jpg",
+      "description": "El curso \"Arduino desde cero: Electrónica, Programación y Automatización\" ofrece una formación integral en el uso de Arduino para el desarrollo de proyectos de electrónica, programación y automatización. Diseñado para principiantes y entusiastas, el curso abarca desde los fundamentos básicos hasta aplicaciones avanzadas, combinando teoría y práctica para garantizar un aprendizaje efectivo. Los participantes se familiarizarán con la plataforma Arduino, su entorno de desarrollo (IDE) y las estructuras básicas de programación. Aprenderán a manejar entradas/salidas digitales, comunicación mediante puerto serial, control de motores y dispositivos, así como el uso del conversor analógico-digital (ADC) para la lectura de sensores. También explorarán técnicas avanzadas como interrupciones, timers, ahorro energético y comunicación I2C. Al finalizar, los participantes estarán capacitados para diseñar, programar y ejecutar proyectos innovadores con Arduino, aplicando técnicas de automatización, comunicación de datos y optimización de recursos en entornos educativos, industriales o de prototipado.",
+      "objectives": [
+        "Capacitar en el diseño, programación y ejecución de proyectos con Arduino, desde configuraciones básicas (entradas/salidas digitales, estructuras de control) hasta aplicaciones avanzadas (control de motores, comunicación serial/I2C y automatización).",
+        "Desarrollar habilidades prácticas en electrónica y sistemas integrados, incluyendo el manejo de sensores analógicos/digitales, modulación PWM, integración con herramientas como LabVIEW, y optimización de recursos mediante interrupciones y técnicas de bajo consumo.",
+        "Fomentar la creación de soluciones innovadoras y eficientes en automatización, prototipado y adquisición de datos, aplicables en contextos educativos, industriales o de desarrollo tecnológico."
+      ],
+      "location": [
+        "Centro de Transferencia y Desarrollo de Tecnologías CTT-FISEI.",
+        "Avda. Los Chasquis entre Río Payamino y Río Guayllabamba",
+        "Campus Huachi, Ambato-Ecuador."
+      ],
+      "organizers": [
+        "Ing. Luis Pomaquero",
+        "Ing. Carlos Luis Vargas Guevara",
+        "Ing. Jesús Israel Guamán Molina"
+      ],
+      "instructors": [],
+      "details": {
+        "Fechas de inscripciones": "Del 19 de mayo al 04 de junio de 2025",
+        "El cupo de inscripciones": "Mínimo 15, máximo 25 participantes",
+        "Lugar del evento": "Laboratorio asignado - FISEI",
+        "Fecha del curso": "Del 07 al 30 de junio de 2025",
+        "Horario": "8:00 - 14:00 (Sábados)",
+        "Precio para los asistentes": "40 USD Estudiantes UTA (Último periodo); 50 USD Graduados, Docentes y Administrativos UTA; 60 USD Público en general",
+        "Tipo de capacitación": "Certificado digital de asistencia y aprobación con validación QR",
+        "Horas de capacitación": "40 horas (24 presenciales, 16 trabajo autónomo)",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Presencial",
+        "Conocimientos previos": "• Ninguno"
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 19 de mayo al 04 de junio de 2025",
+        "El cupo de inscripciones: Mínimo 15, máximo 25 participantes",
+        "Lugar del evento: Laboratorio asignado - FISEI",
+        "Fecha del curso: Del 07 al 30 de junio de 2025",
+        "Horario: 8:00 - 14:00 (Sábados)",
+        "Precio para los asistentes:",
+        "40 USD Estudiantes UTA (Último periodo)",
+        "50 USD Graduados, Docentes y Administrativos UTA",
+        "60 USD Público en general",
+        "Tipo de capacitación: Certificado digital de asistencia y aprobación con validación QR",
+        "Horas de capacitación: 40 horas (24 presenciales, 16 trabajo autónomo)",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Presencial",
+        "Conocimientos previos: • Ninguno"
+      ],
+      "notes": [],
+      "materials": [
+        "• Sensores (analógicos y digitales: temperatura, presión, botones, etc.)",
+        "• Motores DC, servomotores y módulos de control de potencia",
+        "• Resistencias, LEDs, protoboards, cables jumper y conectores",
+        "• Multímetros digitales",
+        "• Tarjetas para comunicación serial entre placas Arduino",
+        "• Laboratorio con 25 computadores",
+        "• Tableros de control",
+        "• Internet",
+        "• Proyector"
+      ],
+      "contents": [
+        "Clase 1:",
+        "• ¿Qué es Arduino?",
+        "• Entorno de desarrollo IDE",
+        "• Estructuras de selección if/else y switch",
+        "• Puerto serial. Transmisión/Recepción de datos",
+        "• Comunicación serial entre tarjetas Arduino",
+        "• Lectura de botones, control de motores DC y dispositivos de potencia AC",
+        "• Estructuras de repetición: while, do-while y for",
+        "• Manejo de entradas/salidas digitales",
+        "Clase 2:",
+        "• Conversor Analógico – Digital (ADC)",
+        "• Configuración del módulo ADC de Arduino",
+        "• Lectura de voltaje y sensores analógicos",
+        "• Modulación por ancho de Pulso (PWM)",
+        "• Control de intensidad de luz y de servomotor por PWM",
+        "• Comunicación con sistemas HMI y SCADAS",
+        "• Convirtiendo al Arduino en una DAQ (Tarjeta de Adquisición de datos)",
+        "• Prototipo de un Osciloscopio con Arduino y NI LabVIEW",
+        "Clase 3:",
+        "• Interrupciones y control de tiempo (timers) en Arduino",
+        "• Corrección de efecto rebote en pulsadores",
+        "• Modo sleep y ahorro de batería",
+        "• Uso del modo sleep para la lectura periódica de sensores",
+        "Clase 4:",
+        "• Comunicación I2C",
+        "• Lectura de temperatura y presión mediante la comunicación I2C"
+      ],
+      "registrationUrl": null,
+      "title": "Arduino desde cero: Electrónica, Programación y Automatización"
+    },
+    {
+      "id": 15,
+      "name": "INTELIGENCIA ARTIFICIAL PARA LA GESTIÓN DE RECURSOS HUMANOS",
+      "status": "abierto",
+      "hours": 32,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso15.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso15.jpg",
+      "description": "Este curso está diseñado para introducirte de manera práctica y sencilla en el uso de herramientas de IA aplicadas a Recursos Humanos. Aprende a optimizar procesos clave como la selección de personal entre otros. Incorpora tecnologías accesibles que potenciarán tu productividad y te permitirán gestionar el capital humano de forma más eficiente, innovadora y orientada a resultados.",
+      "objectives": [
+        "Entender los fundamentos y el impacto de la inteligencia artificial en el ámbito de los Recursos Humanos.",
+        "Explorar y dominar el uso de herramientas de IA gratuitas para hacer más eficiente el proceso de atracción y selección de talento.",
+        "Implementar soluciones basadas en IA que mejoren la experiencia de onboarding e integración de nuevos colaboradores."
+      ],
+      "location": [
+        "Centro de Transferencia y Desarrollo de Tecnologías CTT-FISEI.",
+        "Avda. Los Chasquis entre Río Payamino y Río Guayllabamba",
+        "Campus Huachi, Ambato-Ecuador.",
+        "Nota: Curso en modalidad virtual"
+      ],
+      "organizers": [
+        "Ing. Daniel Sebastian Jerez Mayorga, Mg",
+        "Ing. Diana Cristina Altamirano Andrade, Mg"
+      ],
+      "instructors": [],
+      "details": {
+        "Fechas de inscripciones": "Del 14 de Mayo al 03 de Junio de 2025",
+        "El cupo de inscripciones": "Sin límite específico",
+        "Lugar del evento": "Virtual",
+        "Fecha del curso": "Del 04 al 30 de junio de 2025",
+        "Horario": "7:00 PM - 10:00 PM (Miércoles y Jueves)",
+        "Precio para los asistentes": "40 USD Estudiantes UTA (Último periodo); 60 USD Graduados, Docentes y Administrativos UTA; 80 USD Público en general",
+        "Tipo de capacitación": "Certificado digital de asistencia y aprobación con validación QR",
+        "Horas de capacitación": "32 horas (21 sincrónicas, 11 trabajo autónomo)",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Virtual",
+        "Conocimientos previos": "• Ninguno"
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 14 de Mayo al 03 de Junio de 2025",
+        "El cupo de inscripciones: Sin límite específico",
+        "Lugar del evento: Virtual",
+        "Fecha del curso: Del 04 al 30 de junio de 2025",
+        "Horario: 7:00 PM - 10:00 PM (Miércoles y Jueves)",
+        "Precio para los asistentes:",
+        "40 USD Estudiantes UTA (Último periodo)",
+        "60 USD Graduados, Docentes y Administrativos UTA",
+        "80 USD Público en general",
+        "Tipo de capacitación: Certificado digital de asistencia y aprobación con validación QR",
+        "Horas de capacitación: 32 horas (21 sincrónicas, 11 trabajo autónomo)",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Virtual",
+        "Conocimientos previos: • Ninguno"
+      ],
+      "notes": [],
+      "materials": [
+        "• Computador personal",
+        "• Conexión a internet",
+        "• Plataforma Zoom"
+      ],
+      "contents": [
+        "Clase 1: Introducción a la Inteligencia Artificial",
+        "Clase 2: Prompt Engineering",
+        "Clase 3: Creación de Presentaciones con IA",
+        "Clase 4: Extensiones para la productividad con IA",
+        "Clase 5: La IA como motor de selección del personal",
+        "Clase 6: Inteligencia Artificial generativa: innovación y aplicaciones",
+        "Clase 7: Consideraciones éticas sobre IA"
+      ],
+      "registrationUrl": null,
+      "title": "Inteligencia Artificial para la Gestión de Recursos Humanos"
+    },
+    {
+      "id": 14,
+      "name": "LA LEY DE PROTECCIÓN DE DATOS EN EL ECUADOR",
+      "status": "abierto",
+      "hours": 32,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso14.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso14.jpg",
+      "description": "Este curso tiene como objetivo ofrecer a estudiantes, docentes y al público en general una comprensión sólida sobre la Ley Orgánica de Protección de Datos Personales (LOPDP) de Ecuador y su reglamento. A través de un análisis de los fundamentos legales, principios clave y casos prácticos, los participantes aprenderán a identificar los derechos que tienen como titulares de datos, así como las responsabilidades que deben cumplir las instituciones, tanto públicas como privadas, al manejar información personal. La propuesta académica se basa en ejemplos reales de políticas internas, normativas internacionales y estándares como el GDPR europeo. El curso promueve una perspectiva humanista sobre la protección de datos, fomentando el uso responsable de la información como un derecho fundamental y un aspecto esencial en nuestra sociedad digital. Este curso contribuye a establecer una cultura de privacidad y cumplimiento normativo que se alinea con los más altos estándares, ayudando a formar ciudadanos y profesionales conscientes y capaces de adaptarse a las nuevas realidades legales, éticas y tecnológicas en el manejo de datos personales.",
+      "objectives": [
+        "Comprender los fundamentos jurídicos, principios rectores y alcance de la Ley Orgánica de Protección de Datos Personales y su reglamento en el contexto ecuatoriano.",
+        "Identificar los derechos que asisten a los titulares de datos personales y las responsabilidades de los distintos actores involucrados en su tratamiento (responsables, encargados, delegados de protección, entre otros).",
+        "Aplicar buenas prácticas y herramientas para la protección de datos personales en organizaciones públicas y privadas, con base en ejemplos reales, normativa internacional comparada y estándares como el GDPR europeo."
+      ],
+      "location": [
+        "Centro de Transferencia y Desarrollo de Tecnologías CTT-FISEI.",
+        "Avda. Los Chasquis entre Río Payamino y Río Guayllabamba",
+        "Campus Huachi, Ambato-Ecuador."
+      ],
+      "organizers": [
+        "Ing. Msc. Xavier Francisco López Andrade"
+      ],
+      "instructors": [],
+      "details": {
+        "Fechas de inscripciones": "Del 15 de Mayo al 04 de Junio de 2025",
+        "El cupo de inscripciones": "Mínimo 15, máximo 20 participantes",
+        "Lugar del evento": "CTT – FISEI / Laboratorio asignado",
+        "Fecha del curso": "Del 07 al 30 de junio de 2025",
+        "Horario": "8:00 - 13:00 (Sábados)",
+        "Precio para los asistentes": "40 USD Estudiantes UTA (Último periodo); 50 USD Graduados, Docentes y Administrativos UTA; 60 USD Público en general",
+        "Tipo de capacitación": "Certificado digital de asistencia y aprobación con validación QR",
+        "Horas de capacitación": "32 horas (20 presenciales, 12 trabajo autónomo)",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Presencial",
+        "Conocimientos previos": "• Ninguno"
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 15 de Mayo al 04 de Junio de 2025",
+        "El cupo de inscripciones: Mínimo 15, máximo 20 participantes",
+        "Lugar del evento: CTT – FISEI / Laboratorio asignado",
+        "Fecha del curso: Del 07 al 30 de junio de 2025",
+        "Horario: 8:00 - 13:00 (Sábados)",
+        "Precio para los asistentes:",
+        "40 USD Estudiantes UTA (Último periodo)",
+        "50 USD Graduados, Docentes y Administrativos UTA",
+        "60 USD Público en general",
+        "Tipo de capacitación: Certificado digital de asistencia y aprobación con validación QR",
+        "Horas de capacitación: 32 horas (20 presenciales, 12 trabajo autónomo)",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Presencial",
+        "Conocimientos previos: • Ninguno"
+      ],
+      "notes": [],
+      "materials": [
+        "• 1 laboratorio (30 computadores)",
+        "• 1 proyector",
+        "• 1 pizarrón",
+        "• Internet",
+        "• Tiza liquida",
+        "• Manuales digitales",
+        "• Plataforma Digital"
+      ],
+      "contents": [
+        "Clase 1: Fundamentos de la Protección de Datos Personales: Contexto Nacional e Internacional",
+        "Clase 2: Derechos del Titular y Obligaciones de los Responsables del Tratamiento",
+        "Clase 3: Gestión y Seguridad de los Datos en Organizaciones",
+        "Clase 4: Aplicación Práctica y Casos Reales"
+      ],
+      "registrationUrl": null,
+      "title": "La Ley de Protección de Datos en el Ecuador: Claves Legales y Técnicas para el Cumplimiento Normativo"
+    },
+    {
+      "id": 9,
+      "name": "ADMINISTRACIÓN Y DEFENSA DE AMENAZAS CIBERNÉTICAS",
+      "status": "abierto",
+      "hours": 50,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso9.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso9.jpg",
+      "description": "Este curso cubre diferentes métodos para monitorear la red y cómo evaluar las alertas de seguridad. Se profundiza en las herramientas y técnicas utilizadas para proteger la red, incluido el control de acceso, firewalls, seguridad en la nube y criptografía. Permite explorar la gobernanza en la ciberseguridad y la gestión de amenazas, mediante el desarrollo de políticas para que la organización cumpla con los estándares de ética y los marcos legales y regulatorios.",
+      "objectives": [
+        "Explicar los enfoques para la defensa de la seguridad de la red.",
+        "Implementar listas de control de acceso (ACL), firewall para filtrar el tráfico y mitigar los ataques a la red.",
+        "Determinar las técnicas criptográficas que se requieren para garantizar la confidencialidad, la integridad y la autenticidad.",
+        "Impulsar el desarrollo de proyectos de mejora continua dentro del campo empresarial."
+      ],
+      "location": [
+        "Avda. Los Chasquis entre Río Payamino y Río Guayllabamba",
+        "Campus Huachi, Ambato-Ecuador.",
+        "Aula virtual de los Talleres Tecnológicos – FISEI"
+      ],
+      "organizers": [
+        "Ing. Daniel Jerez, Mg."
+      ],
+      "instructors": [],
+      "details": {
+        "Fechas de inscripciones": "Del 01 de mayo al 03 de junio de 2025",
+        "Lugar del evento": "Plataforma: Virtual, plataforma:CISCO",
+        "Fecha del curso": "Del 31-mayo al 05-julio-2025",
+        "Horario": "Curso MOOC desarrollado en el aula virtual de los talleres tecnológicos, sin horarios específicos de conexión.",
+        "Precio para los asistentes": "40 USD Estudiantes UTA (Último periodo) 50 USD Graduados, Docentes y Administrativos UTA 60 USD Público en general; 40 USD Estudiantes UTA (Último periodo); 50 USD Graduados, Docentes y Administrativos UTA; 60 USD Público en general",
+        "Tipo de capacitación": "Curso MOOC - certificado digital de aprobación con validación QR",
+        "Horas de capacitación": "50 horas",
+        "Beneficiarios": "Estudiantes y público en general",
+        "Modalidad": "MOOC",
+        "Conocimientos previos": "Conocimientos básicos de ciberseguridad. Conocimientos básicos de redes"
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 01 de mayo al 03 de junio de 2025",
+        "Lugar del evento: Plataforma: Virtual, plataforma:CISCO",
+        "Fecha del curso: Del 31-mayo al 05-julio-2025",
+        "Horario: Curso MOOC desarrollado en el aula virtual de los talleres tecnológicos, sin horarios específicos de conexión.",
+        "Precio para los asistentes: 40 USD Estudiantes UTA (Último periodo) 50 USD Graduados, Docentes y Administrativos UTA 60 USD Público en general",
+        "40 USD Estudiantes UTA (Último periodo)",
+        "50 USD Graduados, Docentes y Administrativos UTA",
+        "60 USD Público en general",
+        "Tipo de capacitación: Curso MOOC - certificado digital de aprobación con validación QR",
+        "Horas de capacitación: 50 horas",
+        "Beneficiarios: Estudiantes y público en general",
+        "Modalidad: MOOC",
+        "Conocimientos previos: Conocimientos básicos de ciberseguridad. Conocimientos básicos de redes"
+      ],
+      "notes": [],
+      "materials": [
+        "Computador con conexión a internet",
+        "Conexión a internet"
+      ],
+      "contents": [
+        "Módulo 1: Defensa de la Red Capítulo 1:Comprendiendo la Defensa Capítulo 2: Defensa de Sistemas y Redes Capítulo 3:Control de Acceso Capítulo 4: Listas de Control de Acceso Capítulo 5: Tecnologías de Firewall Capítulo 6: Firewalls de Política Basados en Zonas Capítulo 7: Seguridad en la Nube Capítulo 8: Criptografía Capítulo 9: Tecnologías y Protocolos Capítulo 10: Datos de Seguridad de la Red Capítulo 11: Evaluación de Alertas",
+        "Capítulo 1:Comprendiendo la Defensa",
+        "Capítulo 2: Defensa de Sistemas y Redes",
+        "Capítulo 3:Control de Acceso",
+        "Capítulo 4: Listas de Control de Acceso",
+        "Capítulo 5: Tecnologías de Firewall",
+        "Capítulo 6: Firewalls de Política Basados en Zonas",
+        "Capítulo 7: Seguridad en la Nube",
+        "Capítulo 8: Criptografía",
+        "Capítulo 9: Tecnologías y Protocolos",
+        "Capítulo 10: Datos de Seguridad de la Red",
+        "Capítulo 11: Evaluación de Alertas",
+        "Módulo 2: Administración de Amenazas Cibernéticas Capítulo 1: Gobernanza y Cumplimiento Capítulo 2: Pruebas de seguridad de red Capítulo 3: Inteligencia de amenazas Capítulo 4: Evaluación de la vulnerabilidad de los endpoints Capítulo 5: Gestión de Riesgos y Controles de Seguridad Capítulo 6: Forense digital y Análisis y respuesta a incidentes",
+        "Capítulo 1: Gobernanza y Cumplimiento",
+        "Capítulo 2: Pruebas de seguridad de red",
+        "Capítulo 3: Inteligencia de amenazas",
+        "Capítulo 4: Evaluación de la vulnerabilidad de los endpoints",
+        "Capítulo 5: Gestión de Riesgos y Controles de Seguridad",
+        "Capítulo 6: Forense digital y Análisis y respuesta a incidentes"
+      ],
+      "registrationUrl": null,
+      "title": "ADMINISTRACIÓN Y DEFENSA DE AMENAZAS CIBERNÉTICAS"
+    },
+    {
+      "id": 1,
+      "name": "FUNDAMENTOS DE PYTHON 1",
+      "status": "cerrado",
+      "hours": 32,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso1.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso1.jpg",
+      "description": "El curso Fundamentos de Python 1 de Cisco NetAcad es una introducción esencial al mundo de la programación, diseñado para enseñar los conceptos básicos de Python de forma práctica y accesible. A través de actividades interactivas y ejercicios basados en problemas reales, los estudiantes desarrollarán habilidades fundamentales en lógica de programación, estructuras de control, manejo de datos y uso de funciones básicas. Este curso está dirigido tanto a principiantes como a personas interesadas en dar sus primeros pasos en el campo de la programación, proporcionando una base sólida para avanzar hacia niveles más complejos y para explorar su aplicación en áreas como redes, ciberseguridad e inteligencia artificial.",
+      "objectives": [
+        "Comprender los conceptos básicos de programación aprendiendo a usar Python para resolver problemas mediante algoritmos y estructuras lógicas.",
+        "Escribir y ejecutar programas simples en Python aplicando elementos clave como variables, operadores y estructuras condicionales para automatizar tareas.",
+        "Utilizar estructuras de datos básicas como listas y diccionarios para almacenar, organizar y manipular información de manera eficiente.",
+        "Dominar el uso de bucles e iteraciones para gestionar flujos de trabajo repetitivos en los programas.",
+        "Implementar funciones y trabajar con módulos para estructurar código reutilizable y organizar proyectos de forma profesional.",
+        "Prepararse para el uso de Python en contextos prácticos explorando aplicaciones básicas en áreas como el análisis de datos y la automatización de procesos."
+      ],
+      "location": [
+        "Avda. Los Chasquis entre Río Payamino y Río Guayllabamba.",
+        "Campus Huachi, Ambato-Ecuador."
+      ],
+      "organizers": [
+        "Ing. Daniel Jerez Mayorga, Mg."
+      ],
+      "instructors": [],
+      "details": {
+        "Fechas de inscripciones": "15 de febrero al 02 de marzo de 2025",
+        "El cupo de inscripciones": "Ilimitado",
+        "Lugar del evento": "Virtual a través de la plataforma CISCO.",
+        "Fecha del curso": "Del 01 de marzo al 30 de marzo de 2025",
+        "Horario": "A elección del participante",
+        "Precio para los asistentes": "30 USD Estudiantes UTA (Último periodo); 40 USD Graduados, Docentes y Administrativos UTA; 50 USD Público en general",
+        "Tipo de capacitación": "Certificado digital de asistencia y aprobación.",
+        "Horas de capacitación": "32 horas",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Virtual auto-didacta (Self-paced)"
+      },
+      "detailLines": [
+        "Fechas de inscripciones: 15 de febrero al 02 de marzo de 2025",
+        "El cupo de inscripciones: Ilimitado",
+        "Lugar del evento: Virtual a través de la plataforma CISCO.",
+        "Fecha del curso: Del 01 de marzo al 30 de marzo de 2025",
+        "Horario: A elección del participante",
+        "Precio para los asistentes:",
+        "30 USD Estudiantes UTA (Último periodo)",
+        "40 USD Graduados, Docentes y Administrativos UTA",
+        "50 USD Público en general",
+        "Tipo de capacitación: Certificado digital de asistencia y aprobación.",
+        "Horas de capacitación: 32 horas",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Virtual auto-didacta (Self-paced)"
+      ],
+      "notes": [],
+      "materials": [
+        "• Computador personal",
+        "• Conexión a internet"
+      ],
+      "contents": [
+        "• Módulo 1: Introducción a Python y programación informática o Introducción a la programación o Introducción a Python o Evaluación",
+        "• Módulo 2: Tipos de datos, variables, operaciones básicas de entradasalida y operadores básicos o El programa “Hola, Mundo” o Literales de Python o Operadores – herramientas de manipulación de datos o Variables o Comentarios o Interacción con el usuario o Evaluación",
+        "• Módulo 3: Valores booleanos, ejecución condicional, bucles, listas y procesamiento de listas, operaciones lógicas y bit a bit o Toma de decisiones en Python o Bucles en Python o Operadores lógicos y operacionales bit a bit en Python. o Listas o Operaciones con listas o Aplicaciones avanzadas de listas o Evaluación",
+        "• Módulo 4: Funciones, tuplas, diccionarios, excepciones y procesamiento de datos. o Funciones o Comunicación de las funciones con su entorno o Resultados de funciones o Alcances en Python"
+      ],
+      "registrationUrl": null,
+      "title": "FUNDAMENTOS DE PYTHON 1"
+    },
+    {
+      "id": 2,
+      "name": "Fundamentos de Python 2",
+      "status": "cerrado",
+      "hours": 40,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso2.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso2.jpg",
+      "description": "Fundamentos de Python 2 de Cisco NetAcad es un curso avanzado que amplía los conocimientos adquiridos en \"Fundamentos de Python 1\", profundizando en conceptos intermedios y avanzados de programación con Python. Este curso explora temas como la manipulación de excepciones, el uso avanzado de estructuras de datos, la programación orientada a objetos (POO) y el manejo eficiente de archivos. Con un enfoque práctico y orientado a problemas reales, los estudiantes adquirirán habilidades que les permitirán desarrollar programas más complejos y robustos, preparándolos para roles técnicos y para aplicaciones avanzadas de Python en redes, ciberseguridad y análisis de datos.",
+      "objectives": [
+        "Aplicar el manejo de excepciones en programas Python para identificar y gestionar errores, mejorando la robustez y fiabilidad del código.",
+        "Profundizar en estructuras de datos avanzadas como conjuntos y matrices multidimensionales para resolver problemas complejos de almacenamiento y procesamiento de información",
+        "Diseñar programas modulares utilizando programación orientada a objetos (OOP), incorporando clases, objetos, herencia y encapsulación para desarrollar soluciones escalables.",
+        "Manejar y procesar archivos en diferentes formatos para la lectura, escritura y manipulación de datos persistentes en aplicaciones.",
+        "Explorar el uso de bibliotecas estándar y externas de Python para ampliar la funcionalidad de los programas y trabajar con tareas específicas como manejo de fechas, cálculos matemáticos y acceso a internet.."
+      ],
+      "location": [
+        "Avda. Los Chasquis entre Río Payamino y Río Guayllabamba",
+        "Campus Huachi, Ambato-Ecuador."
+      ],
+      "organizers": [
+        "Ing. Daniel Jerez, Mg."
+      ],
+      "instructors": [],
+      "details": {
+        "Fechas de inscripciones": "Del 15 de marzo al 07 de abril de 2025.",
+        "El cupo de inscripciones": "Ilimitado",
+        "Lugar del evento": "Virtual a través de la plataforma CISCO.",
+        "Fecha del curso": "Del 05 de abril al 04 de mayo del 2025",
+        "Horario": "A elección del participante",
+        "Precio para los asistentes": "30 Estudiantes UTA (Último periodo); 40 USD Graduados, Docentes y Administrativos UTA; 50 USD Público en general",
+        "Tipo de capacitación": "Certificado digital de asistencia y aprobación con validación QR.",
+        "Horas de capacitación": "40 horas",
+        "Beneficiarios": "Estudiantes, graduados, docentes y público en general",
+        "Modalidad": "Curso virtual auto-didacta (Self-paced)"
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 15 de marzo al 07 de abril de 2025.",
+        "El cupo de inscripciones: Ilimitado",
+        "Lugar del evento: Virtual a través de la plataforma CISCO.",
+        "Fecha del curso: Del 05 de abril al 04 de mayo del 2025",
+        "Horario: A elección del participante",
+        "Precio para los asistentes:",
+        "30 Estudiantes UTA (Último periodo)",
+        "40 USD Graduados, Docentes y Administrativos UTA",
+        "50 USD Público en general",
+        "Tipo de capacitación: Certificado digital de asistencia y aprobación con validación QR.",
+        "Horas de capacitación: 40 horas",
+        "Beneficiarios: Estudiantes, graduados, docentes y público en general",
+        "Modalidad: Curso virtual auto-didacta (Self-paced)"
+      ],
+      "notes": [],
+      "materials": [
+        "• Computador personal.",
+        "• Conexión a internet."
+      ],
+      "contents": [
+        "• Módulo 1: Módulos, Paquetes y PIP • Capítulo 1: ¿Qué es un módulo y para qué lo necesitamos? • Capítulo 2: Importación y uso de módulos. • Capítulo 3: Revisión de algunos módulos útiles de Python. • Capítulo 4: ¿Qué es un paquete y en qué se diferencia de un módulo? • Capítulo 5: Construcción y uso de paquetes • Capítulo 6: PIP: La navaja suiza y el mantenimiento de paquetes.",
+        "• Módulo 2: Caracteres, cadenas y excepciones avanzadas • Capítulo 1: Caracteres, cadenas y estándares de codificación • Capítulo 2: Cadenas y listas: similitudes y diferencias. • Capítulo 3: Métodos de listas. • Capítulo 4: Métodos de cadenas. • Capítulo 5: La forma en que Python maneja los errores en tiempo de ejecución • Capítulo 6: Controlar el flujo de errores usando try y except • Capítulo 7: La jerarquía de excepciones. • Capítulo 8: Evaluación.",
+        "• Módulo 3: Programación orientada a objetos en Python • Capítulo 1: Conceptos básicos de programación orientada a objetos. • Capítulo 2: Del enfoque procedimental al de objetos: motivaciones y beneficios. • Capítulo 3: Clases, objetos, propiedades, y métodos. • Capítulo 4:Herencia y polimorfismo • Capítulo 5: Excepción como objecto.",
+        "• Módulo 4: Trabajar con archivos y utilidades • Capítulo 1: Generadores, iteradores y cierres. • Capítulo 2: Trabajar con sistemas de archivos, árboles de directorios y archivos • Capítulo 3: Módulos seleccionados de la biblioteca estándar de Python (os, date, datetime, calendar)."
+      ],
+      "registrationUrl": null,
+      "title": "FUNDAMENTOS DE PYTHON 2"
+    },
+    {
+      "id": 3,
+      "name": "JavaScript Essentials 1",
+      "status": "cerrado",
+      "hours": 40,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso3.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso3.jpg",
+      "description": "El curso JavaScript Essentials 1 es una introducción integral al mundo de la programación utilizando JavaScript, un lenguaje clave en el desarrollo de aplicaciones web y móviles. A través de seis módulos, los estudiantes aprenderán desde los fundamentos de la programación, como variables, tipos de datos y operadores, hasta conceptos más avanzados como estructuras de control, funciones, manejo de errores y depuración de código. El curso está diseñado para principiantes, sin requerir experiencia previa en programación, y utiliza herramientas prácticas como entornos de desarrollo en línea y navegadores web para ejecutar y probar código. Al finalizar, los estudiantes no solo dominarán los fundamentos de JavaScript, sino que también estarán preparados para aplicar las mejores prácticas de programación y resolver problemas de forma algorítmica.",
+      "objectives": [
+        "Aprender los fundamentos de programación, como el manejo de variables, tipos de datos, estructuras de control y operadores en JavaScript.",
+        "Diseñar y desarrollar aplicaciones que interactúen con los usuarios mediante cuadros de diálogo (alert, confirm, prompt) y manipulación básica del DOM",
+        "Integrar JavaScript en aplicaciones web, entender su interacción con HTML y CSS, y explorar su uso en aplicaciones del lado cliente."
+      ],
+      "location": [],
+      "organizers": [
+        "Ing. Daniel Jerez, Mg."
+      ],
+      "instructors": [],
+      "details": {
+        "Fechas de inscripciones": "Del 17 de febrero al 03 de marzo de 2025.",
+        "Fecha del curso": "01-marzo a 31-marzo-2025.",
+        "Horario": "Curso virtual auto-didacta (Self-paced)",
+        "Precio": "30 USD Estudiantes UTA 40 USD Graduados, Docentes y Administrativos UTA 50 USD Público en general; 30 USD Estudiantes UTA; 40 USD Graduados, Docentes y Administrativos UTA; 50 USD Público en general",
+        "Horas de capacitación": "40 horas",
+        "Modalidad": "Virtual - eLearning",
+        "Conocimientos previos": "Ninguno"
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 17 de febrero al 03 de marzo de 2025.",
+        "Fecha del curso: 01-marzo a 31-marzo-2025.",
+        "Horario: Curso virtual auto-didacta (Self-paced)",
+        "Precio: 30 USD Estudiantes UTA 40 USD Graduados, Docentes y Administrativos UTA 50 USD Público en general",
+        "30 USD Estudiantes UTA",
+        "40 USD Graduados, Docentes y Administrativos UTA",
+        "50 USD Público en general",
+        "Horas de capacitación:40 horas",
+        "Modalidad: Virtual - eLearning",
+        "Conocimientos previos: Ninguno"
+      ],
+      "notes": [],
+      "materials": [
+        "• Computador personal.",
+        "• Conexión a internet."
+      ],
+      "contents": [
+        "Módulo 1:Introducción Introducción a JavaScript y a la programación de computadoras: conceptos básicos de JS, entorno de desarrollo, primer programa en JavaScript (Hola, Mundo)",
+        "Módulo 2: Variables y Tipos Variables, tipos de datos primitivos y complejos, conversión de tipos, comentarios",
+        "Módulo 3: Operadores Operadores aritméticos, lógicos, de comparación y de asignación; interacción con el usuario mediante cuadros de diálogo (alert, confirm, prompt).",
+        "Módulo 4: Control de Flujo Ejecución condicional (if-else, switch-case); bucles (for, while, do-while, for-in, for-of); manejo de interrupciones en bucles (break, continue).",
+        "Módulo 5: Funciones Declaración y uso de funciones, variables locales, parámetros, retorno de valores, funciones como miembros de primera clase, funciones flecha, recursividad, y callbacks.",
+        "Módulo 6: Manejo de Errores Manejo de errores y excepciones (try-catch, throw); depuración de código (análisis paso a paso, medición de tiempos de ejecución)"
+      ],
+      "registrationUrl": null,
+      "title": "JAVASCRIPT ESSENTIALS 1"
+    },
+    {
+      "id": 4,
+      "name": "JavaScript Essentials 2",
+      "status": "cerrado",
+      "hours": 50,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso4.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso4.jpg",
+      "description": "JavaScript Essentials 2 es un curso avanzado diseñado para profundizar en las capacidades de programación con JavaScript, abordando conceptos avanzados como la programación orientada a objetos (OOP), técnicas funcionales y asincrónicas. A través de un enfoque práctico, los estudiantes aprenderán a analizar y resolver problemas del mundo real, trabajar con estructuras de datos complejas y desarrollar aplicaciones más eficientes y escalables. Este curso prepara a los participantes construir un portafolio profesional que demuestre habilidades avanzadas en el desarrollo de aplicaciones con JavaScript",
+      "objectives": [
+        "Comprender e implementar clases y programación basada en clases para estructurar aplicaciones siguiendo principios modernos de diseño orientado a objetos.",
+        "Explorar y utilizar objetos integrados y estructuras avanzadas como Map, Set y JSON para optimizar el manejo de datos y mejorar el rendimiento de las aplicaciones",
+        "Aplicar técnicas avanzadas de programación funcional y asincrónica usando closures, funciones de orden superior, generadores y promesas para gestionar tareas complejas y asincrónicas.",
+        "Desarrollar habilidades analíticas y prácticas en resolución de problemas aplicando conceptos de JavaScript en proyectos prácticos para construir un portafolio competitivo"
+      ],
+      "location": [],
+      "organizers": [
+        "Ing. Daniel Jerez, Mg."
+      ],
+      "instructors": [],
+      "details": {
+        "Modalidad": "Curso virtual auto-didacta (Self-paced)",
+        "Horas de capacitación": "50 horas",
+        "Fecha del curso": "05-abril a 04-mayo-2025",
+        "Período de inscripción": "01-marzo a 08-abril-2025",
+        "Precio": "40 USD Estudiantes UTA 50 USD Graduados, Docentes y Administrativos UTA 60 USD Público en general; 40 USD Estudiantes UTA; 50 USD Graduados, Docentes y Administrativos UTA; 60 USD Público en general",
+        "Conocimientos previos": "JavaScript."
+      },
+      "detailLines": [
+        "Modalidad: Curso virtual auto-didacta (Self-paced)",
+        "Horas de capacitación: 50 horas",
+        "Fecha del curso: 05-abril a 04-mayo-2025",
+        "Período de inscripción: 01-marzo a 08-abril-2025",
+        "Precio: 40 USD Estudiantes UTA 50 USD Graduados, Docentes y Administrativos UTA 60 USD Público en general",
+        "40 USD Estudiantes UTA",
+        "50 USD Graduados, Docentes y Administrativos UTA",
+        "60 USD Público en general",
+        "Conocimientos previos: JavaScript."
+      ],
+      "notes": [],
+      "materials": [
+        "• Computador personal.",
+        "• Conexión a internet."
+      ],
+      "contents": [
+        "Módulo 1: Objetos sin clases Manipulación de objetos, comparación, clonación, métodos, getters/setters, prototipos y herencia.",
+        "Módulo 2: Clases y programación basada en clases Declaración de clases, propiedades, herencia, miembros estáticos, getters y setters.",
+        "Módulo 3: Objetos integrados Uso de objetos como String, Date, Array, Map, Set; manejo de JSON; operaciones matemáticas y expresiones regulares",
+        "Módulo 4: Uso avanzado de funciones Parámetros extendidos, closures, funciones de orden superior, generadores, programación asincrónica con callbacks y promesas"
+      ],
+      "registrationUrl": null,
+      "title": "JAVASCRIPT ESSENTIALS 2"
+    },
+    {
+      "id": 5,
+      "name": "FUNDAMENTOS DE CIENCIA Y ANALÍTICA DE DATOS",
+      "status": "cerrado",
+      "hours": 32,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso5.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso5.jpg",
+      "description": "Este curso lleva a los estudiantes al mundo de la ciencia y analítica de datos. Aprenderán los aspectos básicos en los campos de la ciencia de datos, el análisis de datos y la ingeniería de datos para comprender mejor cómo el aprendizaje automático está dando forma al futuro de los negocios, los servicios de salud, la educación y más. El curso le enseña las herramientas fundamentales de un analista de datos. Aprenderás a transformar, organizar y visualizar datos con herramientas de hoja de cálculo como Excel. También aprenderá a consultar datos de una base de datos relacional utilizando SQL y a mejorar sus presentaciones de datos utilizando potentes herramientas de inteligencia empresarial como Tableau. Al final del curso, habrás dado los pasos necesarios para iniciar una cartera de análisis de datos completa con un análisis del popular conjunto de datos de películas, mostrando tus habilidades en Excel, SQL y Tableau.",
+      "objectives": [
+        "Explicar las características de los datos masivos y los efectos del crecimiento de los datos.",
+        "Examinar el rol de los datos en la Inteligencia Artificial y el Aprendizaje Automático.",
+        "Realizar la recopilación inicial de datos y la investigación utilizando una hoja de cálculo.",
+        "Utilizar funciones y fórmulas de Excel para transformar datos para su análisis.",
+        "Obtener datos apropiados para el análisis estadístico de los datos."
+      ],
+      "location": [],
+      "organizers": [
+        "Ing. Daniel Jerez, Mg."
+      ],
+      "instructors": [],
+      "details": {
+        "Modalidad": "Curso virtual auto-didacta (Self-paced)",
+        "Horas de capacitación": "36 horas",
+        "Fecha del curso": "01-marzo a 30-marzo-2025",
+        "Período de inscripción": "14-febrero a 03-marzo-2025",
+        "Precio": "30 USD Estudiantes UTA 40 USD Graduados, Docentes y Administrativos UTA 50 USD Público en general; 30 USD Estudiantes UTA; 40 USD Graduados, Docentes y Administrativos UTA; 50 USD Público en general",
+        "Conocimientos previos": "Nivel de inglés básico.",
+        "Dirigido a": "Estudiantes, graduados, docentes UTA, y público en general."
+      },
+      "detailLines": [
+        "Modalidad: Curso virtual auto-didacta (Self-paced)",
+        "Horas de capacitación: 36 horas",
+        "Fecha del curso: 01-marzo a 30-marzo-2025",
+        "Período de inscripción: 14-febrero a 03-marzo-2025",
+        "Precio: 30 USD Estudiantes UTA 40 USD Graduados, Docentes y Administrativos UTA 50 USD Público en general",
+        "30 USD Estudiantes UTA",
+        "40 USD Graduados, Docentes y Administrativos UTA",
+        "50 USD Público en general",
+        "Conocimientos previos: Nivel de inglés básico.",
+        "Dirigido a: Estudiantes, graduados, docentes UTA, y público en general."
+      ],
+      "notes": [],
+      "materials": [
+        "• Computador personal.",
+        "• Conexión a internet."
+      ],
+      "contents": [
+        "Módulo 1:Introducción a la Ciencia de Datos Capítulo 1: Análisis de la Experiencia 1.1 ¿Qué son los Datos? 1.2 Los Datos nos Rodean 1.3 Comprensión del Negocio Capítulo 2: Recopilación y Almacenamiento de Datos 2.1 Comprendiendo los Datos Masivos 2.2 Comprendiendo la Administración de los Datos Masivos Capítulo 3: Inteligencia Artificial y Aprendizaje Automático 3.1 Realidad y Ficción de la IA 3.2 Datos Masivos y Aprendizaje Automático Capítulo 4: Embarcarse en su Carrera en Análisis de Datos 4.1 Preparándose para una Carrera en Análisis de Datos 4.2 Tomando los Próximos Pasos",
+        "Módulo 2: Fundamentos de Análisis de Datos Capítulo 1: Proyectos de análisis de datos 1.1 Análisis en tiempo real 1.2 Análisis de datos en acción 1.3 La cartera de proyectos Capítulo 2: Introducción a la recopilación e Investigación de Datos 2.1 Herramientas para la comprensión de datos 2.2 Conceptos y características básicos de Excel 2.3 Utilice Funciones simples para el análisis de datos Capítulo 3: Preparación y limpieza de datos para análisis 3.1 Fuentes de datos 3.2 Datos en archivos estructurados 3.3 Datos no estructurados 3.4 Preparación de datos 3.5 Preparación y limpieza de datos para el resumen del análisis Capítulo 4: Transformación de datos con Excel 4.1 Ordenar y filtrar datos con Excel 4.2 Formatear y ajustar datos 4.3 Cálculos de datos 4.4 Transformación de datos con resumen de Excel Capítulo 5: Analizar los datos utilizando estadísticas 5.1 Uso de estadísticas para interpretar datos 5.2 Elegir la visualización adecauda para el trabajo 5.3 Creando visualizaciones con Excel 5.4 Abordar anomalías en los datos 5.5 Uso de Excel para abordar problemas con los datos 5.6 Analizar los datos utilizando el resumen estadístico Capítulo 6: Introducción a las Bases de Datos Relacionales y SQL 6.1 Gestión básica de datos 6.2 SQL 6.3 Introducción a las bases de datos relacionales y resumen de SQL Capítulo 7: Introducción a las consultas estructuradas 7.1 Estructuras de bases de datos relacionales 7.2 Usar SQL con varias tablas 7.3 Combinando funciones SQL para extraer datos 7.4 Funciones de gestión de SQL y alternativas Capítulo 8: Introducción a Tableau 8.1 Introducción a Tableau 8.2 Crear visualizaciones en Tableau 8.3 Paneles de control de Tableau Capítulo 9: Ética y sesgo en los datos 9.1 Sesgo en el análisis de datos 9.2 Uso ético de los datos Capítulo 10: Dé los siguientes pasos 10.1 Requisitos para una cartera 10.2 Ampliando sus habilidades analíticas"
+      ],
+      "registrationUrl": null,
+      "title": "FUNDAMENTOS DE CIENCIA Y ANALÍTICA DE DATOS"
+    },
+    {
+      "id": 6,
+      "name": "ETHICAL HACKER",
+      "status": "cerrado",
+      "hours": 70,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso6.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso6.jpg",
+      "description": "El panorama digital está evolucionando a un ritmo sin precedentes y las amenazas cibernéticas acechan en cada esquina. La resiliencia de la ciberseguridad en el mundo moderno no puede ser sólo un complemento: es una necesidad. Los profesionales de seguridad ofensivos, como los piratas informáticos éticos y los evaluadores de penetración, pueden ayudar a descubrir de forma proactiva amenazas desconocidas y abordarlas antes de que lo hagan los ciberdelincuentes. El curso Ethical Hacker prepara a los alumnos para descubrir vulnerabilidades de forma proactiva antes de que lo hagan los ciberdelincuentes. Los alumnos dominarán el arte de determinar el alcance, ejecutar e informar sobre las evaluaciones de vulnerabilidades, al tiempo que recomiendan estrategias de mitigación.",
+      "objectives": [
+        "Analizar la mentalidad y las tácticas de los cibercriminales para fortalecer sus habilidades defensivas.",
+        "Implementar controles de seguridad de manera más efectiva y monitorear, analizar y responder a las amenazas de seguridad actuales.",
+        "Adquirir las habilidades necesarias para implementar seguridad y monitorear, analizar y y responder a las amenazas de seguridad actuales"
+      ],
+      "location": [],
+      "organizers": [
+        "Ing. Daniel Jerez, Mg."
+      ],
+      "instructors": [],
+      "details": {
+        "Modalidad": "MOOC",
+        "Horas de capacitación": "70 horas",
+        "Fecha del curso": "5-abril a 18-mayo-2025",
+        "Período de inscripción": "10-marzo a 08-abril-2025",
+        "Precio": "50 USD Estudiantes UTA 60 USD Graduados, Docentes y Administrativos UTA 70 USD Público en general; 50 USD Estudiantes UTA; 60 USD Graduados, Docentes y Administrativos UTA; 70 USD Público en general",
+        "Conocimientos previos": "Conocimientos básicos de ciberseguridad Conocimientos básicos de programación Conocimiento del idioma inglés"
+      },
+      "detailLines": [
+        "Modalidad: MOOC",
+        "Horas de capacitación: 70 horas",
+        "Fecha del curso: 5-abril a 18-mayo-2025",
+        "Período de inscripción: 10-marzo a 08-abril-2025",
+        "Precio: 50 USD Estudiantes UTA 60 USD Graduados, Docentes y Administrativos UTA 70 USD Público en general",
+        "50 USD Estudiantes UTA",
+        "60 USD Graduados, Docentes y Administrativos UTA",
+        "70 USD Público en general",
+        "Conocimientos previos: Conocimientos básicos de ciberseguridad Conocimientos básicos de programación Conocimiento del idioma inglés"
+      ],
+      "notes": [],
+      "materials": [
+        "• Computador personal. • Conexión a internet."
+      ],
+      "contents": [
+        "Módulo 1: Introducción al hacking ético y a las pruebas de penetración 1.1 Entendiendo el Hacking Ético y la Penetración Pruebas 1.2 Exploración de metodologías de pruebas de penetración 1.3 Construir su propio laboratorio",
+        "Módulo 2: Planificación y alcance de una prueba de penetración Evaluación 2.1 Comparación y contraste de los conceptos de gobernanza, riesgo y cumplimiento normativo 2.2 Explicar la importancia del alcance y los requisitos de la organización o del cliente 2.3 Demostrar una mentalidad de hacking ético manteniendo el profesionalismo y la integridad",
+        "Módulo 3: Recopilación de información y exploración de vulnerabilidades 3.1 Realización de un reconocimiento pasivo 3.2 Realización de un reconocimiento activo 3.3 Entender el arte de realizar escaneos de vulnerabilidades 3.4 Cómo analizar los resultados de la exploración de vulnerabilidades",
+        "Módulo 4: Ataques de Ingeniería Social 4.1 Pretexto para un acercamiento y suplantación de identidad 4.2 Ataques de ingeniería social 4.3 Ataques físicos 4.4 Herramientas de ingeniería social 4.5 Métodos de influencia",
+        "Módulo 5: Ataques de Ingeniería Social 5.1 Explotación de vulnerabilidades basadas en la red 5.2 Explotación de vulnerabilidades inalámbricas.",
+        "Módulo 6: Explotación de vulnerabilidades basadas en aplicaciones 6.1 Visión general de los ataques basados en aplicaciones web para profesionales de seguridad y los 10 principales de OWASP 6.2 Cómo construir su propio laboratorio de aplicaciones web 6.3 Entendiendo las fallas en la lógica del negocio 6.4 Entender las vulnerabilidades basadas en inyección 6.5 Explotación de vulnerabilidades basadas en autenticación 6.6 Explotación de vulnerabilidades basadas en autorización 6.7 Descripción de vulnerabilidades de secuencias de comandos en sitios cruzados (XSS) 6.8 Entender la Falsificación de Peticiones en Sitios Cruzados (CSRF/XSRF)(CSRF/XSRF) y Ataques de Falsificación de Peticiones del Lado del Servidor 6.9 Entendiendo Clickjacking 6.10 Explotación de vulnerabilidades de inclusión de archivos 6.11 Explotación de prácticas de código inseguro",
+        "Módulo 7: Seguridad en la nube, móvil e IoT 7.1 Investigación de vectores de ataque y realización de ataques en tecnologías de nube 7.2 Explicación de ataques y vulnerabilidades comunes contra sistemas especializados",
+        "Módulo 8: Realización de técnicas de post-explotación 8.1 Creación de un punto de apoyo y mantener la persistencia después de comprometer un sistema 8.2 Realización de movimientos laterales, evasión de detección y enumeración",
+        "Módulo 9:Informes y comunicación 9.1 Comparación y contraste de los componentes importantes de los informes escritos 9.2 Análisis de los hallazgos y recomendar la remediación apropiada dentro de un informe 9.3 Explicación de la importancia de la comunicación durante el proceso de pruebas de penetración 9.4 Explicación de las actividades posteriores a la entrega del informe",
+        "Módulo 10: Ataques de Ingeniería Social 10.1 Conceptos Básicos de Scripting y Desarrollo de Software. 10.2 Comprensión de los Diferentes Casos de Uso de las Herramientas de Pruebas de Penetración y Análisis de Código Exploit."
+      ],
+      "registrationUrl": null,
+      "title": "ETHICAL HACKER"
+    },
+    {
+      "id": 7,
+      "name": "CONCEPTOS BÁSICOS DE REDES",
+      "status": "cerrado",
+      "hours": 32,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso7.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso7.jpg",
+      "description": "Este curso cubre la base de redes y dispositivos de red, medios y protocolos. Observará datos que fluyen a través de una red y configurará dispositivos para conectarse a redes. Por último, aprenderá a usar diferentes aplicaciones y protocolos de red para realizar tareas de red. El conocimiento y las habilidades que obtenga le pueden dar un punto de partida para encontrar una carrera gratificante en tecnología.",
+      "objectives": [
+        "Comprender cómo las redes conectan el mundo, identificando los diferentes tipos de redes, cómo se transmiten los datos, y el impacto del ancho de banda y el rendimiento en la comunicación.",
+        "Adquirir conocimientos prácticos para diseñar y gestionar redes, tanto inalámbricas como móviles, incluyendo la creación de redes domésticas, con un enfoque en los componentes de la red, opciones de conectividad y configuraciones de enrutadores.",
+        "Dominar los fundamentos de la comunicación en red, incluyendo los principios de la comunicación, los medios de red, la capa de acceso, el protocolo de Internet (IPv4 e IPv6), y comprender la importancia del direccionamiento dinámico con DHCP, el enrutamiento entre redes, y los servicios de la capa de aplicación."
+      ],
+      "location": [],
+      "organizers": [
+        "Ing. Daniel Jerez, Mg."
+      ],
+      "instructors": [],
+      "details": {
+        "Modalidad": "Presencial",
+        "Horas de capacitación": "32 horas",
+        "Fecha del curso": "19-abril a 18-mayo-2025",
+        "Período de inscripción": "20-marzo al 22-abril-2025",
+        "Precio": "30 USD Estudiantes UTA (actuales) 40 USD Graduados, Docentes y Administrativos UTA 50 USD Público en general; 30 USD Estudiantes UTA (actuales); 40 USD Graduados, Docentes y Administrativos UTA; 50 USD Público en general",
+        "Conocimientos previos": "Ninguno"
+      },
+      "detailLines": [
+        "Modalidad: Presencial",
+        "Horas de capacitación: 32 horas",
+        "Fecha del curso: 19-abril a 18-mayo-2025",
+        "Período de inscripción: 20-marzo al 22-abril-2025",
+        "Precio: 30 USD Estudiantes UTA (actuales) 40 USD Graduados, Docentes y Administrativos UTA 50 USD Público en general",
+        "30 USD Estudiantes UTA (actuales)",
+        "40 USD Graduados, Docentes y Administrativos UTA",
+        "50 USD Público en general",
+        "Conocimientos previos: Ninguno"
+      ],
+      "notes": [
+        "TOTAL: 32 horas"
+      ],
+      "materials": [
+        "Computador.",
+        "Conexión a internet."
+      ],
+      "contents": [
+        "Módulo 1: Comunicación en un mundo conectado Tipos de red Transmisión de datos Ancho de banda y rendimiento",
+        "Módulo 2:Componentes, tipos y conexiones de red Clientes y Servidores Componentes de la red Opciones de conectividad al ISP",
+        "Módulo 3: Redes inalámbricas y móviles Redes inalámbricas Conectividad de dispositivos móviles",
+        "Módulo 4:Crear una red domestica Conceptos básicos de redes domesticas Tecnologías de red en el hogar Estándares inalámbricos Configurar un enrutador domestico",
+        "Módulo 5: Principios de comunicación Protocolo de comunicación Estándares de comunicación Modelos de comunicación de red",
+        "Módulo 6: Medios de red Tipos de medios de red",
+        "Módulo 7: La capa de acceso Encapsulación y la trama de Ethernet La capa de acceso",
+        "Módulo 8: El protocolo de internet Propósito de una dirección IPv4 La estructura de la dirección IPv4",
+        "Módulo 9: IPv4 y segmentación de redes Unidifusión, difusión y multidifusión de IPv4 Tipos de direcciones IPv4 Segmentación de la red",
+        "Módulo 10: Formatos y reglas de direccionamiento IPv6 Problemas con IPv4 Direccionamiento IPv6",
+        "Módulo 11: Direccionamiento dinámico con DHCP Direccionamiento estático y dinámico Configuración de DHCPv4",
+        "Módulo 12: Puertas de enlace a otras redes Límites de la Red Traducción de direcciones de red",
+        "Módulo 13: El proceso ARP MAC e IP Contención de difusiones",
+        "Módulo 14: Enrutamiento entre redes La necesidad del enrutamiento La tabla de enrutamiento Crear una LAN",
+        "Módulo 15: TCP y UDP TCP y UDP Números de puerto",
+        "Módulo 16: El protocolo de internet La relación cliente servidor Servicios de aplicaciones de red Sistema de nombres de dominio Clientes y servidores web Clientes y servidores FTP Terminales virtuales Correo electrónico y mensajería",
+        "Módulo 17: Utilidades de prueba de red Comandos de solución de problemas"
+      ],
+      "registrationUrl": null,
+      "title": "CONCEPTOS BÁSICOS DE REDES"
+    },
+    {
+      "id": 8,
+      "name": "CIBERSEGURIDAD EN DISPOSITIVOS FINALES",
+      "status": "cerrado",
+      "hours": 40,
+      "url": "https://ctt-talleresfisei.uta.edu.ec/curso8.php",
+      "imageUrl": "https://ctt-talleresfisei.uta.edu.ec/img/curso8.jpg",
+      "description": "Este curso parte desde las bases de la ciberseguridad, con los conceptos básicos de ciberseguridad cibernética, explorando formas de estar seguro en línea, los diferentes tipos de malware y ataques, las medidas utilizadas por las organizaciones para mitigar los ataques e investigando oportunidades profesionales. A través de este curso, se podrán adquirir las habilidades para proteger la red hasta el borde, incluso hardware, software y medios, mediante la evaluación de la red, los sistemas operativos y los puntos finales en busca de vulnerabilidades, mediante el desarrollo de habilidades para mantener la integridad, confidencialidad y disponibilidad.",
+      "objectives": [
+        "Analizar los Principios Básicos de Ciberseguridad en Dispositivos Finales.",
+        "Explicar cómo los actores de amenazas ejecutan algunos de los tipos más comunes de ciberataques.",
+        "Desarrollar habilidades para proteger una red hasta el borde, incluido el hardware, el software y los medios de transmisión.",
+        "Utilizar las mejores prácticas de ciberseguridad para mejorar la confidencialidad, la integridad y la disponibilidad."
+      ],
+      "location": [
+        "Centro de Transferencia y Desarrollo de Tecnologías CTT-FISEI.",
+        "Avda. Los Chasquis entre Río Payamino y Río Guayllabamba",
+        "Campus Huachi, Ambato-Ecuador."
+      ],
+      "organizers": [
+        "Ing. Daniel Jerez, Mg."
+      ],
+      "instructors": [],
+      "details": {
+        "Fechas de inscripciones": "Del 20 de abril al 20 de mayo de 2025",
+        "El cupo de inscripciones": "Mínimo 15, Máximo 25",
+        "Fecha del curso": "Del 17-mayo al 15-junio-2025",
+        "Precio para los asistentes": "30 USD Estudiantes UTA 40 USD Graduados, Docentes y Administrativos UTA 50 USD Público en general; 30 USD Estudiantes UTA; 40 USD Graduados, Docentes y Administrativos UTA; 50 USD Público en general",
+        "Tipo de capacitación": "Curso con certificado digital QR",
+        "Horas de capacitación": "40 horas",
+        "Beneficiarios": "Estudiantes y público en general",
+        "Modalidad": "Virtual",
+        "Conocimientos previos": "Ninguno"
+      },
+      "detailLines": [
+        "Fechas de inscripciones: Del 20 de abril al 20 de mayo de 2025",
+        "El cupo de inscripciones: Mínimo 15, Máximo 25",
+        "Fecha del curso: Del 17-mayo al 15-junio-2025",
+        "Precio para los asistentes: 30 USD Estudiantes UTA 40 USD Graduados, Docentes y Administrativos UTA 50 USD Público en general",
+        "30 USD Estudiantes UTA",
+        "40 USD Graduados, Docentes y Administrativos UTA",
+        "50 USD Público en general",
+        "Tipo de capacitación: Curso con certificado digital QR",
+        "Horas de capacitación: 40 horas",
+        "Beneficiarios: Estudiantes y público en general",
+        "Modalidad: Virtual",
+        "Conocimientos previos: Ninguno"
+      ],
+      "notes": [],
+      "materials": [
+        "Computador personal.",
+        "Conexión a internet."
+      ],
+      "contents": [
+        "Módulo 1: Introducción a la Ciberseguridad Capítulo 1: Introducción a la Ciberseguridad Capítulo 2: Ataques, conceptos y técnicas Capítulo 3: Protegiendo sus datos y su privacidad Capítulo 4: Protegiendo a la organización Capítulo 5: ¿Su futuro estará relacionado con la ciberseguridad?",
+        "Módulo 2: Seguridad de Terminales Capítulo 1: Amenazas, vulnerabilidades y ataques a la ciberseguridad Capítulo 2: Protección de redes Capítulo 3: Ataque a los fundamentos Capítulo 4: Atacando lo que hacemos Capítulo 5: Comunicación de red Inalámbrica Capítulo 6: Infraestructura de seguridad de redes Capítulo 7: El sistema Operativo Windows Capítulo 8: Descripción General de Linux Capítulo 9: Protección de terminales Capítulo 10: Principios, prácticas y procesos de ciberseguridad"
+      ],
+      "registrationUrl": null,
+      "title": "CIBERSEGURIDAD EN DISPOSITIVOS FINALES"
+    }
+  ]
+}
