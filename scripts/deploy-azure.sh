@@ -36,8 +36,13 @@ if ! az acr show -n "$ACR" -g "$RG" -o none 2>/dev/null; then
   az acr create -n "$ACR" -g "$RG" -l "$LOCATION" --sku Basic --admin-enabled true -o none
 fi
 
-echo "==> Construyendo la imagen $IMAGE en Azure"
-az acr build -r "$ACR" -t "$IMAGE" -t ctt-fisei-agente:latest . -o none
+# Las suscripciones Azure for Students no permiten ACR Tasks (az acr build),
+# así que la imagen se construye con Docker local y se sube al registro.
+echo "==> Construyendo la imagen $IMAGE con Docker"
+docker build --platform linux/amd64 -t "$ACR.azurecr.io/$IMAGE" -t "$ACR.azurecr.io/ctt-fisei-agente:latest" .
+az acr login -n "$ACR"
+docker push "$ACR.azurecr.io/$IMAGE"
+docker push "$ACR.azurecr.io/ctt-fisei-agente:latest"
 
 REGISTRY="https://$ACR.azurecr.io"
 ACR_USER="$(az acr credential show -n "$ACR" --query username -o tsv)"
