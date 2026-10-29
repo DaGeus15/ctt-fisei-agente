@@ -56,7 +56,7 @@ fi
 echo "==> Web App $APP"
 if ! az webapp show -n "$APP" -g "$RG" -o none 2>/dev/null; then
   az webapp create -n "$APP" -g "$RG" -p "$PLAN" \
-    --container-image-name "$ACR.azurecr.io/$IMAGE" \
+    --container-image-name "$IMAGE" \
     --container-registry-url "$REGISTRY" \
     --container-registry-user "$ACR_USER" \
     --container-registry-password "$ACR_PASS" -o none
