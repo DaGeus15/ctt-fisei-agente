@@ -1,6 +1,7 @@
 import wwebjs from 'whatsapp-web.js';
 import qrcodeTerminal from 'qrcode-terminal';
 import QRCode from 'qrcode';
+import { toFile } from 'openai';
 import { WELCOME, RESET_DONE, openCourses, splitMessage } from './common.js';
 
 const { Client, LocalAuth } = wwebjs;
@@ -19,7 +20,7 @@ function coursesMenu() {
   return `*Cursos con inscripciones abiertas:*\n${lines.join('\n')}\n\nPregúntame por cualquiera de ellos.`;
 }
 
-export function createWhatsAppClient({ agent, chromePath }) {
+export function createWhatsAppClient({ service, chromePath, transcriber = null }) {
   const client = new Client({
     authStrategy: new LocalAuth({ clientId: 'ctt-fisei' }),
     puppeteer: {
@@ -29,6 +30,11 @@ export function createWhatsAppClient({ agent, chromePath }) {
     },
   });
   const seen = new Set();
+
+  const sendText = async (to, text) => {
+    for (const part of splitMessage(text, MAX_LENGTH)) await client.sendMessage(to, part);
+  };
+  service.registerChannel(CHANNEL, sendText);
 
   client.on('qr', async (qr) => {
     console.log('[whatsapp] Escanea este código QR desde WhatsApp > Dispositivos vinculados:');
@@ -61,15 +67,21 @@ export function createWhatsAppClient({ agent, chromePath }) {
     const contact = await msg.getContact().catch(() => null);
     const user = { channel: CHANNEL, externalId: msg.from, name: contact?.pushname || contact?.name || null };
 
-    if (msg.type !== 'chat') {
-      await msg.reply('Por ahora solo puedo leer mensajes de texto. ¿Qué te gustaría saber de los cursos?');
+    let text = msg.body?.trim() ?? '';
+    if ((msg.type === 'ptt' || msg.type === 'audio') && transcriber) {
+      const media = await msg.downloadMedia();
+      const file = await toFile(Buffer.from(media.data, 'base64'), 'nota.ogg');
+      text = await transcriber.transcribe(file);
+      if (!text) return msg.reply('No logré entender el audio. ¿Me lo escribes, por favor?');
+      text = `🎤 ${text}`;
+    } else if (msg.type !== 'chat') {
+      await msg.reply('Por ahora solo puedo leer texto y notas de voz. ¿Qué te gustaría saber de los cursos?');
       return;
     }
-    const text = msg.body.trim();
     if (!text) return;
 
     if (RESET_WORDS.test(text)) {
-      agent.resetConversation(user);
+      service.reset(user);
       await client.sendMessage(msg.from, RESET_DONE);
       return;
     }
@@ -80,9 +92,9 @@ export function createWhatsAppClient({ agent, chromePath }) {
 
     const chat = await msg.getChat();
     await chat.sendStateTyping().catch(() => {});
-    const reply = await agent.reply({ ...user, text });
+    const replies = await service.handleIncoming({ ...user, text });
     await chat.clearState().catch(() => {});
-    for (const part of splitMessage(reply, MAX_LENGTH)) await client.sendMessage(msg.from, part);
+    for (const reply of replies) await sendText(msg.from, reply);
   }
 
   return {
