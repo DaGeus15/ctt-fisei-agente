@@ -50,8 +50,6 @@ Para el personal de coordinación y ventas del CTT-FISEI, que necesita atender a
 | :---: | :---: |
 | <img width="420" src="docs/capturas/bandeja.png" alt="Bandeja en vivo"> | <img width="420" src="docs/capturas/metricas.png" alt="Métricas"> |
 | <sub>Bandeja en vivo: termómetro, modo IA/operador, resumen y respuesta del operador.</sub> | <sub>Métricas: leads, derivaciones, manipulaciones bloqueadas, temas y cursos.</sub> |
-| <img width="420" src="docs/capturas/metricas-claro.png" alt="Métricas en tema claro"> | |
-| <sub>El panel respeta el tema claro u oscuro del sistema.</sub> | |
 
 Las capturas se generaron con `npm run seed` (datos de ejemplo, sin personas reales).
 
@@ -71,6 +69,7 @@ Las capturas se generaron con `npm run seed` (datos de ejemplo, sin personas rea
 - **Respaldo entre modelos**: si un modelo llega a su límite de tokens (429) la respuesta sigue con el siguiente de la lista.
 - **Tolerancia a faltas ortográficas**: la búsqueda de cursos usa distancia de edición ("pyton", "arduno").
 - **Notas de voz**: transcripción con cualquier endpoint compatible con `/audio/transcriptions` (por ejemplo Groq Whisper).
+- **Identidad del CTT**: el panel usa el logo, la tipografía y los colores del sitio oficial; la cabecera de cada conversación es un póster de curso, marino cuando atiende la IA y carmesí cuando atiende un operador.
 - **Panel en tiempo real**: Server-Sent Events, sin recargar la página; API abierta a cualquier origen (CORS).
 - **Métricas**: personas atendidas, leads calientes, derivaciones, manipulaciones bloqueadas, latencia, tokens por respuesta, temas, cursos y horarios.
 - **Dos canales, un pipeline**: Telegram (grammY) y WhatsApp (whatsapp-web.js) usan el mismo servicio de conversación.
@@ -81,7 +80,7 @@ Las capturas se generaron con `npm run seed` (datos de ejemplo, sin personas rea
 
 ## 🛠️ Tecnologías Utilizadas
 
-- **Frontend**: HTML, CSS y JavaScript sin framework; Chart.js 4.4.1 desde cdnjs; `EventSource` para SSE.
+- **Frontend**: HTML, CSS y JavaScript sin framework; Chart.js 4.4.1 desde cdnjs; `EventSource` para SSE. La identidad visual replica la del sitio del CTT: Poppins, rojo UTA `#AD272E`, pizarra `#44425A`, lila `#F2F1F8` y los pósters de curso en marino `#012E5A` y carmesí `#B70717`.
 - **Backend**: Node.js (ESM), Express 5, grammY, whatsapp-web.js, SDK `openai` contra un proveedor compatible (por defecto Groq con `gpt-oss-120b`; también funciona con xAI), cheerio y undici para el scraping.
 - **Base de datos**: SQLite con el módulo nativo `node:sqlite` (sin dependencias nativas).
 - **Pruebas**: `node:test` y ESLint 10.
@@ -148,7 +147,7 @@ Los conectores de mensajería solo traducen eventos del canal; toda la lógica d
 │   │   └── certs/                  # Certificado intermedio que la web de la UTA no envía
 │   └── dashboard/
 │       ├── server.js               # API REST + SSE + CORS + auth básica
-│       └── public/                 # Panel (HTML, CSS, JS)
+│       └── public/                 # Panel (HTML, CSS, JS e img/logo-ctt.png)
 ├── data/courses.json               # Snapshot del catálogo (respaldo si la web no responde)
 ├── test/                           # Pruebas node:test y fixtures HTML
 ├── docs/capturas/                  # Capturas del panel
