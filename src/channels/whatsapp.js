@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import wwebjs from 'whatsapp-web.js';
 import qrcodeTerminal from 'qrcode-terminal';
 import QRCode from 'qrcode';
@@ -10,9 +12,16 @@ const CHANNEL = 'whatsapp';
 const MAX_LENGTH = 3500;
 const RESET_WORDS = /^(reiniciar|\/reiniciar|nueva conversaci[oó]n)$/i;
 const MENU_WORDS = /^(menu|men[uú]|cursos|\/cursos|\/start|inicio)$/i;
+const CLIENT_ID = 'ctt-fisei';
 
 /** Estado del canal que muestra el dashboard (incluye el QR mientras no se vincula). */
-export const whatsappState = { status: 'deshabilitado', qrDataUrl: null, number: null, updatedAt: null };
+export const whatsappState = {
+  status: 'deshabilitado',
+  available: false,
+  qrDataUrl: null,
+  number: null,
+  updatedAt: null,
+};
 
 const setState = (patch) => {
   Object.assign(whatsappState, patch, { updatedAt: new Date().toISOString() });
@@ -24,44 +33,61 @@ function coursesMenu() {
   return `*Cursos con inscripciones abiertas:*\n${lines.join('\n')}\n\nPregúntame por cualquiera de ellos.`;
 }
 
+/**
+ * Conector de WhatsApp. El panel controla la sesión: `start` abre WhatsApp Web
+ * y publica el QR, `logout` desvincula el teléfono. Cada inicio crea un cliente nuevo.
+ */
 export function createWhatsAppClient({ service, chromePath, dataPath, transcriber = null }) {
-  const client = new Client({
-    authStrategy: new LocalAuth({ clientId: 'ctt-fisei', dataPath }),
-    puppeteer: {
-      headless: true,
-      executablePath: chromePath,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    },
-  });
+  let client = null;
+  let starting = null;
   const seen = new Set();
 
   const sendText = async (to, text) => {
+    if (!client || whatsappState.status !== 'conectado') throw new Error('WhatsApp no está conectado');
     for (const part of splitMessage(text, MAX_LENGTH)) await client.sendMessage(to, part);
   };
   service.registerChannel(CHANNEL, sendText);
+  setState({ status: 'desconectado', available: true });
 
-  client.on('qr', async (qr) => {
-    console.log('[whatsapp] Escanea este código QR desde WhatsApp > Dispositivos vinculados:');
-    qrcodeTerminal.generate(qr, { small: true });
-    setState({ status: 'esperando QR', qrDataUrl: await QRCode.toDataURL(qr, { margin: 1, width: 280 }) });
-  });
+  function createClient() {
+    const c = new Client({
+      authStrategy: new LocalAuth({ clientId: CLIENT_ID, dataPath }),
+      puppeteer: {
+        headless: true,
+        executablePath: chromePath,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      },
+    });
+    attach(c);
+    return c;
+  }
 
-  client.on('authenticated', () => setState({ status: 'autenticado', qrDataUrl: null }));
-  client.on('auth_failure', (msg) => setState({ status: `error de autenticación: ${msg}` }));
-  client.on('ready', () => {
-    setState({ status: 'conectado', qrDataUrl: null, number: client.info?.wid?.user ?? null });
-    console.log(`[whatsapp] Conectado como ${whatsappState.number}`);
-  });
-  client.on('disconnected', (reason) => {
-    setState({ status: `desconectado (${reason})` });
-    console.warn(`[whatsapp] Desconectado: ${reason}`);
-  });
+  function attach(wa) {
+    wa.on('qr', async (qr) => {
+      console.log('[whatsapp] Escanea este código QR desde WhatsApp > Dispositivos vinculados:');
+      qrcodeTerminal.generate(qr, { small: true });
+      setState({ status: 'esperando QR', qrDataUrl: await QRCode.toDataURL(qr, { margin: 1, width: 280 }) });
+    });
 
-  client.on('message', (msg) =>
-    handleMessage(msg).catch((err) => console.error(`[whatsapp] ${err.message}`)),
-  );
+    wa.on('authenticated', () => setState({ status: 'autenticado', qrDataUrl: null }));
+    wa.on('auth_failure', (msg) => setState({ status: `error de autenticación: ${msg}` }));
+    wa.on('ready', () => {
+      setState({ status: 'conectado', qrDataUrl: null, number: wa.info?.wid?.user ?? null });
+      console.log(`[whatsapp] Conectado como ${whatsappState.number}`);
+    });
+    wa.on('disconnected', (reason) => {
+      setState({ status: 'desconectado', qrDataUrl: null, number: null });
+      console.warn(`[whatsapp] Desconectado: ${reason}`);
+      wa.destroy().catch(() => {});
+      if (wa === client) client = null;
+    });
 
-  async function handleMessage(msg) {
+    wa.on('message', (msg) =>
+      handleMessage(wa, msg).catch((err) => console.error(`[whatsapp] ${err.message}`)),
+    );
+  }
+
+  async function handleMessage(wa, msg) {
     // Solo chats privados de texto; se ignoran grupos, estados y mensajes repetidos.
     if (msg.fromMe || msg.isStatus || msg.from.endsWith('@g.us') || msg.from === 'status@broadcast') return;
     if (seen.has(msg.id._serialized)) return;
@@ -86,11 +112,11 @@ export function createWhatsAppClient({ service, chromePath, dataPath, transcribe
 
     if (RESET_WORDS.test(text)) {
       service.reset(user);
-      await client.sendMessage(msg.from, RESET_DONE);
+      await wa.sendMessage(msg.from, RESET_DONE);
       return;
     }
     if (MENU_WORDS.test(text)) {
-      await client.sendMessage(msg.from, `${WELCOME}\n\n${coursesMenu()}`);
+      await wa.sendMessage(msg.from, `${WELCOME}\n\n${coursesMenu()}`);
       return;
     }
 
@@ -102,10 +128,30 @@ export function createWhatsAppClient({ service, chromePath, dataPath, transcribe
   }
 
   return {
-    async start() {
-      setState({ status: 'iniciando' });
-      await client.initialize();
+    /** Abre WhatsApp Web; si no hay sesión guardada se publica el QR en el panel. */
+    start() {
+      if (client) return starting;
+      setState({ status: 'iniciando', qrDataUrl: null });
+      client = createClient();
+      starting = client.initialize().catch((err) => {
+        console.error(`[whatsapp] No se pudo iniciar: ${err.message}`);
+        setState({ status: 'error al iniciar', qrDataUrl: null });
+        client = null;
+      });
+      return starting;
     },
-    stop: () => client.destroy(),
+    /** Desvincula el teléfono y borra la sesión guardada. */
+    async logout() {
+      if (!client) return;
+      const c = client;
+      client = null;
+      await c.logout().catch(() => {});
+      await c.destroy().catch(() => {});
+      setState({ status: 'desconectado', qrDataUrl: null, number: null });
+    },
+    hasSession: () => existsSync(join(dataPath, `session-${CLIENT_ID}`)),
+    async stop() {
+      await client?.destroy().catch(() => {});
+    },
   };
 }

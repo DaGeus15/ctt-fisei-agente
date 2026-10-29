@@ -25,6 +25,7 @@
     pide_humano: 'pide humano',
     frustracion: 'frustración',
     respuesta_bloqueada: 'respuesta bloqueada',
+    riesgo: 'POSIBLE RIESGO',
   };
 
   let inbox = [];
@@ -285,9 +286,9 @@
   // ---------- Estado de canales ----------
 
   function renderStatus(st) {
+    lastStatus = st;
     const tg = st.telegram;
     const wa = st.whatsapp;
-    const waOk = wa.status === 'conectado';
     $('status').replaceChildren(
       el(
         'div',
@@ -295,13 +296,7 @@
         el('span', { class: `dot ${tg ? 'ok' : 'off'}` }),
         el('div', {}, el('strong', {}, 'Telegram'), tg ? el('small', {}, el('a', { href: `https://t.me/${tg.username}`, target: '_blank', rel: 'noopener' }, `@${tg.username}`)) : el('small', {}, 'Sin configurar')),
       ),
-      el(
-        'div',
-        { class: 'status-item' },
-        el('span', { class: `dot ${waOk ? 'ok' : wa.status === 'deshabilitado' ? 'off' : 'warn'}` }),
-        el('div', {}, el('strong', {}, 'WhatsApp'), el('small', {}, waOk && wa.number ? `Conectado · +${wa.number}` : wa.status)),
-        wa.qrDataUrl ? el('img', { class: 'qr', src: wa.qrDataUrl, alt: 'Código QR para vincular WhatsApp' }) : null,
-      ),
+      renderWhatsApp(wa),
       el(
         'div',
         { class: 'status-item' },
@@ -309,6 +304,47 @@
         el('div', {}, el('strong', {}, `Cursos: ${st.courses.open} con inscripción vigente de ${st.courses.total}`), el('small', {}, st.courses.updatedAt ? `Sincronizado ${fmtDate(st.courses.updatedAt)}` : 'Sin datos')),
       ),
     );
+  }
+
+  const WA_BUSY = ['iniciando', 'esperando QR', 'autenticado'];
+
+  function renderWhatsApp(wa) {
+    const ok = wa.status === 'conectado';
+    const busy = WA_BUSY.includes(wa.status);
+    let action = null;
+    if (wa.available && ok) {
+      action = el('button', { type: 'button', onclick: () => whatsappAction('logout') }, 'Cerrar sesión');
+    } else if (wa.available && !busy) {
+      action = el('button', { type: 'button', class: 'btn-wa', onclick: () => whatsappAction('start') }, 'Iniciar sesión');
+    }
+    const detail = ok && wa.number
+      ? `Conectado · +${wa.number}`
+      : wa.status === 'esperando QR'
+        ? 'Escanea el QR: WhatsApp > Dispositivos vinculados > Vincular un dispositivo'
+        : wa.status === 'iniciando'
+          ? 'Abriendo WhatsApp Web… (unos segundos)'
+          : wa.status;
+    return el(
+      'div',
+      { class: `status-item${wa.qrDataUrl ? ' wa-qr' : ''}` },
+      el('span', { class: `dot ${ok ? 'ok' : busy ? 'warn' : 'off'}` }),
+      el('div', { class: 'grow' }, el('strong', {}, 'WhatsApp'), el('small', {}, detail)),
+      wa.qrDataUrl ? el('img', { class: 'qr', src: wa.qrDataUrl, alt: 'Código QR para vincular WhatsApp' }) : null,
+      action,
+    );
+  }
+
+  async function whatsappAction(action) {
+    try {
+      renderStatusPatch(await post(`/api/whatsapp/${action}`));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  let lastStatus = null;
+  function renderStatusPatch(wa) {
+    if (lastStatus) renderStatus({ ...lastStatus, whatsapp: wa });
   }
 
   // ---------- Métricas ----------

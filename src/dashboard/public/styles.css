@@ -616,3 +616,21 @@ main {
 .badge.whatsapp {
   background: var(--whatsapp);
 }
+
+.status-item .grow {
+  flex: 1;
+  min-width: 0;
+}
+.status-item.wa-qr {
+  flex-wrap: wrap;
+}
+.btn-wa {
+  border-color: var(--whatsapp);
+  background: var(--whatsapp);
+  color: #fff;
+}
+.qr {
+  width: 200px;
+  height: 200px;
+  padding: 8px;
+}

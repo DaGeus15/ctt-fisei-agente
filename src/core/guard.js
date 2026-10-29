@@ -18,7 +18,7 @@ const INJECTION = [
 ];
 
 const DISCOUNT_ABUSE = [
-  /(curso|inscripcion|matricula)s? gratis|gratuit[oa]|sin pagar|no (quiero|voy a) pagar/,
+  /\bgratis\b|gratuit[oa]|sin pagar|no (quiero|voy a) pagar|regalad[oa]/,
   /(descuento|rebaja) del? ?(\d{2,3}) ?%|100 ?%|precio (de )?(cero|\$?0)\b/,
   /(dame|regalame|aplicame|hazme) (un |el )?(descuento|cupon|codigo)/,
   /codigo (promocional|de descuento)|cupon/,
@@ -35,6 +35,12 @@ const FRUSTRATION = [
   /(estoy|me tienen) (harto|harta|cansad[oa]|molest[oa]|enojad[oa])/,
   /(ya )?te (lo )?(dije|pregunte) (\d+|mil|varias|muchas) veces/,
   /estafa|robo|denuncia|queja formal|inutil|idiota|estupid/,
+  /mamaverga|hijueputa|hdp|\bverga\b|\bputa\b|mierda|carajo|imbecil|pendej|malparid|\bcabron/,
+];
+
+// Riesgo para la persona: se atiende con contención y derivación urgente, nunca como objeción comercial.
+const SELF_HARM = [
+  /suicid|quitarme la vida|matarme|me mato\b|no quiero (seguir )?vivir|hacerme dano|cortarme las venas|acabar con todo/,
 ];
 
 const matches = (patterns, text) => patterns.some((p) => p.test(text));
@@ -46,6 +52,7 @@ export function inspectInput(text) {
   if (matches(INJECTION, t)) flags.push('inyeccion');
   if (matches(DISCOUNT_ABUSE, t)) flags.push('descuento_indebido');
   if (matches(HUMAN_REQUEST, t)) flags.push('pide_humano');
+  if (matches(SELF_HARM, t)) flags.push('riesgo');
   if (matches(FRUSTRATION, t) || (text.length > 12 && text === text.toUpperCase() && /[A-ZÁÉÍÓÚÑ]{4}/.test(text) && /[!?]{2,}/.test(text))) {
     flags.push('frustracion');
   }
@@ -79,3 +86,7 @@ export function checkOutput(answer) {
 export const SAFE_REPLY =
   'Entiendo tu interés 😊. Los valores de los cursos son los publicados por el CTT-FISEI según el tipo de participante y no puedo modificarlos. ' +
   'Si necesitas una facilidad de pago o tienes un convenio institucional, puedo pasarte con un asesor. ¿Te gustaría?';
+
+export const RISK_REPLY =
+  'Lamento mucho que te sientas así y me importa que estés bien 💙. No estás solo/a: si estás en peligro llama ahora al ECU 911, ' +
+  'o a la línea gratuita de apoyo emocional 171 (opción 6). Ya avisé a una persona del CTT-FISEI para que te escriba por este chat.';

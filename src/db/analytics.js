@@ -134,6 +134,7 @@ const EVENT_TEXT = {
   operador_toma: 'El operador tomó el control',
   intento_manipulacion: 'Intento de manipulación bloqueado',
   lead_caliente: 'Marcado como lead caliente',
+  riesgo: '⚠ Posible riesgo para la persona',
 };
 
 /** Mensajes de una conversación intercalados con sus eventos (handover, reanudación, etc.). */

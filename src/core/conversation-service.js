@@ -1,5 +1,5 @@
 import { bus } from './events.js';
-import { inspectInput } from './guard.js';
+import { inspectInput, RISK_REPLY } from './guard.js';
 
 export const HANDOVER_REPLY =
   'Entiendo, te comunico con un asesor del CTT-FISEI 🙌. En unos momentos te escribirá por este mismo chat.';
@@ -47,6 +47,14 @@ export class ConversationService {
     this.record({ userId, channel, role: 'user', content, flags });
     if (flags.includes('inyeccion') || flags.includes('descuento_indebido')) {
       this.store.addEvent(userId, 'intento_manipulacion', flags.join(','));
+    }
+
+    if (flags.includes('riesgo')) {
+      // Prioridad sobre cualquier modo: contención inmediata y aviso urgente al operador.
+      this.store.addEvent(userId, 'riesgo', 'Posible riesgo para la persona');
+      this.setMode(userId, 'human', 'URGENTE: posible riesgo para la persona', 'frustrado');
+      this.record({ userId, channel, role: 'assistant', content: RISK_REPLY });
+      return [RISK_REPLY];
     }
 
     let conversation = this.store.getConversation(userId);
