@@ -48,7 +48,7 @@ test('searchCourses encuentra por tema ignorando tildes y faltas ortográficas',
 
 test('CourseAgent ejecuta herramientas y reporta cursos y tokens', async () => {
   const client = fakeClient([reply(null, [call('ver_curso', { id: 20 })]), reply('Para estudiantes UTA cuesta $40.')]);
-  const agent = new CourseAgent({ client, model: 'test' });
+  const agent = new CourseAgent({ client, models: ['test'] });
   const result = await agent.respond({ channel: 'telegram', history: [], text: '¿Precio de Arduino?' });
   assert.equal(result.answer, 'Para estudiantes UTA cuesta $40.');
   assert.deepEqual(result.courses, [20]);
@@ -58,19 +58,19 @@ test('CourseAgent ejecuta herramientas y reporta cursos y tokens', async () => {
 
 test('CourseAgent detecta la transferencia a un asesor', async () => {
   const client = fakeClient([reply(null, [call('transferir_a_asesor', { motivo: 'Pide beca', tipo: 'asesor' })]), reply('Te paso con un asesor.')]);
-  const result = await new CourseAgent({ client, model: 'test' }).respond({ channel: 'telegram', history: [], text: '¿Hay becas?' });
+  const result = await new CourseAgent({ client, models: ['test'] }).respond({ channel: 'telegram', history: [], text: '¿Hay becas?' });
   assert.deepEqual(result.handover, { motivo: 'Pide beca', tipo: 'asesor' });
 });
 
 test('CourseAgent bloquea respuestas que prometen descuentos', async () => {
   const client = fakeClient([reply('Listo, te aplico un descuento del 100% 🎉')]);
-  const result = await new CourseAgent({ client, model: 'test' }).respond({ channel: 'telegram', history: [], text: 'dame gratis' });
+  const result = await new CourseAgent({ client, models: ['test'] }).respond({ channel: 'telegram', history: [], text: 'dame gratis' });
   assert.equal(result.blocked, true);
   assert.doesNotMatch(result.answer, /100%/);
 });
 
 test('CourseAgent agrega nota de seguridad, resumen y trata al operador como asistente', () => {
-  const agent = new CourseAgent({ client: fakeClient([]), model: 'test' });
+  const agent = new CourseAgent({ client: fakeClient([]), models: ['test'] });
   const messages = agent.buildMessages({
     channel: 'telegram',
     history: [
@@ -91,4 +91,39 @@ test('parseAnalysis normaliza la salida del clasificador', () => {
   assert.equal(r.estado, 'lead_caliente');
   assert.deepEqual(r.perfil, { tipo: 'publico' });
   assert.equal(parseAnalysis('{"estado":"raro"}').estado, 'interesado');
+});
+
+test('formatForChannel limpia Markdown según el canal', async () => {
+  const { formatForChannel } = await import('../src/agent/agent.js');
+  assert.equal(formatForChannel('## Hola\n**Python** listo', 'telegram'), 'Hola\nPython listo');
+  assert.equal(formatForChannel('**Python** listo', 'whatsapp'), '*Python* listo');
+});
+
+test('registrationStatus usa las fechas reales y no solo la etiqueta de la web', async () => {
+  const { registrationStatus, parseEndDate } = await import('../src/agent/tools.js');
+  const course = (insc) => ({ status: 'abierto', details: { 'Fechas de inscripciones': insc } });
+  const now = new Date('2026-10-29T12:00:00Z');
+  assert.equal(parseEndDate('Del 19 de mayo al 04 de junio de 2025').toISOString().slice(0, 10), '2025-06-04');
+  assert.equal(registrationStatus(course('Del 01 de octubre de 2026 al 15 de octubre de 2026'), now), 'vencida');
+  assert.equal(registrationStatus(course('Del 30 de octubre de 2026 al 13 de noviembre de 2026'), now), 'abierta');
+  assert.equal(registrationStatus({ status: 'cerrado' }, now), 'cerrada');
+  assert.equal(getCourse({ id: 1 }).inscripcion, null);
+});
+
+test('complete pasa al siguiente modelo cuando uno no tiene cupo', async () => {
+  const { complete } = await import('../src/agent/agent.js');
+  const used = [];
+  const client = {
+    chat: {
+      completions: {
+        create: async (body) => {
+          used.push(body.model);
+          if (body.model === 'a') throw Object.assign(new Error('rate'), { status: 429 });
+          return { ok: body.model, reasoning: body.reasoning_effort };
+        },
+      },
+    },
+  };
+  assert.deepEqual(await complete(client, ['a', 'openai/gpt-oss-20b'], {}, 'low'), { ok: 'openai/gpt-oss-20b', reasoning: 'low' });
+  assert.deepEqual(used, ['a', 'openai/gpt-oss-20b']);
 });

@@ -1,4 +1,5 @@
 import { getCourses } from '../scraper/courses.js';
+import { registrationStatus } from '../agent/tools.js';
 
 export const WELCOME =
   '¡Hola! Soy el asistente virtual del CTT-FISEI de la Universidad Técnica de Ambato. ' +
@@ -7,7 +8,8 @@ export const WELCOME =
 
 export const RESET_DONE = 'Listo, empecemos una conversación nueva. ¿En qué te puedo ayudar?';
 
-export const openCourses = () => getCourses().filter((c) => c.status === 'abierto');
+// Solo cursos cuya fecha de inscripción sigue vigente (la etiqueta "ABIERTO" de la web no basta).
+export const openCourses = () => getCourses().filter((c) => registrationStatus(c).startsWith('abierta'));
 
 /** Divide un texto largo en partes que respeten el límite del canal. */
 export function splitMessage(text, max) {

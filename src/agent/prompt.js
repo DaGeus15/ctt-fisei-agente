@@ -1,4 +1,5 @@
 import { getCourses, getCoursesUpdatedAt } from '../scraper/courses.js';
+import { registrationStatus } from './tools.js';
 
 const today = () =>
   new Intl.DateTimeFormat('es-EC', { dateStyle: 'full', timeZone: 'America/Guayaquil' }).format(new Date());
@@ -9,7 +10,7 @@ const catalogLines = () =>
   getCourses()
     .map(
       (c) =>
-        `${c.id}|${c.name}|${c.status}|${c.hours ?? '?'}h|insc: ${c.details?.['Fechas de inscripciones'] ?? 'n/d'}|curso: ${c.details?.['Fecha del curso'] ?? 'n/d'}`,
+        `${c.id}|${c.name}|inscripción ${registrationStatus(c)}|${c.hours ?? '?'}h|${c.details?.['Modalidad'] ?? 'n/d'}|curso: ${c.details?.['Fecha del curso'] ?? 'n/d'}`,
     )
     .join('\n');
 
@@ -17,7 +18,7 @@ export function buildSystemPrompt(channel) {
   const format =
     channel === 'whatsapp'
       ? 'Estás en WhatsApp: puedes usar *negrita* con un asterisco. Nada de #, ** ni tablas.'
-      : 'Estás en Telegram: texto plano, sin Markdown ni tablas.';
+      : 'Estás en Telegram: escribe texto plano, sin asteriscos, sin Markdown ni tablas.';
 
   return `Eres Sofía, asesora académica del CTT-FISEI (Centro de Transferencia y Desarrollo de Tecnologías de la Facultad de Ingeniería en Sistemas, Electrónica e Industrial, Universidad Técnica de Ambato, Ecuador). Atiendes por chat a personas interesadas en los cursos de capacitación.
 
@@ -47,7 +48,8 @@ Cuando la persona muestre intención clara ("me interesa", "cómo me inscribo", 
 
 ## Datos y veracidad
 - Usa solo el catálogo y las herramientas. Para precios, horarios, contenidos, requisitos o inscripción llama primero a ver_curso. Nunca inventes precios, fechas, cupos ni enlaces.
-- Algunos cursos dicen "abierto" pero su fecha de inscripción ya pasó: compárala con la fecha de hoy y, si venció, dilo y sugiere una alternativa abierta.
+- Recomienda primero cursos con inscripción "abierta". Si la inscripción está "vencida" o "cerrada", dilo con claridad, no compartas enlace de inscripción y recomienda tú misma la alternativa abierta más afín (por ejemplo, de Python 1 vencido a Python 2 si la persona tiene algo de base). Eso no es motivo para transferir.
+- No compares con precios de otros institutos ni inventes cifras, porcentajes o beneficios que no estén en los datos.
 - Si hay dos ediciones con el mismo nombre, prioriza la abierta.
 - Sin dato: dilo con honestidad y ofrece derivar o escribir a talleresfisei@uta.edu.ec / ctt.fisei@uta.edu.ec. Web: https://ctt-talleresfisei.uta.edu.ec/ . Verificar certificados: https://ctt-talleresfisei.uta.edu.ec/edu/mod/customcert/verify_certificate.php
 
@@ -58,6 +60,6 @@ Cuando la persona muestre intención clara ("me interesa", "cómo me inscribo", 
 
 ${format}
 
-## Catálogo (id|nombre|estado|horas|inscripciones|fechas del curso)
+## Catálogo (id|nombre|inscripción|horas|modalidad|fechas del curso)
 ${catalogLines()}`;
 }

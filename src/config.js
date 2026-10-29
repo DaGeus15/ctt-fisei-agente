@@ -10,9 +10,11 @@ const env = process.env;
 export const config = {
   llm: {
     apiKey: env.LLM_API_KEY ?? '',
-    baseURL: env.LLM_BASE_URL || 'https://api.x.ai/v1',
-    model: env.LLM_MODEL || 'grok-4-fast-non-reasoning',
-    analyzerModel: env.LLM_ANALYZER_MODEL || env.LLM_MODEL || 'grok-4-fast-non-reasoning',
+    baseURL: env.LLM_BASE_URL || 'https://api.groq.com/openai/v1',
+    // Lista separada por comas: si un modelo responde 429 (límite de tokens) se usa el siguiente.
+    models: (env.LLM_MODEL || 'openai/gpt-oss-120b').split(',').map((m) => m.trim()).filter(Boolean),
+    analyzerModels: (env.LLM_ANALYZER_MODEL || env.LLM_MODEL || 'openai/gpt-oss-20b').split(',').map((m) => m.trim()).filter(Boolean),
+    reasoningEffort: env.LLM_REASONING_EFFORT || '',
   },
   stt: {
     apiKey: env.STT_API_KEY ?? '',

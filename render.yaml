@@ -13,9 +13,13 @@ services:
       - key: LLM_API_KEY
         sync: false
       - key: LLM_BASE_URL
-        value: https://api.x.ai/v1
+        value: https://api.groq.com/openai/v1
       - key: LLM_MODEL
-        value: grok-4-fast-non-reasoning
+        value: openai/gpt-oss-120b,qwen/qwen3.8-27b,openai/gpt-oss-20b
+      - key: LLM_ANALYZER_MODEL
+        value: openai/gpt-oss-20b,qwen/qwen3.8-27b
+      - key: LLM_REASONING_EFFORT
+        value: low
       - key: TELEGRAM_BOT_TOKEN
         sync: false
       - key: STT_API_KEY
