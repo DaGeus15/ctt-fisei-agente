@@ -306,7 +306,7 @@
         'div',
         { class: 'status-item' },
         el('span', { class: 'dot ok' }),
-        el('div', {}, el('strong', {}, `Cursos: ${st.courses.open} abiertos de ${st.courses.total}`), el('small', {}, st.courses.updatedAt ? `Sincronizado ${fmtDate(st.courses.updatedAt)}` : 'Sin datos')),
+        el('div', {}, el('strong', {}, `Cursos: ${st.courses.open} con inscripción vigente de ${st.courses.total}`), el('small', {}, st.courses.updatedAt ? `Sincronizado ${fmtDate(st.courses.updatedAt)}` : 'Sin datos')),
       ),
     );
   }
