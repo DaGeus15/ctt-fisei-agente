@@ -14,6 +14,12 @@
   --good: #008300;
   --critical: #e34948;
   --warning: #c98500;
+  --state-nuevo: #7a7974;
+  --state-interesado: #2a78d6;
+  --state-dudoso: #c98500;
+  --state-frustrado: #e34948;
+  --state-lead: #008300;
+  --operator: #6250d6;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
@@ -30,6 +36,12 @@
     --whatsapp: #199e70;
     --bar: #3987e5;
     --critical: #e66767;
+    --state-nuevo: #8e8d86;
+    --state-interesado: #3987e5;
+    --state-dudoso: #c98500;
+    --state-frustrado: #e66767;
+    --state-lead: #2fa52f;
+    --operator: #9085e9;
   }
 }
 :root[data-theme='dark'] {
@@ -46,6 +58,12 @@
   --whatsapp: #199e70;
   --bar: #3987e5;
   --critical: #e66767;
+  --state-nuevo: #8e8d86;
+  --state-interesado: #3987e5;
+  --state-dudoso: #c98500;
+  --state-frustrado: #e66767;
+  --state-lead: #2fa52f;
+  --operator: #9085e9;
 }
 
 * {
@@ -242,42 +260,349 @@ main {
   vertical-align: -1px;
 }
 
-.split {
+
+
+.live {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-muted) 16%, transparent);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  vertical-align: middle;
+}
+.live.on {
+  background: color-mix(in srgb, var(--good) 16%, transparent);
+  color: var(--good);
+}
+.live.on::before {
+  content: '● ';
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 clamp(16px, 4vw, 40px) 12px;
+}
+.tabs button {
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-secondary);
+}
+.tabs button[aria-selected='true'] {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+}
+.count {
+  margin-left: 6px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--critical);
+  color: #fff;
+  font-size: 12px;
+}
+
+#view-metrics {
   display: grid;
-  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
   gap: 16px;
 }
+#view-metrics[hidden],
+.inbox[hidden] {
+  display: none;
+}
+
+.inbox {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  gap: 16px;
+  height: calc(100vh - 250px);
+  min-height: 520px;
+}
+.inbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+.inbox-list input {
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-primary);
+  font: inherit;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chips button {
+  min-height: 28px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.chips button[aria-pressed='true'] {
+  border-color: var(--text-primary);
+  background: var(--text-primary);
+  color: var(--surface);
+}
 .conv-list {
-  max-height: 480px;
+  flex: 1;
+  min-height: 0;
   margin: 0;
   padding: 0;
   overflow-y: auto;
   list-style: none;
 }
-.conv-list button {
-  display: block;
+.conv {
+  display: grid;
+  gap: 4px;
   width: 100%;
   margin-bottom: 6px;
+  padding: 10px 12px;
+  border-left: 4px solid var(--state-color, var(--border));
   text-align: left;
   font-weight: 400;
 }
-.conv-list button[aria-pressed='true'] {
-  border-color: var(--telegram);
+.conv[aria-current='true'] {
+  border-color: var(--state-color, var(--border));
+  background: color-mix(in srgb, var(--state-color, var(--border)) 8%, var(--surface));
 }
-.conv-list .who {
+.conv.flash {
+  animation: flash 1.2s ease-out;
+}
+@keyframes flash {
+  from {
+    background: color-mix(in srgb, var(--state-color, var(--telegram)) 25%, var(--surface));
+  }
+}
+.conv .row {
   display: flex;
+  gap: 6px;
+  align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  font-weight: 600;
 }
-.conv-list .q {
-  display: block;
+.conv .name {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.conv .preview {
   overflow: hidden;
   color: var(--text-secondary);
   font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.conv time {
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.unread {
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--telegram);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+.state {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 1px 8px;
+  border: 1px solid color-mix(in srgb, var(--state-color) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--state-color) 12%, transparent);
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.mode {
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.mode.ai {
+  background: color-mix(in srgb, var(--telegram) 14%, transparent);
+  color: var(--text-primary);
+}
+.mode.human {
+  background: var(--operator);
+  color: #fff;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0;
+}
+.chat .empty {
+  margin: auto;
+  padding: 24px;
+  text-align: center;
+}
+.chat > .chat-head {
+  display: grid;
+  margin: 0;
+  gap: 8px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.chat-head .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+.chat-head h2 {
+  font-size: 16px;
+}
+.summary {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.summary strong {
+  color: var(--text-primary);
+}
+.handover {
+  margin: 0;
+  color: var(--operator);
+  font-size: 12px;
+  font-weight: 600;
+}
+.btn-take {
+  background: var(--operator);
+  color: #fff;
+  border-color: var(--operator);
+}
+.btn-ai {
+  border-color: var(--telegram);
+}
+.messages {
+  flex: 1;
+  min-height: 0;
+  padding: 16px;
+  overflow-y: auto;
+}
+.msg {
+  max-width: 78%;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.msg.user {
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+.msg.assistant,
+.msg.operator {
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+  background: color-mix(in srgb, var(--telegram) 14%, var(--surface));
+}
+.msg.operator {
+  background: color-mix(in srgb, var(--operator) 18%, var(--surface));
+}
+.msg.error {
+  outline: 1px solid var(--critical);
+}
+.msg.system {
+  max-width: none;
+  margin: 12px 0;
+  padding: 0;
+  background: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+}
+.msg small {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.flag {
+  margin-left: 4px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--critical) 16%, transparent);
+  color: var(--text-primary);
+  font-size: 11px;
+}
+.composer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+}
+.composer textarea {
+  flex: 1;
+  min-height: 44px;
+  max-height: 140px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-primary);
+  font: inherit;
+  resize: vertical;
+}
+.composer button {
+  align-self: flex-end;
+  background: var(--operator);
+  color: #fff;
+  border-color: var(--operator);
+}
+.composer-hint {
+  margin: 0;
+  padding: 0 16px 10px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+@media (max-width: 860px) {
+  .grid,
+  .inbox {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .inbox {
+    height: auto;
+  }
+  .inbox-list {
+    max-height: 360px;
+  }
+  .chat {
+    min-height: 70vh;
+  }
+  .msg {
+    max-width: 92%;
+  }
+}
+
 .badge {
   padding: 0 6px;
   border-radius: 6px;
@@ -290,43 +615,4 @@ main {
 }
 .badge.whatsapp {
   background: var(--whatsapp);
-}
-.transcript {
-  max-height: 480px;
-  padding: 4px;
-  overflow-y: auto;
-}
-.msg {
-  max-width: 80%;
-  margin-bottom: 10px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-.msg.user {
-  margin-left: auto;
-  background: color-mix(in srgb, var(--telegram) 14%, var(--surface));
-}
-.msg.assistant {
-  border: 1px solid var(--border);
-}
-.msg.error {
-  border-color: var(--critical);
-}
-.msg small {
-  display: block;
-  margin-top: 4px;
-  color: var(--text-muted);
-  font-size: 11px;
-}
-
-@media (max-width: 760px) {
-  .grid,
-  .split {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .msg {
-    max-width: 95%;
-  }
 }

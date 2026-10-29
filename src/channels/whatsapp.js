@@ -2,6 +2,7 @@ import wwebjs from 'whatsapp-web.js';
 import qrcodeTerminal from 'qrcode-terminal';
 import QRCode from 'qrcode';
 import { toFile } from 'openai';
+import { bus } from '../core/events.js';
 import { WELCOME, RESET_DONE, openCourses, splitMessage } from './common.js';
 
 const { Client, LocalAuth } = wwebjs;
@@ -13,7 +14,10 @@ const MENU_WORDS = /^(menu|men[uú]|cursos|\/cursos|\/start|inicio)$/i;
 /** Estado del canal que muestra el dashboard (incluye el QR mientras no se vincula). */
 export const whatsappState = { status: 'deshabilitado', qrDataUrl: null, number: null, updatedAt: null };
 
-const setState = (patch) => Object.assign(whatsappState, patch, { updatedAt: new Date().toISOString() });
+const setState = (patch) => {
+  Object.assign(whatsappState, patch, { updatedAt: new Date().toISOString() });
+  bus.emit('whatsapp', whatsappState);
+};
 
 function coursesMenu() {
   const lines = openCourses().map((c) => `• ${c.name} (${c.hours} h)`);

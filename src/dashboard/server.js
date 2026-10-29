@@ -5,6 +5,7 @@ import * as analytics from '../db/analytics.js';
 import { TOPIC_LABELS } from '../db/topics.js';
 import { getCourses, getCoursesUpdatedAt, refreshCourses } from '../scraper/courses.js';
 import { whatsappState } from '../channels/whatsapp.js';
+import { bus } from '../core/events.js';
 
 const safeEqual = (a, b) => {
   const x = Buffer.from(a);
@@ -15,7 +16,7 @@ const safeEqual = (a, b) => {
 /** Autenticación HTTP básica; se desactiva si no hay contraseña configurada. */
 function basicAuth({ user, password }) {
   return (req, res, next) => {
-    if (!password) return next();
+    if (!password || req.method === 'OPTIONS') return next();
     const [scheme, encoded] = (req.headers.authorization ?? '').split(' ');
     if (scheme === 'Basic' && encoded) {
       const [u, ...p] = Buffer.from(encoded, 'base64').toString().split(':');
@@ -23,6 +24,19 @@ function basicAuth({ user, password }) {
     }
     res.set('WWW-Authenticate', 'Basic realm="Dashboard CTT-FISEI"').status(401).send('Autenticación requerida');
   };
+}
+
+// La API queda abierta a cualquier origen (requisito del jurado: sin restricciones de CORS).
+function cors(req, res, next) {
+  res.set({
+    'Access-Control-Allow-Origin': req.headers.origin ?? '*',
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    Vary: 'Origin',
+  });
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
 }
 
 const RANGES = { '24h': 1, '7d': 7, '30d': 30, '90d': 90 };
@@ -34,18 +48,52 @@ function filters(req) {
   return { since, channel };
 }
 
-export function createDashboard({ store, auth, telegramInfo }) {
+export function createDashboard({ store, service, auth, telegramInfo }) {
   const app = express();
   const db = store.db;
   app.disable('x-powered-by');
+  app.use(cors);
   app.use(basicAuth(auth));
+  app.use(express.json({ limit: '32kb' }));
   app.use(express.static(fileURLToPath(new URL('./public', import.meta.url))));
+
+  const status = () => {
+    const courses = getCourses();
+    return {
+      telegram: telegramInfo(),
+      whatsapp: whatsappState,
+      courses: {
+        total: courses.length,
+        open: courses.filter((c) => c.status === 'abierto').length,
+        updatedAt: getCoursesUpdatedAt(),
+      },
+    };
+  };
+
+  bus.on('whatsapp', () => bus.emit('status', status()));
+
+  // Server-Sent Events: el dashboard recibe mensajes y cambios de estado sin recargar.
+  app.get('/api/events', (req, res) => {
+    res.set({ 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive', 'X-Accel-Buffering': 'no' });
+    res.flushHeaders();
+    const send = (event) => (data) => res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+    const listeners = { message: send('message'), conversation: send('conversation'), status: send('status') };
+    for (const [event, fn] of Object.entries(listeners)) bus.on(event, fn);
+    listeners.status(status());
+    const heartbeat = setInterval(() => res.write(': ping\n\n'), 25_000);
+    req.on('close', () => {
+      clearInterval(heartbeat);
+      for (const [event, fn] of Object.entries(listeners)) bus.off(event, fn);
+    });
+  });
 
   app.get('/api/overview', (req, res) => {
     const f = filters(req);
     const names = new Map(getCourses().map((c) => [c.id, c.name]));
     res.json({
       summary: analytics.summary(db, f),
+      events: analytics.eventCounts(db, f),
+      byState: analytics.byState(db, f),
       byChannel: analytics.byChannel(db, f),
       byDay: analytics.byDay(db, f),
       byHour: analytics.byHour(db, f),
@@ -54,30 +102,45 @@ export function createDashboard({ store, auth, telegramInfo }) {
     });
   });
 
-  app.get('/api/conversations', (req, res) => {
-    res.json(analytics.recentConversations(db, filters(req)));
-  });
+  app.get('/api/inbox', (req, res) => res.json(analytics.inbox(db, filters(req))));
 
   app.get('/api/conversations/:userId', (req, res) => {
-    res.json(analytics.conversation(db, req.params.userId));
+    const conversation = store.getConversation(req.params.userId);
+    if (!conversation) return res.status(404).json({ error: 'Conversación no encontrada' });
+    res.json({ conversation, messages: analytics.conversation(db, req.params.userId) });
   });
 
-  app.get('/api/status', (_req, res) => {
-    const courses = getCourses();
-    res.json({
-      telegram: telegramInfo(),
-      whatsapp: whatsappState,
-      courses: {
-        total: courses.length,
-        open: courses.filter((c) => c.status === 'abierto').length,
-        updatedAt: getCoursesUpdatedAt(),
-      },
-    });
+  app.post('/api/conversations/:userId/messages', async (req, res) => {
+    const text = String(req.body?.text ?? '').trim();
+    if (!text) return res.status(400).json({ error: 'El mensaje está vacío' });
+    if (text.length > 3000) return res.status(400).json({ error: 'El mensaje es demasiado largo' });
+    try {
+      res.json(await service.sendOperatorMessage(req.params.userId, text));
+    } catch (err) {
+      res.status(502).json({ error: err.message });
+    }
   });
+
+  app.post('/api/conversations/:userId/mode', (req, res) => {
+    const mode = req.body?.mode;
+    if (!['ai', 'human'].includes(mode)) return res.status(400).json({ error: 'mode debe ser "ai" o "human"' });
+    if (!store.getConversation(req.params.userId)) return res.status(404).json({ error: 'Conversación no encontrada' });
+    const reason = mode === 'human' ? 'El operador tomó el control' : 'El operador devolvió la conversación a la IA';
+    if (mode === 'human') store.addEvent(req.params.userId, 'operador_toma', reason);
+    res.json(service.setMode(req.params.userId, mode, reason));
+  });
+
+  app.post('/api/conversations/:userId/read', (req, res) => {
+    service.markRead(req.params.userId);
+    res.json({ ok: true });
+  });
+
+  app.get('/api/status', (_req, res) => res.json(status()));
 
   app.post('/api/courses/refresh', async (_req, res) => {
     try {
       const data = await refreshCourses();
+      bus.emit('status', status());
       res.json({ total: data.courses.length, updatedAt: data.updatedAt });
     } catch (err) {
       res.status(502).json({ error: err.message });
