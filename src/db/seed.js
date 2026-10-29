@@ -29,7 +29,9 @@ let total = 0;
 for (let u = 0; u < 60; u++) {
   const channel = Math.random() < 0.55 ? 'whatsapp' : 'telegram';
   const externalId = channel === 'whatsapp' ? `5939${String(10000000 + rand(89999999))}@c.us` : 100000 + rand(899999);
-  let t = now - rand(14) * 86400_000 - rand(10 * 3600_000);
+  const day = new Date(now - rand(14) * 86400_000);
+  day.setHours(8 + rand(13), rand(60), 0, 0);
+  let t = Math.min(day.getTime(), now - 3600_000);
   const userId = store.upsertUser({ channel, externalId, name: pick(NAMES) }, new Date(t).toISOString());
   const say = (role, content, extra = {}) => {
     store.addMessage({ userId, channel, role, content, createdAt: new Date(t).toISOString(), ...extra });
