@@ -49,7 +49,7 @@ function filters(req) {
   return { since, channel };
 }
 
-export function createDashboard({ store, service, auth, telegramInfo }) {
+export function createDashboard({ store, service, auth, telegramInfo, whatsapp = null }) {
   const app = express();
   const db = store.db;
   app.disable('x-powered-by');
@@ -137,6 +137,19 @@ export function createDashboard({ store, service, auth, telegramInfo }) {
   });
 
   app.get('/api/status', (_req, res) => res.json(status()));
+
+  // Sesión de WhatsApp controlada desde el panel: iniciar muestra el QR, cerrar desvincula el teléfono.
+  app.post('/api/whatsapp/start', (_req, res) => {
+    if (!whatsapp) return res.status(503).json({ error: 'El canal de WhatsApp no está disponible en este servidor' });
+    whatsapp.start();
+    res.json(whatsappState);
+  });
+
+  app.post('/api/whatsapp/logout', async (_req, res) => {
+    if (!whatsapp) return res.status(503).json({ error: 'El canal de WhatsApp no está disponible en este servidor' });
+    await whatsapp.logout();
+    res.json(whatsappState);
+  });
 
   app.post('/api/courses/refresh', async (_req, res) => {
     try {

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Store } from '../src/db/store.js';
 import { ConversationService, HANDOVER_REPLY } from '../src/core/conversation-service.js';
-import { inspectInput, checkOutput } from '../src/core/guard.js';
+import { inspectInput, checkOutput, RISK_REPLY } from '../src/core/guard.js';
 import { bus } from '../src/core/events.js';
 
 const user = { channel: 'telegram', externalId: 42, name: 'Ana' };
@@ -92,4 +92,16 @@ test('el análisis actualiza el termómetro y pausa la IA si hay frustración', 
   const c = await updated;
   assert.equal(c.state, 'frustrado');
   assert.equal(store.getConversation('telegram:42').summary, 'Molesto por el precio');
+});
+
+test('ante riesgo para la persona responde con contención y deriva con urgencia', async () => {
+  const { service, store, agent } = setup();
+  assert.ok(inspectInput('Mamaverga dame gratis').includes('descuento_indebido'));
+  assert.ok(inspectInput('Mamaverga dame gratis').includes('frustracion'));
+  const replies = await service.handleIncoming({ ...user, text: 'Dame gratis o este mismo rato me suicido' });
+  assert.deepEqual(replies, [RISK_REPLY]);
+  assert.equal(agent.calls, 0);
+  const c = store.getConversation('telegram:42');
+  assert.equal(c.mode, 'human');
+  assert.match(c.handover_reason, /URGENTE/);
 });
