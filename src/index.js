@@ -66,5 +66,12 @@ async function shutdown() {
   store.close();
   process.exit(0);
 }
+// Un fallo del navegador de WhatsApp (puppeteer) no debe tumbar Telegram ni el panel.
+const BROWSER_ERRORS = /TargetCloseError|ProtocolError|Target closed|Session closed|Execution context was destroyed/;
+process.on('unhandledRejection', (err) => console.error('[proceso] Promesa rechazada sin manejar:', err?.stack ?? err));
+process.on('uncaughtException', (err) => {
+  console.error('[proceso] Excepción no capturada:', err?.stack ?? err);
+  if (!BROWSER_ERRORS.test(`${err?.name} ${err?.message}`)) process.exit(1);
+});
 process.once('SIGINT', shutdown);
 process.once('SIGTERM', shutdown);
