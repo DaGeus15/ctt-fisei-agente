@@ -5,6 +5,7 @@ import * as analytics from '../db/analytics.js';
 import { TOPIC_LABELS } from '../db/topics.js';
 import { getCourses, getCoursesUpdatedAt, refreshCourses } from '../scraper/courses.js';
 import { whatsappState } from '../channels/whatsapp.js';
+import { openCourses } from '../channels/common.js';
 import { bus } from '../core/events.js';
 
 const safeEqual = (a, b) => {
@@ -64,7 +65,7 @@ export function createDashboard({ store, service, auth, telegramInfo }) {
       whatsapp: whatsappState,
       courses: {
         total: courses.length,
-        open: courses.filter((c) => c.status === 'abierto').length,
+        open: openCourses().length,
         updatedAt: getCoursesUpdatedAt(),
       },
     };
