@@ -16,43 +16,49 @@ function coursesKeyboard() {
   return keyboard;
 }
 
-async function answer(ctx, agent, text) {
-  await ctx.replyWithChatAction('typing');
-  const typing = setInterval(() => ctx.replyWithChatAction('typing').catch(() => {}), 4500);
-  try {
-    const reply = await agent.reply({ ...userOf(ctx), text });
-    for (const part of splitMessage(reply, MAX_LENGTH)) {
-      await ctx.reply(part, { link_preview_options: { is_disabled: true } });
-    }
-  } finally {
-    clearInterval(typing);
-  }
-}
-
-export function createTelegramBot({ token, agent }) {
+/** Conector de Telegram: traduce updates del bot a llamadas del ConversationService. */
+export function createTelegramBot({ token, service, transcriber = null }) {
   const bot = new Bot(token);
 
+  const sendText = async (chatId, text) => {
+    for (const part of splitMessage(text, MAX_LENGTH)) {
+      await bot.api.sendMessage(chatId, part, { link_preview_options: { is_disabled: true } });
+    }
+  };
+  service.registerChannel(CHANNEL, sendText);
+
+  async function handle(ctx, text) {
+    await ctx.replyWithChatAction('typing');
+    const typing = setInterval(() => ctx.replyWithChatAction('typing').catch(() => {}), 4500);
+    try {
+      const replies = await service.handleIncoming({ ...userOf(ctx), text });
+      for (const reply of replies) await sendText(ctx.chat.id, reply);
+    } finally {
+      clearInterval(typing);
+    }
+  }
+
   bot.command('start', async (ctx) => {
-    agent.resetConversation(userOf(ctx));
+    service.reset(userOf(ctx));
     await ctx.reply(WELCOME);
     await ctx.reply('Estos son los cursos con inscripciones abiertas:', { reply_markup: coursesKeyboard() });
   });
 
   bot.command('cursos', (ctx) =>
-    ctx.reply('Cursos con inscripciones abiertas. Toca uno para ver su información:', {
-      reply_markup: coursesKeyboard(),
-    }),
+    ctx.reply('Cursos con inscripciones abiertas. Toca uno para conocerlo:', { reply_markup: coursesKeyboard() }),
   );
 
   bot.command('reiniciar', async (ctx) => {
-    agent.resetConversation(userOf(ctx));
+    service.reset(userOf(ctx));
     await ctx.reply(RESET_DONE);
   });
 
+  bot.command('asesor', (ctx) => handle(ctx, 'Quiero hablar con un asesor humano'));
+
   bot.command('ayuda', (ctx) =>
     ctx.reply(
-      'Comandos:\n/cursos - ver cursos abiertos\n/reiniciar - empezar una conversación nueva\n\n' +
-        'También puedes escribir tu pregunta directamente.',
+      'Comandos:\n/cursos - ver cursos abiertos\n/asesor - hablar con una persona del CTT\n/reiniciar - empezar una conversación nueva\n\n' +
+        'También puedes escribirme o enviarme una nota de voz.',
     ),
   );
 
@@ -60,12 +66,29 @@ export function createTelegramBot({ token, agent }) {
     await ctx.answerCallbackQuery();
     const course = openCourses().find((c) => c.id === Number(ctx.match[1]));
     if (!course) return ctx.reply('Ese curso ya no está disponible. Usa /cursos para ver la oferta actual.');
-    await answer(ctx, agent, `Quiero información del curso "${course.name}" (id ${course.id}).`);
+    await handle(ctx, `Me interesa el curso "${course.name}". ¿Me cuentas de qué trata?`);
   });
 
-  bot.on('message:text', (ctx) => answer(ctx, agent, ctx.message.text));
+  bot.on('message:text', (ctx) => handle(ctx, ctx.message.text));
 
-  bot.on('message', (ctx) => ctx.reply('Por ahora solo puedo leer mensajes de texto. ¿Qué te gustaría saber de los cursos?'));
+  bot.on(['message:voice', 'message:audio'], async (ctx) => {
+    if (!transcriber) {
+      return ctx.reply('Por ahora no puedo escuchar audios 🙈. ¿Me lo escribes, por favor?');
+    }
+    await ctx.replyWithChatAction('typing');
+    try {
+      const file = await ctx.getFile();
+      const url = `https://api.telegram.org/file/bot${token}/${file.file_path}`;
+      const text = await transcriber.transcribeUrl(url, file.file_path.split('/').pop());
+      if (!text) return ctx.reply('No logré entender el audio. ¿Me lo escribes, por favor?');
+      await handle(ctx, `🎤 ${text}`);
+    } catch (err) {
+      console.error(`[telegram] audio: ${err.message}`);
+      await ctx.reply('No pude procesar el audio. ¿Me lo escribes, por favor?');
+    }
+  });
+
+  bot.on('message', (ctx) => ctx.reply('Por ahora solo puedo leer texto y notas de voz. ¿Qué te gustaría saber de los cursos?'));
 
   bot.catch((err) => console.error(`[telegram] ${err.error?.message ?? err.message}`));
 
@@ -73,6 +96,7 @@ export function createTelegramBot({ token, agent }) {
     async start() {
       await bot.api.setMyCommands([
         { command: 'cursos', description: 'Ver cursos abiertos' },
+        { command: 'asesor', description: 'Hablar con una persona del CTT' },
         { command: 'reiniciar', description: 'Empezar una conversación nueva' },
         { command: 'ayuda', description: 'Cómo usar el asistente' },
       ]);

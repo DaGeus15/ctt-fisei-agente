@@ -8,6 +8,23 @@ const normalize = (text) =>
 
 const STOPWORDS = new Set(['de', 'del', 'la', 'el', 'los', 'las', 'en', 'y', 'a', 'curso', 'cursos', 'para', 'que', 'un', 'una', 'sobre']);
 
+// Distancia de edición acotada para tolerar faltas ortográficas ("pyton", "arduno", "redez").
+function editDistance(a, b) {
+  if (Math.abs(a.length - b.length) > 2) return 3;
+  let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    const row = [i];
+    for (let j = 1; j <= b.length; j++) {
+      row[j] = Math.min(prev[j] + 1, row[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    }
+    prev = row;
+  }
+  return prev[b.length];
+}
+
+const fuzzyIncludes = (words, term) =>
+  words.some((w) => w.includes(term) || (term.length >= 4 && editDistance(w, term) <= (term.length >= 7 ? 2 : 1)));
+
 export function courseSummary(c) {
   return {
     id: c.id,
@@ -31,9 +48,9 @@ export function searchCourses({ consulta = '', estado = 'todos' } = {}) {
 
   return courses
     .map((c) => {
-      const name = normalize(c.name);
-      const body = normalize([c.description, ...(c.objectives ?? []), ...(c.contents ?? [])].join(' '));
-      const score = terms.reduce((s, t) => s + (name.includes(t) ? 3 : 0) + (body.includes(t) ? 1 : 0), 0);
+      const name = normalize(c.name).split(/[^a-z0-9+#]+/);
+      const body = normalize([c.description, ...(c.objectives ?? []), ...(c.contents ?? [])].join(' ')).split(/[^a-z0-9+#]+/);
+      const score = terms.reduce((s, t) => s + (fuzzyIncludes(name, t) ? 3 : 0) + (fuzzyIncludes(body, t) ? 1 : 0), 0);
       return { c, score };
     })
     .filter((r) => r.score > 0)
@@ -94,9 +111,32 @@ export const TOOL_DEFINITIONS = [
       },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'transferir_a_asesor',
+      description:
+        'Pausa la IA y deriva la conversación a una persona del CTT. Úsala cuando el usuario pida hablar con alguien, pida descuentos, becas, convenios o formas de pago especiales, tenga un reclamo, una duda académica que no está en los datos (tipo "docente"), o esté listo para inscribirse y necesite ayuda con el pago.',
+      parameters: {
+        type: 'object',
+        properties: {
+          motivo: { type: 'string', description: 'Motivo breve para el operador' },
+          tipo: { type: 'string', enum: ['asesor', 'docente'], description: 'asesor comercial o docente del curso' },
+        },
+        required: ['motivo'],
+        additionalProperties: false,
+      },
+    },
+  },
 ];
+
+export function transferToAdvisor({ motivo, tipo = 'asesor' }) {
+  if (!motivo) return { error: 'Indica el motivo de la transferencia' };
+  return { ok: true, handover: { motivo, tipo }, instruccion: 'Avísale al usuario que un asesor humano continuará por este mismo chat.' };
+}
 
 export const TOOL_HANDLERS = {
   buscar_cursos: searchCourses,
   ver_curso: getCourse,
+  transferir_a_asesor: transferToAdvisor,
 };

@@ -3,6 +3,8 @@ import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { classifyTopic } from './topics.js';
 
+// Cada usuario de un canal tiene una única conversación (tabla `users`) con su
+// estado de atención: modo IA/humano, termómetro del prospecto, perfil y resumen.
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
@@ -17,7 +19,7 @@ CREATE TABLE IF NOT EXISTS messages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id TEXT NOT NULL REFERENCES users(id),
   channel TEXT NOT NULL,
-  role TEXT NOT NULL CHECK (role IN ('user', 'assistant')),
+  role TEXT NOT NULL,
   content TEXT NOT NULL,
   topic TEXT,
   courses TEXT NOT NULL DEFAULT '[]',
@@ -25,11 +27,36 @@ CREATE TABLE IF NOT EXISTS messages (
   tokens_in INTEGER,
   tokens_out INTEGER,
   error TEXT,
+  flags TEXT NOT NULL DEFAULT '[]',
+  created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT NOT NULL REFERENCES users(id),
+  type TEXT NOT NULL,
+  detail TEXT,
   created_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_messages_user ON messages(user_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_messages_created ON messages(created_at);
+CREATE INDEX IF NOT EXISTS idx_events_created ON events(created_at);
 `;
+
+// Columnas agregadas después de la primera versión; se aplican sobre bases existentes.
+const MIGRATIONS = [
+  ['users', 'mode', "TEXT NOT NULL DEFAULT 'ai'"],
+  ['users', 'state', "TEXT NOT NULL DEFAULT 'nuevo'"],
+  ['users', 'profile', "TEXT NOT NULL DEFAULT '{}'"],
+  ['users', 'summary', 'TEXT'],
+  ['users', 'handover_reason', 'TEXT'],
+  ['users', 'unread', 'INTEGER NOT NULL DEFAULT 0'],
+  ['messages', 'flags', "TEXT NOT NULL DEFAULT '[]'"],
+];
+
+export const STATES = ['nuevo', 'interesado', 'dudoso', 'frustrado', 'lead_caliente'];
+
+const parseConversation = (row) =>
+  row && { ...row, profile: JSON.parse(row.profile || '{}') };
 
 export class Store {
   constructor(path) {
@@ -37,6 +64,16 @@ export class Store {
     this.db = new DatabaseSync(path);
     this.db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;');
     this.db.exec(SCHEMA);
+    this.migrate();
+  }
+
+  migrate() {
+    for (const [table, column, definition] of MIGRATIONS) {
+      const columns = this.db.prepare(`PRAGMA table_info(${table})`).all();
+      if (!columns.some((c) => c.name === column)) {
+        this.db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+      }
+    }
   }
 
   upsertUser({ channel, externalId, name }, now = new Date().toISOString()) {
@@ -52,17 +89,35 @@ export class Store {
     return id;
   }
 
-  /** Inicia una conversación nueva: el historial previo deja de enviarse al LLM. */
-  resetSession(userId, now = new Date().toISOString()) {
-    this.db.prepare('UPDATE users SET session_started_at = ? WHERE id = ?').run(now, userId);
+  getConversation(userId) {
+    return parseConversation(this.db.prepare('SELECT * FROM users WHERE id = ?').get(userId));
   }
 
-  addMessage({ userId, channel, role, content, courses = [], latencyMs, tokensIn, tokensOut, error, createdAt }) {
+  /** Actualiza campos del estado de atención (mode, state, profile, summary, handover_reason, unread). */
+  updateConversation(userId, patch) {
+    const allowed = ['mode', 'state', 'profile', 'summary', 'handover_reason', 'unread'];
+    const entries = Object.entries(patch).filter(([k, v]) => allowed.includes(k) && v !== undefined);
+    if (!entries.length) return this.getConversation(userId);
+    const sets = entries.map(([k]) => `${k} = ?`).join(', ');
+    const values = entries.map(([k, v]) => (k === 'profile' ? JSON.stringify(v) : v));
+    this.db.prepare(`UPDATE users SET ${sets} WHERE id = ?`).run(...values, userId);
+    return this.getConversation(userId);
+  }
+
+  /** Inicia una conversación nueva: el historial previo deja de enviarse al LLM. */
+  resetSession(userId, now = new Date().toISOString()) {
+    this.db
+      .prepare("UPDATE users SET session_started_at = ?, summary = NULL, mode = 'ai', handover_reason = NULL WHERE id = ?")
+      .run(now, userId);
+  }
+
+  addMessage({ userId, channel, role, content, courses = [], latencyMs, tokensIn, tokensOut, error, flags = [], createdAt }) {
     const topic = role === 'user' ? classifyTopic(content) : null;
+    const created = createdAt ?? new Date().toISOString();
     const result = this.db
       .prepare(
-        `INSERT INTO messages (user_id, channel, role, content, topic, courses, latency_ms, tokens_in, tokens_out, error, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO messages (user_id, channel, role, content, topic, courses, latency_ms, tokens_in, tokens_out, error, flags, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .run(
         userId,
@@ -75,21 +130,44 @@ export class Store {
         tokensIn ?? null,
         tokensOut ?? null,
         error ?? null,
-        createdAt ?? new Date().toISOString(),
+        JSON.stringify(flags),
+        created,
       );
-    return Number(result.lastInsertRowid);
+    if (role === 'user') this.db.prepare('UPDATE users SET unread = unread + 1, last_seen = ? WHERE id = ?').run(created, userId);
+    return this.getMessage(Number(result.lastInsertRowid));
   }
 
-  /** Últimos mensajes de la sesión actual, en orden cronológico. */
-  getHistory(userId, limit = 12) {
-    return this.db
+  getMessage(id) {
+    const m = this.db
+      .prepare('SELECT id, user_id, channel, role, content, topic, courses, latency_ms, error, flags, created_at FROM messages WHERE id = ?')
+      .get(id);
+    return m && { ...m, courses: JSON.parse(m.courses), flags: JSON.parse(m.flags) };
+  }
+
+  addEvent(userId, type, detail = null, createdAt = new Date().toISOString()) {
+    this.db.prepare('INSERT INTO events (user_id, type, detail, created_at) VALUES (?, ?, ?, ?)').run(userId, type, detail, createdAt);
+  }
+
+  /**
+   * Últimos mensajes de la sesión actual en orden cronológico, recortados a un
+   * presupuesto de caracteres para controlar la ventana de contexto.
+   */
+  getHistory(userId, { limit = 10, maxChars = 6000 } = {}) {
+    const rows = this.db
       .prepare(
         `SELECT role, content FROM messages m JOIN users u ON u.id = m.user_id
          WHERE m.user_id = ? AND m.created_at >= u.session_started_at AND m.error IS NULL
          ORDER BY m.id DESC LIMIT ?`,
       )
-      .all(userId, limit)
-      .reverse();
+      .all(userId, limit);
+    const history = [];
+    let used = 0;
+    for (const row of rows) {
+      used += row.content.length;
+      if (used > maxChars && history.length) break;
+      history.unshift(row);
+    }
+    return history;
   }
 
   close() {
