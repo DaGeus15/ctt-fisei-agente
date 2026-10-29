@@ -82,7 +82,7 @@
     const s = STATES[state] || STATES.nuevo;
     return el('span', { class: 'state', style: `--state-color: var(${s.color})` }, `${s.icon} ${s.label}`);
   };
-  const modeChip = (mode) => el('span', { class: `mode ${mode}` }, mode === 'human' ? '👤 Operador' : '🤖 IA');
+  const modeChip = (mode) => el('span', { class: `mode ${mode}` }, mode === 'human' ? 'Operador' : 'IA');
   const displayName = (c) => c.name || c.external_id.replace('@c.us', '');
   const needsAttention = (c) => c.mode === 'human' || c.state === 'frustrado' || c.state === 'lead_caliente';
 
@@ -133,7 +133,7 @@
     $('conversation-list').replaceChildren(
       ...list.map((c) => {
         const s = STATES[c.state] || STATES.nuevo;
-        const prefix = c.last_role === 'user' ? '' : c.last_role === 'operator' ? 'Operador: ' : 'IA: ';
+        const prefix = { user: '', operator: 'Operador: ', assistant: 'IA: ' }[c.last_role] ?? '';
         return el(
           'li',
           {},
@@ -147,7 +147,7 @@
               onclick: () => openConversation(c.user_id),
             },
             el('span', { class: 'row' }, el('span', { class: 'name' }, displayName(c)), el('time', { datetime: c.last_seen }, fmtTime(c.last_seen))),
-            el('span', { class: 'preview' }, prefix + (c.last_message ?? '')),
+            el('span', { class: 'preview' }, c.last_message ? prefix + c.last_message : 'Abrió el chat, aún sin mensajes'),
             el(
               'span',
               { class: 'row' },
@@ -186,24 +186,29 @@
   function renderChatHead(c) {
     const profile = c.profile || {};
     const tags = [
-      profile.tipo && `Perfil: ${profile.tipo.replace('_', ' ')}`,
-      profile.curso_interes && `Interés: ${profile.curso_interes}`,
-      profile.meta && `Meta: ${profile.meta}`,
+      profile.tipo && profile.tipo.replace('_', ' '),
+      profile.curso_interes,
+      profile.meta,
     ].filter(Boolean);
     const take = c.mode === 'human'
-      ? el('button', { type: 'button', class: 'btn-ai', onclick: () => setMode('ai') }, '🤖 Devolver a la IA')
-      : el('button', { type: 'button', class: 'btn-take', onclick: () => setMode('human') }, '⏸ Tomar control');
+      ? el('button', { type: 'button', class: 'btn-ai', onclick: () => setMode('ai') }, 'Devolver a la IA')
+      : el('button', { type: 'button', class: 'btn-take', onclick: () => setMode('human') }, 'Tomar control');
     return el(
       'header',
-      { class: 'chat-head', id: 'chat-head' },
+      { class: `poster ${c.mode === 'human' ? 'human' : 'ai'}`, id: 'chat-head' },
       el(
         'div',
         { class: 'row' },
-        el('div', {}, el('h2', {}, displayName(c)), el('span', { class: 'tags' }, stateChip(c.state), modeChip(c.mode), el('span', { class: `badge ${c.channel}` }, CHANNELS[c.channel]), ...tags.map((t) => el('span', { class: 'state', style: '--state-color: var(--border)' }, t)))),
+        el(
+          'div',
+          { style: 'min-width: 0' },
+          el('h2', {}, displayName(c)),
+          el('div', { class: 'pills' }, stateChip(c.state), modeChip(c.mode), el('span', { class: `badge ${c.channel}` }, CHANNELS[c.channel]), ...tags.map((t) => el('span', { class: 'pill' }, t))),
+        ),
         take,
       ),
-      c.mode === 'human' && c.handover_reason ? el('p', { class: 'handover' }, `IA en pausa · ${c.handover_reason}`) : null,
-      el('p', { class: 'summary' }, el('strong', {}, 'Resumen IA: '), c.summary || 'Aún no hay suficiente conversación para resumir.'),
+      c.mode === 'human' && c.handover_reason ? el('p', { class: 'handover' }, `IA en pausa: ${c.handover_reason}`) : null,
+      el('p', { class: 'summary' }, el('strong', {}, 'Resumen: '), c.summary || 'Aún no hay suficiente conversación para resumir.'),
     );
   }
 
@@ -285,25 +290,38 @@
 
   // ---------- Estado de canales ----------
 
+  const ICONS = {
+    telegram: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.7 19.5c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13.2l-4.8-1.5c-1-.3-1.1-1 .2-1.5L20.5 2.9c.9-.3 1.7.2 1.4 1.4z"/></svg>',
+    whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.4-.2z"/></svg>',
+    cursos: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3 1 9l11 6 9-4.9V17h2V9L12 3zM5 13.2v4L12 21l7-3.8v-4L12 17l-7-3.8z"/></svg>',
+  };
+
+  function channelItem(kind, color, title, detail) {
+    const icon = el('span', { class: 'icon', style: `--channel-color: ${color}` });
+    icon.innerHTML = ICONS[kind];
+    return el('div', { class: 'channel' }, icon, el('strong', {}, title), el('small', {}, ...[detail].flat()));
+  }
+
   function renderStatus(st) {
     lastStatus = st;
     const tg = st.telegram;
     const wa = st.whatsapp;
     $('status').replaceChildren(
-      el(
-        'div',
-        { class: 'status-item' },
-        el('span', { class: `dot ${tg ? 'ok' : 'off'}` }),
-        el('div', {}, el('strong', {}, 'Telegram'), tg ? el('small', {}, el('a', { href: `https://t.me/${tg.username}`, target: '_blank', rel: 'noopener' }, `@${tg.username}`)) : el('small', {}, 'Sin configurar')),
+      channelItem(
+        'telegram',
+        '#012e5a',
+        'Telegram',
+        tg
+          ? [el('span', { class: 'dot ok' }), el('a', { href: `https://t.me/${tg.username}`, target: '_blank', rel: 'noopener' }, `@${tg.username}`)]
+          : [el('span', { class: 'dot off' }), 'Sin configurar'],
       ),
       renderWhatsApp(wa),
-      el(
-        'div',
-        { class: 'status-item' },
+      channelItem('cursos', '#ad272e', `${st.courses.open} cursos con inscripción vigente`, [
         el('span', { class: 'dot ok' }),
-        el('div', {}, el('strong', {}, `Cursos: ${st.courses.open} con inscripción vigente de ${st.courses.total}`), el('small', {}, st.courses.updatedAt ? `Sincronizado ${fmtDate(st.courses.updatedAt)}` : 'Sin datos')),
-      ),
+        st.courses.updatedAt ? `de ${st.courses.total} publicados · sincronizado ${fmtTime(st.courses.updatedAt)}` : 'Sin datos',
+      ]),
     );
+    renderWhatsAppLink(wa);
   }
 
   const WA_BUSY = ['iniciando', 'esperando QR', 'autenticado'];
@@ -311,26 +329,36 @@
   function renderWhatsApp(wa) {
     const ok = wa.status === 'conectado';
     const busy = WA_BUSY.includes(wa.status);
-    let action = null;
-    if (wa.available && ok) {
-      action = el('button', { type: 'button', onclick: () => whatsappAction('logout') }, 'Cerrar sesión');
-    } else if (wa.available && !busy) {
-      action = el('button', { type: 'button', class: 'btn-wa', onclick: () => whatsappAction('start') }, 'Iniciar sesión');
+    const parts = [el('span', { class: `dot ${ok ? 'ok' : busy ? 'warn' : 'off'}` })];
+    if (ok) parts.push(wa.number ? `+${wa.number}` : 'Conectado', ' ', el('button', { type: 'button', class: 'link-btn', onclick: () => whatsappAction('logout') }, 'Cerrar sesión'));
+    else if (busy) parts.push(wa.status === 'iniciando' ? 'Abriendo WhatsApp Web…' : wa.status === 'esperando QR' ? 'Esperando escaneo del QR' : 'Vinculando…');
+    else if (wa.available) parts.push(el('button', { type: 'button', class: 'link-btn', onclick: () => whatsappAction('start') }, 'Iniciar sesión'));
+    else parts.push('No disponible');
+    return channelItem('whatsapp', '#1e8e5a', 'WhatsApp', parts);
+  }
+
+  /** Franja con el QR mientras se vincula el teléfono. */
+  function renderWhatsAppLink(wa) {
+    const box = $('wa-link');
+    if (!wa.qrDataUrl && wa.status !== 'iniciando') {
+      box.hidden = true;
+      return;
     }
-    const detail = ok && wa.number
-      ? `Conectado · +${wa.number}`
-      : wa.status === 'esperando QR'
-        ? 'Escanea el QR: WhatsApp > Dispositivos vinculados > Vincular un dispositivo'
-        : wa.status === 'iniciando'
-          ? 'Abriendo WhatsApp Web… (unos segundos)'
-          : wa.status;
-    return el(
-      'div',
-      { class: `status-item${wa.qrDataUrl ? ' wa-qr' : ''}` },
-      el('span', { class: `dot ${ok ? 'ok' : busy ? 'warn' : 'off'}` }),
-      el('div', { class: 'grow' }, el('strong', {}, 'WhatsApp'), el('small', {}, detail)),
-      wa.qrDataUrl ? el('img', { class: 'qr', src: wa.qrDataUrl, alt: 'Código QR para vincular WhatsApp' }) : null,
-      action,
+    box.hidden = false;
+    box.replaceChildren(
+      el(
+        'div',
+        {},
+        wa.qrDataUrl ? el('img', { class: 'qr', src: wa.qrDataUrl, alt: 'Código QR para vincular WhatsApp' }) : null,
+        el(
+          'div',
+          {},
+          el('h2', {}, wa.qrDataUrl ? 'Vincula el WhatsApp del CTT' : 'Abriendo WhatsApp Web…'),
+          wa.qrDataUrl
+            ? el('ol', {}, el('li', {}, 'Abre WhatsApp en el teléfono.'), el('li', {}, 'Ve a Dispositivos vinculados y toca Vincular un dispositivo.'), el('li', {}, 'Escanea este código. El panel se actualiza solo al conectar.'))
+            : el('p', {}, 'El código QR aparecerá aquí en unos segundos.'),
+        ),
+      ),
     );
   }
 
@@ -351,7 +379,7 @@
 
   function baseOptions(extra) {
     const grid = css('--grid');
-    const text = css('--text-secondary');
+    const text = css('--text');
     return Object.assign(
       {
         responsive: true,
@@ -360,7 +388,7 @@
         interaction: { mode: 'index', intersect: false },
         plugins: {
           legend: { display: false },
-          tooltip: { backgroundColor: css('--surface'), titleColor: css('--text-primary'), bodyColor: css('--text-primary'), borderColor: css('--border'), borderWidth: 1, padding: 10 },
+          tooltip: { backgroundColor: css('--surface'), titleColor: css('--ink'), bodyColor: css('--ink'), borderColor: css('--line'), borderWidth: 1, padding: 10 },
         },
         scales: {
           x: { grid: { display: false }, ticks: { color: text }, border: { color: grid } },
@@ -369,6 +397,11 @@
       },
       extra,
     );
+  }
+
+  if (window.Chart) {
+    Chart.defaults.font.family = 'Poppins, system-ui, sans-serif';
+    Chart.defaults.font.size = 12;
   }
 
   function draw(id, config) {
@@ -383,7 +416,7 @@
     const items = [
       ['Personas atendidas', fmt(s.users)],
       ['Preguntas', fmt(s.questions)],
-      ['🔥 Leads calientes', fmt(leads)],
+      ['Leads calientes', fmt(leads)],
       ['Derivaciones a humano', fmt(events.handover)],
       ['Manipulaciones bloqueadas', fmt(events.intento_manipulacion)],
       ['Respuesta media', s.avgLatencyMs ? `${(s.avgLatencyMs / 1000).toFixed(1)} s` : '—'],
@@ -414,8 +447,8 @@
   function horizontalBar(id, labels, values, label, colors) {
     const opts = baseOptions({ indexAxis: 'y', interaction: { mode: 'nearest', axis: 'y', intersect: false } });
     opts.scales = {
-      x: { beginAtZero: true, grid: { color: css('--grid') }, ticks: { color: css('--text-secondary'), precision: 0 }, border: { display: false } },
-      y: { grid: { display: false }, ticks: { color: css('--text-primary'), callback: (v) => (labels[v].length > 34 ? `${labels[v].slice(0, 33)}…` : labels[v]) } },
+      x: { beginAtZero: true, grid: { color: css('--grid') }, ticks: { color: css('--text'), precision: 0 }, border: { display: false } },
+      y: { grid: { display: false }, ticks: { color: css('--ink'), callback: (v) => (labels[v].length > 34 ? `${labels[v].slice(0, 33)}…` : labels[v]) } },
     };
     draw(id, { type: 'bar', data: { labels, datasets: [{ label, data: values, backgroundColor: colors || css('--bar'), ...barStyle }] }, options: opts });
   }
@@ -490,7 +523,6 @@
       if (activeTab === 'metrics') loadMetrics();
     });
   }
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => activeTab === 'metrics' && loadMetrics());
 
   renderFilters();
   api('/api/status').then(renderStatus).catch(console.error);
